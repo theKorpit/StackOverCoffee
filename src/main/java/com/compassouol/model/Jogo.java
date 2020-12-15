@@ -1,7 +1,12 @@
 package com.compassouol.model;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
+
 
 public class Jogo {
 	private int codigoJogo;
@@ -9,15 +14,15 @@ public class Jogo {
 	private String desenvolvedor;
 	private String distribuidora;
 	private int appIdSteam;
-	private LocalDateTime dataLancamento;//REVER QUAL BIBLIOTECA
-	private Enum categoria;
+	private String dataLancamento;
+	private String categoria;
 	private double valorDeVenda;
 	private Collection<TempoJogo> tempoJogado;
 	private Collection<Avaliacao> avaliacaoJogo;
 	
 	
 	public Jogo(int codigoJogo, String nomeJogo, String desenvolvedor, String distribuidora,
-			LocalDateTime dataLancamento, Enum categoria, double valorDeVenda) {
+			String dataLancamento, String categoria, double valorDeVenda) throws IOException {
 		super();
 		this.codigoJogo = codigoJogo;
 		this.nomeJogo = nomeJogo;
@@ -25,7 +30,9 @@ public class Jogo {
 		this.distribuidora = distribuidora;
 		this.dataLancamento = dataLancamento;
 		this.categoria = categoria;
-		this.valorDeVenda = valorDeVenda;
+		this.avaliacaoJogo = new ArrayList<Avaliacao>();
+		this.tempoJogado = new HashSet<TempoJogo>();
+		validaValorVenda(valorDeVenda);
 	}
 	
 	
@@ -44,10 +51,10 @@ public class Jogo {
 	public int getAppIdSteam() {
 		return appIdSteam;
 	}
-	public LocalDateTime getDataLancamento() {
-		return dataLancamento;
+	public String getDataLancamento() {
+		return this.dataLancamento;
 	}
-	public Enum getCategoria() {
+	public String getCategoria() {
 		return categoria;
 	}
 	public double getValorDeVenda() {
@@ -56,9 +63,45 @@ public class Jogo {
 	public Collection<TempoJogo> getTempoJogado() {
 		return tempoJogado;
 	}
-	public Collection<Avaliacao> getAvaliacaoJogo() {
-		return avaliacaoJogo;
+	public String getAvaliacaoJogo() {
+		String saida = "";
+		for (Avaliacao av : avaliacaoJogo) {
+			saida = saida + av.toString();
+		}
+		return saida;
 	}
+		
+	
+	private void validaValorVenda(double valor) throws IOException {
+		if(valor<0) {
+			throw new IOException("O valor inserido é negativo");
+		}
+		this.valorDeVenda=valor;
+	}
+	
+	public void adicionaAvaliacaoJogo(int nota, String comentario) throws IOException {
+		Avaliacao av = new Avaliacao(comentario,nota);
+		this.avaliacaoJogo.add(av);
+	}
+	
+	
+	public float tempoTotalJogado() {
+		float tempo=0.0f;
+		for (TempoJogo tempojogo : tempoJogado) {
+			tempo+=tempojogo.totalTempoJogado();
+		}
+		return tempo;
+	}
+	
+	@Override
+	public String toString() {
+		
+		return ("Nome do jogo: " + this.getNomeJogo() +"\nValor:"+ this.valorDeVenda+ "R$" +  "\nDesenvolvedor: " + this.getDesenvolvedor() +
+				"\nDistribuidora: " + this.getDistribuidora() + "\nData de lançamento: " + this.getDataLancamento() 
+				+ "\nCategoria : " + this.getCategoria() + "\n\nAvaliação(ões):\n" + this.getAvaliacaoJogo());
+	}
+	
+
 	
 	
 	

@@ -1,15 +1,21 @@
 package com.compassouol.model;
 
+import java.io.IOException;
+
 public class Avaliacao {
 	
 	private String comentario; 
 	private double nota; 
 	
-	public Avaliacao(String comentario, double nota){
+	public Avaliacao(String comentario, double nota) throws IOException{
 		
-		validaComentario(comentario);
-		validaNota(nota);
-		
+		try {
+			validaComentario(comentario);
+			validaNota(nota);
+		}
+		catch (IOException ex){
+			throw ex;
+		}
 		this.comentario = comentario;
 		
 		this.nota = nota;
@@ -23,13 +29,19 @@ public class Avaliacao {
 		return this.nota;
 	}
 	
-	public void validaComentario(String comentario) {
+	public void validaComentario(String comentario) throws IOException {
+		comentario = comentario.trim();
 		if(comentario.isEmpty())
-			throw new IllegalArgumentException();
+			throw new IOException("Comentario não pode ser vazio");
 	}
 	
-	private void validaNota(double nota) {
+	private void validaNota(double nota) throws IOException {
 		if(nota > 5 || nota < 0)
-			throw new IllegalArgumentException();
+			throw new IOException("A nota precisa estar entre zero e cinco");
+	}
+	
+	@Override
+	public String toString() {
+		return ("Comentario: " + this.getComentario() + " Nota: " + this.getNota() + "\n");
 	}
 }
