@@ -1,4 +1,4 @@
-package com.compassouol.model;
+package com.compassouol.main;
 
 public class Main {
 
