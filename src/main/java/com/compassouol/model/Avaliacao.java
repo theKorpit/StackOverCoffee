@@ -7,13 +7,12 @@ public class Avaliacao {
 	
 	public Avaliacao(String comentario, double nota){
 		
+		validaComentario(comentario);
+		validaNota(nota);
+		
 		this.comentario = comentario;
 		
-		
-		if(validaNota(nota))
-			this.nota = nota;
-		else 
-			System.out.println("deu ruim");
+		this.nota = nota;
 	}
 
 	public String getComentario() {
@@ -24,13 +23,13 @@ public class Avaliacao {
 		return this.nota;
 	}
 	
-	public void alteraComentario(String comentario) {
-		this.comentario = comentario; 
+	public void validaComentario(String comentario) {
+		if(comentario.isEmpty())
+			throw new IllegalArgumentException();
 	}
 	
-	private boolean validaNota(double nota) {
+	private void validaNota(double nota) {
 		if(nota > 5 || nota < 0)
-			return false;
-		return true;
+			throw new IllegalArgumentException();
 	}
 }
