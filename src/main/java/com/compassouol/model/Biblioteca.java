@@ -25,7 +25,7 @@ public class Biblioteca { // Antiga classe AGENDA - Steam possui biblioteca de j
 			System.out.print("\nJogo incluido com sucesso na biblioteca!\n");
 
 		} catch (IOException e) {
-			throw new IOException("\nDesculpe, não foi possível incluir o jogo na biblioteca!\n");
+			throw new IOException("\nDesculpe, nï¿½o foi possï¿½vel incluir o jogo na biblioteca!\n");
 		}
 	}
 
@@ -39,5 +39,13 @@ public class Biblioteca { // Antiga classe AGENDA - Steam possui biblioteca de j
 		for (Jogo j : jogos) {
 			System.out.println("\n\n" + j);
 		}
+	}
+	
+	public Jogo buscaPorId(int id) {
+		for(Jogo j : jogos) {
+			if(j.getCodigoJogo() == id)
+				return j;
+		}
+		return null;
 	}
 }
