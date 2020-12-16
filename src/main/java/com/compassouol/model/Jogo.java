@@ -18,7 +18,6 @@ public class Jogo {
 	private String categoria;
 	private double valorDeVenda;
 	private Collection<TempoJogo> tempoJogado;
-	private Collection<Avaliacao> avaliacaoJogo;
 	
 	
 	public Jogo(int codigoJogo, String nomeJogo, String desenvolvedor, String distribuidora,
@@ -30,7 +29,6 @@ public class Jogo {
 		this.distribuidora = distribuidora;
 		this.dataLancamento = dataLancamento;
 		this.categoria = categoria;
-		this.avaliacaoJogo = new ArrayList<Avaliacao>();
 		this.tempoJogado = new HashSet<TempoJogo>();
 		validaValorVenda(valorDeVenda);
 	}
@@ -39,38 +37,38 @@ public class Jogo {
 	public int getCodigoJogo() {
 		return codigoJogo;
 	}
+	
 	public String getNomeJogo() {
 		return nomeJogo;
 	}
+	
 	public String getDesenvolvedor() {
 		return desenvolvedor;
 	}
+	
 	public String getDistribuidora() {
 		return distribuidora;
 	}
+	
 	public int getAppIdSteam() {
 		return appIdSteam;
 	}
+	
 	public String getDataLancamento() {
 		return this.dataLancamento;
 	}
+	
 	public String getCategoria() {
 		return categoria;
 	}
+	
 	public double getValorDeVenda() {
 		return valorDeVenda;
 	}
+	
 	public Collection<TempoJogo> getTempoJogado() {
 		return tempoJogado;
 	}
-	public String getAvaliacaoJogo() {
-		String saida = "";
-		for (Avaliacao av : avaliacaoJogo) {
-			saida = saida + av.toString();
-		}
-		return saida;
-	}
-		
 	
 	private void validaValorVenda(double valor) throws IOException {
 		if(valor<0) {
@@ -78,13 +76,7 @@ public class Jogo {
 		}
 		this.valorDeVenda=valor;
 	}
-	
-	public void adicionaAvaliacaoJogo(int nota, String comentario) throws IOException {
-		Avaliacao av = new Avaliacao(comentario,nota);
-		this.avaliacaoJogo.add(av);
-	}
-	
-	
+		
 	public float tempoTotalJogado() {
 		float tempo=0.0f;
 		for (TempoJogo tempojogo : tempoJogado) {
@@ -98,12 +90,6 @@ public class Jogo {
 		
 		return ("Nome do jogo: " + this.getNomeJogo() +"\nValor:"+ this.valorDeVenda+ "R$" +  "\nDesenvolvedor: " + this.getDesenvolvedor() +
 				"\nDistribuidora: " + this.getDistribuidora() + "\nData de lançamento: " + this.getDataLancamento() 
-				+ "\nCategoria : " + this.getCategoria() + "\n\nAvaliação(ões):\n" + this.getAvaliacaoJogo());
+				+ "\nCategoria : " + this.getCategoria());
 	}
-	
-
-	
-	
-	
-	
 }
