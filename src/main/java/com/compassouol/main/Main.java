@@ -35,7 +35,7 @@ public class Main {
 				acessaMenuJogo();
 				break;
 			case 2:
-				// AcessaJogo();
+				AcessaJogo();
 				break;
 			case 3:
 				System.out.print("== BIBLIOTECA ENCERRADA! ==\n\n");
@@ -131,5 +131,11 @@ public class Main {
 		biblioteDeJogos.cadastraJogo(codigoJogo, nomeJogo, desenvolvedor, distribuidora, dataLancamento, categoria,
 				valorDeVenda);
 
+	}
+
+	private static void AcessaJogo()
+	{
+		
+		
 	}
 }

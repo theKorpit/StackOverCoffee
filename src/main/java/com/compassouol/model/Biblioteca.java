@@ -36,8 +36,13 @@ public class Biblioteca { // Antiga classe AGENDA - Steam possui biblioteca de j
 	}
 
 	public void exibeJogos() {
-		for (Jogo j : jogos) {
-			System.out.println("\n\n" + j);
+		if(jogos.isEmpty())
+			System.out.println("\nEsta biblioteca não possui nenhum jogo!");
+		else {
+			for (Jogo j : jogos) {
+				System.out.println("\n\n" + j);
+			}
 		}
+		
 	}
 }
