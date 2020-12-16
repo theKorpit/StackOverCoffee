@@ -2,6 +2,7 @@ package com.compassouol.main;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -46,12 +47,12 @@ public class Main {
 		}
 	}
 
-	private static void acessaMenuJogo() throws IOException {
+	private static void acessaMenuJogo() throws IOException { ///PRONTO
 
 		while (true) {
 
 			System.out.print("\n\n======= MENU DE JOGO =======\n" + "1 - Cadastrar jogo\n" + "2 - Pesquisar jogo\n"
-					+ "3 - Exibir todos os jogos\n" + "4 - Menu anterior\n" + "Digite a opção:");
+					+ "3 - Exibir todos os jogos\n" + "4 - Menu anterior\n" + "Digite a opção: ");
 			try {
 				opcao = sc.nextInt();
 			} catch (Exception e) {
@@ -65,10 +66,12 @@ public class Main {
 				cadastraJogo();
 				break;
 			case 2:
-				//pesquisaJogo();
+				System.out.print("\nInforme o nome do jogo: ");
+				String nomeJogo = sc.next();
+				biblioteDeJogos.pesquisaJogo(nomeJogo);
 				break;
 			case 3:
-				biblioteDeJogos.exibeJogos();
+				biblioteDeJogos.exibeJogos();				
 				break;
 			case 4:
 				System.out.print("== VOLTANDO A BIBLIOTECA! ==\n\n");
@@ -79,7 +82,7 @@ public class Main {
 		}
 	}
 
-	private static void cadastraJogo() throws IOException {
+	private static void cadastraJogo() throws IOException { ///PRONTO
 
 		int codigoJogo;
 		double valorDeVenda;
@@ -88,6 +91,11 @@ public class Main {
 		try {
 			System.out.print("\nDigite o codigo do jogo: ");
 			codigoJogo = sc.nextInt();
+			
+			if(biblioteDeJogos.buscaPorId(codigoJogo) != null) {
+				System.out.println("\nJogo ja cadastrado!");
+				return;
+			}
 		} catch (Exception e) {
 			sc.next();
 			System.out.println("\nOpção negada! Insira apenas números.\n");
@@ -124,7 +132,7 @@ public class Main {
 
 		} catch (Exception e) {
 			sc.next();
-			System.out.println("\nOpção negada! Insira apenas números e o separador decimar ','.\n");
+			System.out.println("\nOpção negada! Insira apenas números e o separador decimar ','\n");
 			return;
 		}
 
@@ -136,6 +144,27 @@ public class Main {
 	private static void AcessaJogo()
 	{
 		
+		int idJogo;
+		try {
+			System.out.print("\nDigite o codigo do jogo: ");
+			idJogo = sc.nextInt();
+		} catch (Exception e) {
+			sc.next();
+			System.out.println("\nOpção negada! Insira apenas números.\n");
+			return;
+		}
 		
+		Jogo j = biblioteDeJogos.buscaPorId(idJogo);
+		if( j.equals(null))
+			System.out.println("\nJogo não encontrado!");
+		else
+		{
+			System.out.println("\nJogo iniado!");
+			LocalDateTime dataInicio = LocalDateTime.now();
+			System.out.print("\nObrigado por jogar, volte mais vezes! ");
+			sc.nextLine();
+			LocalDateTime dataFim = LocalDateTime.now().plusHours(2);
+			j.adicionaTempoJogo(dataInicio, dataFim);	
+		}
 	}
 }

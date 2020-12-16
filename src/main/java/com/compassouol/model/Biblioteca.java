@@ -29,28 +29,42 @@ public class Biblioteca { // Antiga classe AGENDA - Steam possui biblioteca de j
 		}
 	}
 
-	public void pesquisaJogo() {
-		// implementar metodo que recebe uma lista para buscar um jogo e assim que
-		// achar, chamar o metodo ToString do objeto. Caso nao encontre algume erro
-		// tratar
+	public void pesquisaJogo(String nomeJogo) {
+		if (jogos.isEmpty())
+			System.out.println("\nEsta biblioteca não possui nenhum jogo!");
+		else{ 
+			boolean achou = false;
+			for (Jogo j : jogos) {
+				if (j.getNomeJogo().equals(nomeJogo)) {
+					System.out.println("\n\n" + j);
+					achou = true;
+				}	
+			}
+			if(!achou)
+				System.out.println("\nJogo não encontrado!");
+		}
 	}
 
 	public void exibeJogos() {
-		if(jogos.isEmpty())
+		
+		float totalSessoes = 0; 
+		if (jogos.isEmpty())
 			System.out.println("\nEsta biblioteca não possui nenhum jogo!");
 		else {
 			for (Jogo j : jogos) {
 				System.out.println("\n\n" + j);
+				totalSessoes += j.tempoTotalJogado();
 			}
+		System.out.println("\nNesta biblioteca você ja jogou: " + totalSessoes + "Horas");
 		}
-		
 	}
-	
+
 	public Jogo buscaPorId(int id) {
-		for(Jogo j : jogos) {
-			if(j.getCodigoJogo() == id)
+		for (Jogo j : jogos) {
+			if (j.getCodigoJogo() == id)
 				return j;
 		}
+
 		return null;
 	}
 }
