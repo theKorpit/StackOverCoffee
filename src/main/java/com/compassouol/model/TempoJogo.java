@@ -13,7 +13,7 @@ public class TempoJogo {
 	
 	public TempoJogo(LocalDateTime dataInicio, LocalDateTime dataFim) {
 		if(dataInicio.isAfter(dataFim))
-			throw new DataInicioMaiorQueDataFimException("A data Incial não pode ser menor que a data final");
+			throw new DataInicioMaiorQueDataFimException("A data Incial nao pode ser menor que a data final");
 		
 		this.dataInicio = dataInicio;
 		this.dataFim = dataFim;

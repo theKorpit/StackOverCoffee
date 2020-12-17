@@ -77,7 +77,7 @@ public class LeitorDeDadosComTratamento {
 				throw new Exception();
 			this.variavelDouble = Double.toString(valor);
 		} catch (Exception erroDouble) {
-			System.err.println("\nEntrada inválida! Insira apenas números e utilize o separador ','");
+			System.err.println("\nEntrada inválida! Insira apenas números positivos e utilize o separador ','");
 			return false;
 		}
 		return true;

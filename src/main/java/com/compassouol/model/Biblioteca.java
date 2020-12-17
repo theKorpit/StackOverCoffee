@@ -1,9 +1,7 @@
 package com.compassouol.model;
 
 import java.io.IOException;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Scanner;
@@ -37,7 +35,7 @@ public class Biblioteca {
 		adicionaJogoLista(nomeJogo, desenvolvedor, distribuidora, dataLancamento, categoria, valorDeVenda);
 	}
 
-	public void AcessaJogo() // Veio da main
+	public void acessaJogo()
 	{
 		Scanner sc = new Scanner(System.in);
 		int idJogo;
@@ -46,15 +44,15 @@ public class Biblioteca {
 			idJogo = sc.nextInt();
 		} catch (Exception e) {
 			sc.next();
-			System.out.println("\nErro! Insira apenas n�meros.\n");
+			System.out.println("\nErro! Insira apenas numeros.\n");
 			return;
 		}
 
-		if (!buscaJogoPorID(idJogo))
-			System.out.println("\nJogo n�o encontrado!");
+		if (buscaPorId(idJogo) == null)
+			System.out.println("\nJogo nao encontrado!");
 		else {
 			Jogo j = buscaPorId(idJogo);
-			System.out.println("\nJogo iniado!");
+			System.out.println("\nJogo iniciado!");
 			LocalDateTime dataInicio = LocalDateTime.now();
 			System.out.print("\nObrigado por jogar, volte mais vezes! ");
 			sc.nextLine();
@@ -74,7 +72,7 @@ public class Biblioteca {
 
 	public void pesquisaJogo(String nomeJogo) {
 		if (jogos.isEmpty())
-			System.out.println("\nEsta biblioteca n�o possui nenhum jogo!");
+			System.out.println("\nEsta biblioteca nao possui nenhum jogo!");
 		else {
 			boolean achou = false;
 			for (Jogo j : jogos) {
@@ -84,7 +82,7 @@ public class Biblioteca {
 				}
 			}
 			if (!achou)
-				System.out.println("\nJogo n�o encontrado!");
+				System.out.println("\nJogo nao encontrado!");
 		}
 	}
 
@@ -92,27 +90,13 @@ public class Biblioteca {
 
 		float totalSessoes = 0;
 		if (jogos.isEmpty())
-			System.out.println("\nEsta biblioteca n�o possui nenhum jogo!");
+			System.out.println("\nEsta biblioteca nao possui nenhum jogo!");
 		else {
 			for (Jogo j : jogos) {
 				System.out.println("\n\n" + j);
 				totalSessoes += j.tempoTotalJogado();
 			}
-			System.out.println("\nNesta biblioteca voc� ja jogou: " + totalSessoes + "Horas");
-		}
-	}
-
-	public boolean buscaJogoPorID(int idJogo) {
-		if (jogos.isEmpty()) {
-			System.out.println("\nEsta biblioteca n�o possui nenhum jogo!");
-			return false;
-		} else {
-			for (Jogo j : jogos) {
-				if (j.getCodigoJogo() == idJogo) {
-					return true;
-				}
-			}
-			return false;
+			System.out.println("\nNesta biblioteca voce ja jogou: " + totalSessoes + "Horas");
 		}
 	}
 
@@ -121,7 +105,8 @@ public class Biblioteca {
 			if (j.getCodigoJogo() == id)
 				return j;
 		}
-
+		if (jogos.isEmpty()) 
+			System.out.println("\nEsta biblioteca nao possui nenhum jogo!");
 		return null;
 	}
 }

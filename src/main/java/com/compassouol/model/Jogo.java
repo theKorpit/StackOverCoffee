@@ -76,7 +76,7 @@ public class Jogo {
 
 	private void validaValorVenda(double valor){
 		if (valor < 0) {
-			throw new ValorDeVendaNegativoException("O valor inserido � negativo");
+			throw new ValorDeVendaNegativoException("O valor inserido e negativo");
 		}
 		this.valorDeVenda = valor;
 	}
@@ -93,7 +93,7 @@ public class Jogo {
 	public String toString() {
 
 		return ( "ID do jogo: "+ this.codigoJogo+ "\nNome do jogo: " + this.getNomeJogo() + "\nValor: R$" + this.valorDeVenda + "\nDesenvolvedor: "
-				+ this.getDesenvolvedor() + "\nDistribuidora: " + this.getDistribuidora() + "\nData de lan�amento: "
+				+ this.getDesenvolvedor() + "\nDistribuidora: " + this.getDistribuidora() + "\nData de lancamento: "
 				+ this.getDataLancamento() + "\nCategoria : " + this.getCategoria() + "\nTempo total jogado: "
 				+ this.tempoTotalJogado() + " horas");
 	}

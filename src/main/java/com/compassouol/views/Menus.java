@@ -22,7 +22,7 @@ public class Menus {
 				MenuJogo();
 				break;
 			case 2:
-				biblioteDeJogos.AcessaJogo();
+				biblioteDeJogos.acessaJogo();
 				break;
 			case 3:
 				System.out.print("== BIBLIOTECA ENCERRADA! ==\n\n");
@@ -56,7 +56,7 @@ public class Menus {
 				System.out.print("== VOLTANDO A BIBLIOTECA! ==\n\n");
 				return;
 			default:
-				System.err.print("\nEntrada inválida! Insira uma opçõe válida.");
+				System.err.print("\nEntrada inválida! Insira uma opção válida.");
 			}
 		}
 	}
