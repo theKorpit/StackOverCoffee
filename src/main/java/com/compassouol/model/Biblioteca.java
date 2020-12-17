@@ -2,17 +2,104 @@ package com.compassouol.model;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Scanner;
 
-public class Biblioteca { // Antiga classe AGENDA - Steam possui biblioteca de jogos e nao agenda de jogos
+public class Biblioteca {
 
 	private Collection<Jogo> jogos;
 
 	public Biblioteca() {
 		jogos = new ArrayList<Jogo>();
+	}
+	
+	public void cadastraJogo() throws IOException { //Veio da main
+		Scanner sc = new Scanner(System.in);
+		int codigoJogo;
+		double valorDeVenda;
+		String dataLancamento;
+
+		try {
+			System.out.print("\nDigite o codigo do jogo: ");
+			codigoJogo = sc.nextInt();
+			
+			if(buscaPorId(codigoJogo) != null) {
+				System.out.println("\nJogo ja cadastrado!");
+				return;
+			}
+		} catch (Exception e) {
+			sc.next();
+			System.out.println("\nOpção negada! Insira apenas números.\n");
+			return;
+		}
+
+		System.out.print("\nDigite o nome do jogo: ");
+		String nomeJogo = sc.next();
+
+		System.out.print("\nDigite o nome do desenvolvedor: ");
+		String desenvolvedor = sc.next();
+
+		System.out.print("\nDigite o nome da distribuidora:");
+		String distribuidora = sc.next();
+
+		try {
+			System.out.print("\nDigite a data do lancamento(DD/MM/YYYY): ");
+			dataLancamento = sc.next();
+
+			DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+			LocalDate dl = LocalDate.parse(dataLancamento, formato);
+
+		} catch (Exception e) {
+			System.out.println("\nData inválida! Digite no formato DD/MM/YYYY.\n");
+			return;
+		}
+
+		System.out.print("\nDigite a categoria: ");
+		String categoria = sc.next();
+
+		try {
+			System.out.println("\nDigite o valor: ");
+			valorDeVenda = sc.nextDouble();
+
+		} catch (Exception e) {
+			sc.next();
+			System.out.println("\nOpção negada! Insira apenas números e o separador decimar ','\n");
+			return;
+		}
+
+		cadastraJogo(codigoJogo, nomeJogo, desenvolvedor, distribuidora, dataLancamento, categoria,
+				valorDeVenda);
+
+	}
+	
+	public void AcessaJogo() //Veio da main
+	{
+		Scanner sc = new Scanner(System.in);
+		int idJogo;
+		try {
+			System.out.print("\nDigite o codigo do jogo: ");
+			idJogo = sc.nextInt();
+		} catch (Exception e) {
+			sc.next();
+			System.out.println("\nOpção negada! Insira apenas números.\n");
+			return;
+		}
+		
+		Jogo j = buscaPorId(idJogo);
+		if( j.equals(null))
+			System.out.println("\nJogo não encontrado!");
+		else
+		{
+			System.out.println("\nJogo iniado!");
+			LocalDateTime dataInicio = LocalDateTime.now();
+			System.out.print("\nObrigado por jogar, volte mais vezes! ");
+			sc.nextLine();
+			LocalDateTime dataFim = LocalDateTime.now().plusHours(2);
+			j.adicionaTempoJogo(dataInicio, dataFim);	
+		}
 	}
 
 	public void cadastraJogo(int codigoJogo, String nomeJogo, String desenvolvedor, String distribuidora,
