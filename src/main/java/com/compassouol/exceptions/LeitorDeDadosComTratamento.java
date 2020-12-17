@@ -72,9 +72,11 @@ public class LeitorDeDadosComTratamento {
 	private boolean recebeDouble() { /// Le Double com tratamento
 		Scanner sc = new Scanner(System.in);
 		try {
-			this.variavelDouble = Double.toString(sc.nextDouble());	
+			double valor = sc.nextDouble();
+			if(valor<=0)
+				throw new Exception();
+			this.variavelDouble = Double.toString(valor);
 		} catch (Exception erroDouble) {
-			sc.next();
 			System.err.println("\nEntrada inválida! Insira apenas números e utilize o separador ','");
 			return false;
 		}
@@ -107,7 +109,6 @@ public class LeitorDeDadosComTratamento {
 				LocalDate.parse(variavelData, formato);
 			}	
 		} catch (Exception erroString) {
-
 			System.err.println("\nData inválida! Digite no formato DD/MM/YYYY.\n");
 			return false;
 		}
