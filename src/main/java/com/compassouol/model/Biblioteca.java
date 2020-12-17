@@ -35,7 +35,7 @@ public class Biblioteca {
 		double valorDeVenda = Double.parseDouble(leitor.lacoLeitura("\nDigite o valor: ", 3));
 
 
-		cadastraJogo(nomeJogo, desenvolvedor, distribuidora, dataLancamento, categoria,
+		adicionaJogoLista(nomeJogo, desenvolvedor, distribuidora, dataLancamento, categoria,
 				valorDeVenda);
 	}
 	
@@ -66,7 +66,7 @@ public class Biblioteca {
 		}
 	}
 
-	public void cadastraJogo(String nomeJogo, String desenvolvedor, String distribuidora,
+	public void adicionaJogoLista(String nomeJogo, String desenvolvedor, String distribuidora,
 			String dataLancamento, String categoria, double valorDeVenda) throws IOException {
 
 		try {
