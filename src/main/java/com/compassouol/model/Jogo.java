@@ -1,11 +1,10 @@
 package com.compassouol.model;
 
-import java.io.IOException;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
+
+import com.compassouol.exceptions.ValorDeVendaNegativoException;
 
 public class Jogo {
 	private static int counter=0;
@@ -22,7 +21,7 @@ public class Jogo {
 	private Collection<TempoJogo> tempoJogado;
 
 	public Jogo(String nomeJogo, String desenvolvedor, String distribuidora, String dataLancamento,
-			String categoria, double valorDeVenda) throws IOException {
+			String categoria, double valorDeVenda){
 		this.counter+=1;
 		this.codigoJogo = this.counter;
 		this.nomeJogo = nomeJogo;
@@ -75,9 +74,9 @@ public class Jogo {
 		tempoJogado.add(tempo);
 	}
 
-	private void validaValorVenda(double valor) throws IOException {
+	private void validaValorVenda(double valor){
 		if (valor < 0) {
-			throw new IOException("O valor inserido é negativo");
+			throw new ValorDeVendaNegativoException("O valor inserido ï¿½ negativo");
 		}
 		this.valorDeVenda = valor;
 	}
@@ -94,7 +93,7 @@ public class Jogo {
 	public String toString() {
 
 		return ( "ID do jogo: "+ this.codigoJogo+ "\nNome do jogo: " + this.getNomeJogo() + "\nValor: R$" + this.valorDeVenda + "\nDesenvolvedor: "
-				+ this.getDesenvolvedor() + "\nDistribuidora: " + this.getDistribuidora() + "\nData de lançamento: "
+				+ this.getDesenvolvedor() + "\nDistribuidora: " + this.getDistribuidora() + "\nData de lanï¿½amento: "
 				+ this.getDataLancamento() + "\nCategoria : " + this.getCategoria() + "\nTempo total jogado: "
 				+ this.tempoTotalJogado() + " horas");
 	}
