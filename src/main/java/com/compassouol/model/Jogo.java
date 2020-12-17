@@ -8,6 +8,7 @@ import java.util.Collection;
 import java.util.HashSet;
 
 public class Jogo {
+	private static int counter=0;
 	
 	
 	private int codigoJogo;
@@ -20,10 +21,10 @@ public class Jogo {
 	private double valorDeVenda;
 	private Collection<TempoJogo> tempoJogado;
 
-	public Jogo(int codigoJogo, String nomeJogo, String desenvolvedor, String distribuidora, String dataLancamento,
+	public Jogo(String nomeJogo, String desenvolvedor, String distribuidora, String dataLancamento,
 			String categoria, double valorDeVenda) throws IOException {
-		super();
-		this.codigoJogo = codigoJogo;
+		this.counter+=1;
+		this.codigoJogo = this.counter;
 		this.nomeJogo = nomeJogo;
 		this.desenvolvedor = desenvolvedor;
 		this.distribuidora = distribuidora;
@@ -92,9 +93,9 @@ public class Jogo {
 	@Override
 	public String toString() {
 
-		return ("Nome do jogo: " + this.getNomeJogo() + "\nValor: R$" + this.valorDeVenda + "\nDesenvolvedor: "
+		return ( "ID do jogo: "+ this.codigoJogo+ "\nNome do jogo: " + this.getNomeJogo() + "\nValor: R$" + this.valorDeVenda + "\nDesenvolvedor: "
 				+ this.getDesenvolvedor() + "\nDistribuidora: " + this.getDistribuidora() + "\nData de lançamento: "
 				+ this.getDataLancamento() + "\nCategoria : " + this.getCategoria() + "\nTempo total jogado: "
-				+ this.tempoTotalJogado());
+				+ this.tempoTotalJogado() + " horas");
 	}
 }

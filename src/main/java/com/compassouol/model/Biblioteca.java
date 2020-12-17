@@ -21,23 +21,21 @@ public class Biblioteca {
 	public void cadastraJogo() throws IOException {
 		
 		LeitorDeDadosComTratamento leitor = new LeitorDeDadosComTratamento();
-		
-		int codigoJogo = Integer.parseInt(leitor.lacoLeitura("\nDigite o codigo do jogo: ", 1));
-		
+			
 		String nomeJogo = leitor.lacoLeitura("\nDigite o nome do jogo: ", 4);
 		
 		String desenvolvedor = leitor.lacoLeitura("\nDigite o nome do desenvolvedor: ", 4);
 		
 		String distribuidora = leitor.lacoLeitura("\nDigite o nome da distribuidora: ", 4);
 		
-		String dataLancamento = leitor.lacoLeitura("\nDigite a data de lancamento do jogo(DD/MM/YYYY): ", 4);
+		String dataLancamento = leitor.lacoLeitura("\nDigite a data de lancamento do jogo(DD/MM/YYYY): ", 5);
 		
 		String categoria = leitor.lacoLeitura("\nDigite a categoria: ", 4);
 				
 		double valorDeVenda = Double.parseDouble(leitor.lacoLeitura("\nDigite o valor: ", 3));
 
 
-		cadastraJogo(codigoJogo, nomeJogo, desenvolvedor, distribuidora, dataLancamento, categoria,
+		cadastraJogo(nomeJogo, desenvolvedor, distribuidora, dataLancamento, categoria,
 				valorDeVenda);
 	}
 	
@@ -54,11 +52,11 @@ public class Biblioteca {
 			return;
 		}
 		
-		Jogo j = buscaPorId(idJogo);
-		if( j.equals(null))
+		if( !buscaJogoPorID(idJogo))
 			System.out.println("\nJogo não encontrado!");
 		else
 		{
+			Jogo j =buscaPorId(idJogo);
 			System.out.println("\nJogo iniado!");
 			LocalDateTime dataInicio = LocalDateTime.now();
 			System.out.print("\nObrigado por jogar, volte mais vezes! ");
@@ -68,11 +66,11 @@ public class Biblioteca {
 		}
 	}
 
-	public void cadastraJogo(int codigoJogo, String nomeJogo, String desenvolvedor, String distribuidora,
+	public void cadastraJogo(String nomeJogo, String desenvolvedor, String distribuidora,
 			String dataLancamento, String categoria, double valorDeVenda) throws IOException {
 
 		try {
-			Jogo j = new Jogo(codigoJogo, nomeJogo, desenvolvedor, distribuidora, dataLancamento, categoria,
+			Jogo j = new Jogo(nomeJogo, desenvolvedor, distribuidora, dataLancamento, categoria,
 					valorDeVenda);
 			jogos.add(j);
 			System.out.print("\nJogo incluido com sucesso na biblioteca!\n");
@@ -109,6 +107,21 @@ public class Biblioteca {
 				totalSessoes += j.tempoTotalJogado();
 			}
 		System.out.println("\nNesta biblioteca você ja jogou: " + totalSessoes + "Horas");
+		}
+	}
+	
+	public boolean buscaJogoPorID(int idJogo) {
+		if (jogos.isEmpty()) {
+			System.out.println("\nEsta biblioteca não possui nenhum jogo!");
+			return false;
+		}
+		else{ 
+			for (Jogo j : jogos) {
+				if (j.getCodigoJogo() == idJogo) {
+					return true;
+				}	
+			}
+			return false;
 		}
 	}
 
