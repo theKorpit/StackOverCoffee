@@ -27,7 +27,7 @@ public class Biblioteca {
 
 		String distribuidora = leitor.lacoLeitura("\nDigite o nome da distribuidora: ", 4);
 
-		String dataLancamento = leitor.lacoLeitura("\nDigite a data de lancamento do jogo(DD/MM/YYYY): ", 5);
+		String dataLancamento = leitor.lacoLeitura("\nDigite a data de lancamento do jogo(DD/MM/YYYY): ", 2);
 
 		String categoria = leitor.lacoLeitura("\nDigite a categoria: ", 4);
 
@@ -44,7 +44,6 @@ public class Biblioteca {
 		System.out.print("\nJogo incluido com sucesso na biblioteca!\n");
 	}
 
-	
 	public void acessaJogo() {
 
 		LeitorDeDadosComTratamento leitor = new LeitorDeDadosComTratamento();
@@ -67,7 +66,6 @@ public class Biblioteca {
 		}
 	}
 	
-
 	public void pesquisaJogo(String nomeJogo) {
 		if (jogos.isEmpty())
 			System.out.println("\nEsta biblioteca nao possui nenhum jogo!");
@@ -84,7 +82,6 @@ public class Biblioteca {
 		}
 	}
 	
-
 	public void exibeJogos() {
 
 		float totalSessoes = 0;
@@ -95,7 +92,7 @@ public class Biblioteca {
 				System.out.println("\n\n" + j);
 				totalSessoes += j.tempoTotalJogado();
 			}
-			System.out.println("\nNesta biblioteca voce ja jogou: " + totalSessoes + "Horas");
+			System.out.println("\nNesta biblioteca voce ja jogou: " + totalSessoes + " Horas");
 		}
 	}
 	

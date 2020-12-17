@@ -7,10 +7,9 @@ import java.util.Scanner;
 public class LeitorDeDadosComTratamento {
 
 	private String variavelInteira; // 1
-	private String variavelFloat; // 2
+	private String variavelData; // 2
 	private String variavelDouble; // 3
 	private String variavelString; // 4
-	private String variavelData; //5
 
 	public String lacoLeitura(String pergunta, int tipoDeLeitura) {
 
@@ -25,8 +24,8 @@ public class LeitorDeDadosComTratamento {
 					return this.variavelInteira;
 				break;
 			case 2:
-				if (recebeFloat())
-					return this.variavelFloat;
+				if (recebeData())
+					return this.variavelData;
 				break;
 			case 3:
 				if (recebeDouble())
@@ -36,11 +35,6 @@ public class LeitorDeDadosComTratamento {
 				if (recebeString())
 					return this.variavelString;
 				break;
-			case 5:
-				if (recebeData())
-					return this.variavelData;
-				break;
-				
 			}
 		}
 	}
@@ -52,18 +46,6 @@ public class LeitorDeDadosComTratamento {
 		} catch (Exception erroInt) {
 			sc.next();
 			System.err.println("\nEntrada inválida! Insira apenas números.");
-			return false;
-		}
-		return true;
-	}
-
-	private boolean recebeFloat() { /// Le Float com tratamento
-		Scanner sc = new Scanner(System.in);
-		try {
-			this.variavelFloat = Float.toString(sc.nextFloat());
-		} catch (Exception erroFloat) {
-			sc.next();
-			System.err.println("\nEntrada inválida! Insira apenas números e utilize o separador ','");
 			return false;
 		}
 		return true;
