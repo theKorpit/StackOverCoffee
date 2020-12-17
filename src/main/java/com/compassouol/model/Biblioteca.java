@@ -1,12 +1,8 @@
 package com.compassouol.model;
 
-import java.io.IOException;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Scanner;
 
 import com.compassouol.exceptions.LeitorDeDadosComTratamento;
 
@@ -18,7 +14,7 @@ public class Biblioteca {
 		jogos = new ArrayList<Jogo>();
 	}
 
-	public void cadastraJogo() throws IOException {
+	public void cadastraJogo() {
 
 		LeitorDeDadosComTratamento leitor = new LeitorDeDadosComTratamento();
 
@@ -37,44 +33,42 @@ public class Biblioteca {
 		adicionaJogoLista(nomeJogo, desenvolvedor, distribuidora, dataLancamento, categoria, valorDeVenda);
 	}
 
-	public void AcessaJogo() // Veio da main
-	{
-		Scanner sc = new Scanner(System.in);
-		int idJogo;
-		try {
-			System.out.print("\nDigite o codigo do jogo: ");
-			idJogo = sc.nextInt();
-		} catch (Exception e) {
-			sc.next();
-			System.out.println("\nErro! Insira apenas n�meros.\n");
-			return;
-		}
-
-		if (!buscaJogoPorID(idJogo))
-			System.out.println("\nJogo n�o encontrado!");
-		else {
-			Jogo j = buscaPorId(idJogo);
-			System.out.println("\nJogo iniado!");
-			LocalDateTime dataInicio = LocalDateTime.now();
-			System.out.print("\nObrigado por jogar, volte mais vezes! ");
-			sc.nextLine();
-			LocalDateTime dataFim = LocalDateTime.now().plusHours(2);
-			j.adicionaTempoJogo(dataInicio, dataFim);
-		}
-	}
-
+	
 	public void adicionaJogoLista(String nomeJogo, String desenvolvedor, String distribuidora, String dataLancamento,
-			String categoria, double valorDeVenda) throws IOException {
+			String categoria, double valorDeVenda) {
 
 		Jogo j = new Jogo(nomeJogo, desenvolvedor, distribuidora, dataLancamento, categoria, valorDeVenda);
 		jogos.add(j);
 		System.out.print("\nJogo incluido com sucesso na biblioteca!\n");
-
 	}
+
+	
+	public void acessaJogo() {
+
+		LeitorDeDadosComTratamento leitor = new LeitorDeDadosComTratamento();
+
+		int idJogo = Integer.parseInt(leitor.lacoLeitura("\nDigite o codigo do jogo: ", 1));
+
+		if (buscaPorId(idJogo) == null)
+			System.out.println("\nJogo nao encontrado!");
+		else {
+			System.out.print("\nJogo iniado!");
+
+			LocalDateTime dataInicio = LocalDateTime.now();
+			LocalDateTime dataFim = LocalDateTime.now()
+					.plusHours(Integer.parseInt(leitor.lacoLeitura("\nQuantas horas voce jogou: ", 1)));
+
+			System.out.print("\nJogo finalizado!");
+
+			Jogo j = buscaPorId(idJogo);
+			j.adicionaTempoJogo(dataInicio, dataFim);
+		}
+	}
+	
 
 	public void pesquisaJogo(String nomeJogo) {
 		if (jogos.isEmpty())
-			System.out.println("\nEsta biblioteca n�o possui nenhum jogo!");
+			System.out.println("\nEsta biblioteca nao possui nenhum jogo!");
 		else {
 			boolean achou = false;
 			for (Jogo j : jogos) {
@@ -87,12 +81,13 @@ public class Biblioteca {
 				System.out.println("\nJogo n�o encontrado!");
 		}
 	}
+	
 
 	public void exibeJogos() {
 
 		float totalSessoes = 0;
 		if (jogos.isEmpty())
-			System.out.println("\nEsta biblioteca n�o possui nenhum jogo!");
+			System.out.println("\nEsta biblioteca nao possui nenhum jogo!");
 		else {
 			for (Jogo j : jogos) {
 				System.out.println("\n\n" + j);
@@ -102,26 +97,14 @@ public class Biblioteca {
 		}
 	}
 
-	public boolean buscaJogoPorID(int idJogo) {
-		if (jogos.isEmpty()) {
-			System.out.println("\nEsta biblioteca n�o possui nenhum jogo!");
-			return false;
-		} else {
-			for (Jogo j : jogos) {
-				if (j.getCodigoJogo() == idJogo) {
-					return true;
-				}
-			}
-			return false;
-		}
-	}
-
+	
 	public Jogo buscaPorId(int id) {
 		for (Jogo j : jogos) {
 			if (j.getCodigoJogo() == id)
 				return j;
 		}
-
+		if (jogos.isEmpty()) 
+			System.out.println("\nEsta biblioteca n�o possui nenhum jogo!");
 		return null;
 	}
 }

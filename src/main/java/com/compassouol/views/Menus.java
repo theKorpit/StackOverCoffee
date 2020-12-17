@@ -22,7 +22,7 @@ public class Menus {
 				MenuJogo();
 				break;
 			case 2:
-				biblioteDeJogos.AcessaJogo();
+				biblioteDeJogos.acessaJogo();
 				break;
 			case 3:
 				System.out.print("== BIBLIOTECA ENCERRADA! ==\n\n");
