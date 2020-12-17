@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Scanner;
 
+import com.compassouol.exceptions.LeitorDeDadosComTratamento;
+
 public class Biblioteca {
 
 	private Collection<Jogo> jogos;
@@ -16,63 +18,26 @@ public class Biblioteca {
 		jogos = new ArrayList<Jogo>();
 	}
 	
-	public void cadastraJogo() throws IOException { //Veio da main
-		Scanner sc = new Scanner(System.in);
-		int codigoJogo;
-		double valorDeVenda;
-		String dataLancamento;
-
-		try {
-			System.out.print("\nDigite o codigo do jogo: ");
-			codigoJogo = sc.nextInt();
-			
-			if(buscaPorId(codigoJogo) != null) {
-				System.out.println("\nJogo ja cadastrado!");
-				return;
-			}
-		} catch (Exception e) {
-			sc.next();
-			System.out.println("\nOpção negada! Insira apenas números.\n");
-			return;
-		}
-
-		System.out.print("\nDigite o nome do jogo: ");
-		String nomeJogo = sc.next();
-
-		System.out.print("\nDigite o nome do desenvolvedor: ");
-		String desenvolvedor = sc.next();
-
-		System.out.print("\nDigite o nome da distribuidora:");
-		String distribuidora = sc.next();
-
-		try {
-			System.out.print("\nDigite a data do lancamento(DD/MM/YYYY): ");
-			dataLancamento = sc.next();
-
-			DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-			LocalDate dl = LocalDate.parse(dataLancamento, formato);
-
-		} catch (Exception e) {
-			System.out.println("\nData inválida! Digite no formato DD/MM/YYYY.\n");
-			return;
-		}
-
-		System.out.print("\nDigite a categoria: ");
-		String categoria = sc.next();
-
-		try {
-			System.out.println("\nDigite o valor: ");
-			valorDeVenda = sc.nextDouble();
-
-		} catch (Exception e) {
-			sc.next();
-			System.out.println("\nOpção negada! Insira apenas números e o separador decimar ','\n");
-			return;
-		}
+	public void cadastraJogo() throws IOException {
+		
+		LeitorDeDadosComTratamento leitor = new LeitorDeDadosComTratamento();
+		
+		int codigoJogo = Integer.parseInt(leitor.lacoLeitura("\nDigite o codigo do jogo: ", 1));
+		
+		String nomeJogo = leitor.lacoLeitura("\nDigite o nome do jogo: ", 4);
+		
+		String desenvolvedor = leitor.lacoLeitura("\nDigite o nome do desenvolvedor: ", 4);
+		
+		String distribuidora = leitor.lacoLeitura("\nDigite o nome da distribuidora: ", 4);
+		
+		String dataLancamento = leitor.lacoLeitura("\nDigite a data de lancamento do jogo(DD/MM/YYYY): ", 4);
+		
+		String categoria = leitor.lacoLeitura("\nDigite a categoria: ", 4);
+				
+		double valorDeVenda = Double.parseDouble(leitor.lacoLeitura("\nDigite o valor: ", 3));
 
 		cadastraJogo(codigoJogo, nomeJogo, desenvolvedor, distribuidora, dataLancamento, categoria,
 				valorDeVenda);
-
 	}
 	
 	public void AcessaJogo() //Veio da main
