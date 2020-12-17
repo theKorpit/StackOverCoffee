@@ -1,10 +1,11 @@
 package com.compassouol.model;
 
+
 import java.io.IOException;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Scanner;
 
 import com.compassouol.exceptions.LeitorDeDadosComTratamento;
 
@@ -16,7 +17,7 @@ public class Biblioteca {
 		jogos = new ArrayList<Jogo>();
 	}
 
-	public void cadastraJogo() throws IOException {
+	public void cadastraJogo() {
 
 		LeitorDeDadosComTratamento leitor = new LeitorDeDadosComTratamento();
 
@@ -35,40 +36,37 @@ public class Biblioteca {
 		adicionaJogoLista(nomeJogo, desenvolvedor, distribuidora, dataLancamento, categoria, valorDeVenda);
 	}
 
-	public void acessaJogo()
-	{
-		Scanner sc = new Scanner(System.in);
-		int idJogo;
-		try {
-			System.out.print("\nDigite o codigo do jogo: ");
-			idJogo = sc.nextInt();
-		} catch (Exception e) {
-			sc.next();
-			System.out.println("\nErro! Insira apenas numeros.\n");
-			return;
-		}
-
-		if (buscaPorId(idJogo) == null)
-			System.out.println("\nJogo nao encontrado!");
-		else {
-			Jogo j = buscaPorId(idJogo);
-			System.out.println("\nJogo iniciado!");
-			LocalDateTime dataInicio = LocalDateTime.now();
-			System.out.print("\nObrigado por jogar, volte mais vezes! ");
-			sc.nextLine();
-			LocalDateTime dataFim = LocalDateTime.now().plusHours(2);
-			j.adicionaTempoJogo(dataInicio, dataFim);
-		}
-	}
-
 	public void adicionaJogoLista(String nomeJogo, String desenvolvedor, String distribuidora, String dataLancamento,
-			String categoria, double valorDeVenda) throws IOException {
+			String categoria, double valorDeVenda) {
 
 		Jogo j = new Jogo(nomeJogo, desenvolvedor, distribuidora, dataLancamento, categoria, valorDeVenda);
 		jogos.add(j);
 		System.out.print("\nJogo incluido com sucesso na biblioteca!\n");
-
 	}
+
+	
+	public void acessaJogo() {
+
+		LeitorDeDadosComTratamento leitor = new LeitorDeDadosComTratamento();
+
+		int idJogo = Integer.parseInt(leitor.lacoLeitura("\nDigite o codigo do jogo: ", 1));
+
+		if (buscaPorId(idJogo) == null)
+			System.out.println("\nJogo nao encontrado!");
+		else {
+			System.out.print("\nJogo iniado!");
+
+			LocalDateTime dataInicio = LocalDateTime.now();
+			LocalDateTime dataFim = LocalDateTime.now()
+					.plusHours(Integer.parseInt(leitor.lacoLeitura("\nQuantas horas voce jogou: ", 1)));
+
+			System.out.print("\nJogo finalizado!");
+
+			Jogo j = buscaPorId(idJogo);
+			j.adicionaTempoJogo(dataInicio, dataFim);
+		}
+	}
+	
 
 	public void pesquisaJogo(String nomeJogo) {
 		if (jogos.isEmpty())
@@ -85,6 +83,7 @@ public class Biblioteca {
 				System.out.println("\nJogo nao encontrado!");
 		}
 	}
+	
 
 	public void exibeJogos() {
 
@@ -99,7 +98,7 @@ public class Biblioteca {
 			System.out.println("\nNesta biblioteca voce ja jogou: " + totalSessoes + "Horas");
 		}
 	}
-
+	
 	public Jogo buscaPorId(int id) {
 		for (Jogo j : jogos) {
 			if (j.getCodigoJogo() == id)
