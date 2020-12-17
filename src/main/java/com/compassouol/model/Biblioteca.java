@@ -36,6 +36,7 @@ public class Biblioteca {
 				
 		double valorDeVenda = Double.parseDouble(leitor.lacoLeitura("\nDigite o valor: ", 3));
 
+
 		cadastraJogo(codigoJogo, nomeJogo, desenvolvedor, distribuidora, dataLancamento, categoria,
 				valorDeVenda);
 	}
@@ -49,7 +50,7 @@ public class Biblioteca {
 			idJogo = sc.nextInt();
 		} catch (Exception e) {
 			sc.next();
-			System.out.println("\nOpção negada! Insira apenas números.\n");
+			System.out.println("\nErro! Insira apenas números.\n");
 			return;
 		}
 		
@@ -77,7 +78,7 @@ public class Biblioteca {
 			System.out.print("\nJogo incluido com sucesso na biblioteca!\n");
 
 		} catch (IOException e) {
-			throw new IOException("\nDesculpe, nï¿½o foi possï¿½vel incluir o jogo na biblioteca!\n");
+			throw new IOException("\nDesculpe, nao foi possivel incluir o jogo na biblioteca!\n");
 		}
 	}
 
