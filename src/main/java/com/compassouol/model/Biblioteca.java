@@ -32,19 +32,25 @@ public class Biblioteca {
 			}
 		} catch (Exception e) {
 			sc.next();
-			System.out.println("\nOpção negada! Insira apenas números.\n");
+			System.out.println("\nErro! Insira apenas números.\n");
 			return;
 		}
-
 		System.out.print("\nDigite o nome do jogo: ");
-		String nomeJogo = sc.next();
+		String nomeJogo = sc.nextLine();
+		
+		sc.next();//desbugando nextLine
+		
 
 		System.out.print("\nDigite o nome do desenvolvedor: ");
-		String desenvolvedor = sc.next();
+		String desenvolvedor = sc.nextLine();
+		
+		sc.next();//desbugando nextLine
 
-		System.out.print("\nDigite o nome da distribuidora:");
-		String distribuidora = sc.next();
-
+		System.out.print("\nDigite o nome da distribuidora: ");
+		String distribuidora = sc.nextLine();
+		
+		sc.next();//desbugando nextLine
+		
 		try {
 			System.out.print("\nDigite a data do lancamento(DD/MM/YYYY): ");
 			dataLancamento = sc.next();
@@ -56,20 +62,20 @@ public class Biblioteca {
 			System.out.println("\nData inválida! Digite no formato DD/MM/YYYY.\n");
 			return;
 		}
-
+		
 		System.out.print("\nDigite a categoria: ");
-		String categoria = sc.next();
-
+		String categoria = sc.next();//nestline não funcionou aqui, categorias só permitem uma palavra
+		
 		try {
 			System.out.println("\nDigite o valor: ");
 			valorDeVenda = sc.nextDouble();
 
 		} catch (Exception e) {
 			sc.next();
-			System.out.println("\nOpção negada! Insira apenas números e o separador decimar ','\n");
+			System.out.println("\nErro! Insira apenas números e o separador decimal ','\n");
 			return;
 		}
-
+		
 		cadastraJogo(codigoJogo, nomeJogo, desenvolvedor, distribuidora, dataLancamento, categoria,
 				valorDeVenda);
 
@@ -84,7 +90,7 @@ public class Biblioteca {
 			idJogo = sc.nextInt();
 		} catch (Exception e) {
 			sc.next();
-			System.out.println("\nOpção negada! Insira apenas números.\n");
+			System.out.println("\nErro! Insira apenas números.\n");
 			return;
 		}
 		
@@ -112,7 +118,7 @@ public class Biblioteca {
 			System.out.print("\nJogo incluido com sucesso na biblioteca!\n");
 
 		} catch (IOException e) {
-			throw new IOException("\nDesculpe, nï¿½o foi possï¿½vel incluir o jogo na biblioteca!\n");
+			throw new IOException("\nDesculpe, nao foi possivel incluir o jogo na biblioteca!\n");
 		}
 	}
 
