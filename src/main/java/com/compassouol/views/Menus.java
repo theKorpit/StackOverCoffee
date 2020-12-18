@@ -38,21 +38,26 @@ public class Menus {
 		while (true) {
 
 			System.out.print("\n\n======= MENU DE JOGO =======");
-			System.out.print("\n1 - Cadastrar jogo" + "\n2 - Pesquisar jogo" + "\n3 - Exibir todos os jogos"
-					+ "\n4 - Menu anterior");
-
+			System.out.print("\n1 - Cadastrar jogo" + "\n2 - Excluir jogo" + "\n3 - Pesquisar jogo por nome"
+					+ "\n4 - Pesquisar jogo por categoria" + "\n5 - Exibir todos os jogos" + "\n6 - Menu anterior");
 			switch (Integer.parseInt(leitor.lacoLeitura("\nDigite a opção: ", 1))) {
 
 			case 1:
 				biblioteDeJogos.cadastraJogo();
 				break;
 			case 2:
-				biblioteDeJogos.pesquisaJogo(leitor.lacoLeitura("\nInforme o nome do jogo: ", 4));
+				biblioteDeJogos.excluiJogo(Integer.parseInt(leitor.lacoLeitura("Informe o ID do jogo: ", 1)));
 				break;
 			case 3:
-				biblioteDeJogos.exibeJogos();
+				biblioteDeJogos.pesquisaJogoNome(leitor.lacoLeitura("\nInforme o nome do jogo: ", 4));
 				break;
 			case 4:
+				biblioteDeJogos.pesquisaJogoCategoria(leitor.lacoLeitura("\nInforme a categoria do jogo: ", 4));
+				break;
+			case 5:
+				biblioteDeJogos.exibeJogos();
+				break;
+			case 6:
 				System.out.print("== VOLTANDO A BIBLIOTECA! ==\n\n");
 				return;
 			default:

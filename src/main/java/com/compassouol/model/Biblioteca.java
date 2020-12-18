@@ -44,6 +44,11 @@ public class Biblioteca {
 		System.out.print("\nJogo incluido com sucesso na biblioteca!\n");
 	}
 
+	public void excluiJogo(int idJogo)
+	{
+		
+	}
+	
 	public void acessaJogo() {
 
 		LeitorDeDadosComTratamento leitor = new LeitorDeDadosComTratamento();
@@ -66,13 +71,29 @@ public class Biblioteca {
 		}
 	}
 	
-	public void pesquisaJogo(String nomeJogo) {
+	public void pesquisaJogoNome(String nomeJogo) {
 		if (jogos.isEmpty())
 			System.out.println("\nEsta biblioteca nao possui nenhum jogo!");
 		else {
 			boolean achou = false;
 			for (Jogo j : jogos) {
 				if (j.getNomeJogo().equals(nomeJogo)) {
+					System.out.println("\n\n" + j);
+					achou = true;
+				}
+			}
+			if (!achou)
+				System.out.println("\nJogo nao encontrado!");
+		}
+	}
+	
+	public void pesquisaJogoCategoria(String categoriaJogo) {
+		if (jogos.isEmpty())
+			System.out.println("\nEsta biblioteca nao possui nenhum jogo!");
+		else {
+			boolean achou = false;
+			for (Jogo j : jogos) {
+				if (j.getCategoria().equals(categoriaJogo)) {
 					System.out.println("\n\n" + j);
 					achou = true;
 				}
