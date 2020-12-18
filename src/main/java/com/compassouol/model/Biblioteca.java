@@ -1,11 +1,8 @@
 package com.compassouol.model;
 
-
-import java.io.IOException;
-
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedList;
 
 import com.compassouol.exceptions.LeitorDeDadosComTratamento;
 
@@ -14,7 +11,7 @@ public class Biblioteca {
 	private Collection<Jogo> jogos;
 
 	public Biblioteca() {
-		jogos = new ArrayList<Jogo>();
+		jogos = new LinkedList<Jogo>();
 	}
 
 	public void cadastraJogo() {
@@ -44,11 +41,19 @@ public class Biblioteca {
 		System.out.print("\nJogo incluido com sucesso na biblioteca!\n");
 	}
 
-	public void excluiJogo(int idJogo)
-	{
-		
+
+	public void excluiJogo(int idJogo) {
+		Jogo j = buscaPorId(idJogo);
+
+		if (j == null)
+			System.out.print("\nJogo nao encontrado");
+
+		else {
+			jogos.remove(j);
+			System.out.print("\nJogo deletado com sucesso!");
+		}
 	}
-	
+
 	public void acessaJogo() {
 
 		LeitorDeDadosComTratamento leitor = new LeitorDeDadosComTratamento();
@@ -70,60 +75,53 @@ public class Biblioteca {
 			j.adicionaTempoJogo(dataInicio, dataFim);
 		}
 	}
-	
-	public void pesquisaJogoNome(String nomeJogo) {
-		if (jogos.isEmpty())
-			System.out.println("\nEsta biblioteca nao possui nenhum jogo!");
-		else {
-			boolean achou = false;
-			for (Jogo j : jogos) {
-				if (j.getNomeJogo().equals(nomeJogo)) {
-					System.out.println("\n\n" + j);
-					achou = true;
-				}
-			}
-			if (!achou)
-				System.out.println("\nJogo nao encontrado!");
-		}
-	}
-	
-	public void pesquisaJogoCategoria(String categoriaJogo) {
-		if (jogos.isEmpty())
-			System.out.println("\nEsta biblioteca nao possui nenhum jogo!");
-		else {
-			boolean achou = false;
-			for (Jogo j : jogos) {
-				if (j.getCategoria().equals(categoriaJogo)) {
-					System.out.println("\n\n" + j);
-					achou = true;
-				}
-			}
-			if (!achou)
-				System.out.println("\nJogo nao encontrado!");
-		}
-	}
-	
-	public void exibeJogos() {
 
-		float totalSessoes = 0;
-		if (jogos.isEmpty())
-			System.out.println("\nEsta biblioteca nao possui nenhum jogo!");
-		else {
-			for (Jogo j : jogos) {
+	public void pesquisaJogoNome(String nomeJogo) {
+		boolean achou = false;
+		for (Jogo j : jogos) {
+			if (j.getNomeJogo().equals(nomeJogo)) {
 				System.out.println("\n\n" + j);
-				totalSessoes += j.tempoTotalJogado();
+				achou = true;
 			}
-			System.out.println("\nNesta biblioteca voce ja jogou: " + totalSessoes + " Horas");
 		}
+		if (!achou)
+			System.out.println("\nJogo nao encontrado!");
 	}
-	
+
+	public void pesquisaJogoCategoria(String categoriaJogo) {
+		boolean achou = false;
+		for (Jogo j : jogos) {
+			if (j.getCategoria().equals(categoriaJogo)) {
+				System.out.println("\n\n" + j);
+				achou = true;
+			}
+		}
+		if (!achou)
+			System.out.println("\nJogo nao encontrado!");
+	}
+
+	public void exibeJogos() {
+		float totalSessoes = 0;
+		for (Jogo j : jogos) {
+			System.out.println("\n\n" + j);
+			totalSessoes += j.tempoTotalJogado();
+		}
+		System.out.println("\nNesta biblioteca voce ja jogou: " + totalSessoes + " Horas");
+	}
+
 	public Jogo buscaPorId(int id) {
 		for (Jogo j : jogos) {
 			if (j.getCodigoJogo() == id)
 				return j;
 		}
-		if (jogos.isEmpty()) 
-			System.out.println("\nEsta biblioteca nao possui nenhum jogo!");
 		return null;
+	}
+
+	public boolean listaVazia() {
+		if (jogos.isEmpty()) {
+			System.out.println("\nEsta biblioteca nao possui nenhum jogo!");
+			return true;
+		}
+		return false;
 	}
 }

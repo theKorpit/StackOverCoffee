@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import com.compassouol.exceptions.LeitorDeDadosComTratamento;
 import com.compassouol.model.Biblioteca;
+import com.compassouol.model.Jogo;
 
 public class Menus {
 	public static LeitorDeDadosComTratamento leitor = new LeitorDeDadosComTratamento();
@@ -19,10 +20,11 @@ public class Menus {
 			switch (Integer.parseInt(leitor.lacoLeitura("\nDigite a opção: ", 1))) {
 
 			case 1:
-				MenuJogo();
+				menuJogo();
 				break;
 			case 2:
-				biblioteDeJogos.acessaJogo();
+				if (!biblioteDeJogos.listaVazia())
+					biblioteDeJogos.acessaJogo();
 				break;
 			case 3:
 				System.out.print("== BIBLIOTECA ENCERRADA! ==\n\n");
@@ -33,36 +35,54 @@ public class Menus {
 		}
 	}
 
-	private static void MenuJogo() throws IOException { /// PRONTO
+	private static void menuJogo() throws IOException { /// PRONTO
 
 		while (true) {
 
 			System.out.print("\n\n======= MENU DE JOGO =======");
-			System.out.print("\n1 - Cadastrar jogo" + "\n2 - Excluir jogo" + "\n3 - Pesquisar jogo por nome"
-					+ "\n4 - Pesquisar jogo por categoria" + "\n5 - Exibir todos os jogos" + "\n6 - Menu anterior");
+			System.out.print("\n1 - Cadastrar jogo" + "\n2 - Alterar jogo" + "\n3 - Excluir jogo"
+					+ "\n4 - Pesquisar jogo por nome" + "\n5 - Pesquisar jogo por categoria"
+					+ "\n6 - Exibir todos os jogos" + "\n7 - Menu anterior");
+
 			switch (Integer.parseInt(leitor.lacoLeitura("\nDigite a opção: ", 1))) {
 
 			case 1:
 				biblioteDeJogos.cadastraJogo();
 				break;
 			case 2:
-				biblioteDeJogos.excluiJogo(Integer.parseInt(leitor.lacoLeitura("Informe o ID do jogo: ", 1)));
+				//if (!biblioteDeJogos.listaVazia())
+					//menuAltera();
 				break;
 			case 3:
-				biblioteDeJogos.pesquisaJogoNome(leitor.lacoLeitura("\nInforme o nome do jogo: ", 4));
+				if (!biblioteDeJogos.listaVazia())
+					biblioteDeJogos.excluiJogo(Integer.parseInt(leitor.lacoLeitura("Informe o ID do jogo: ", 1)));
 				break;
 			case 4:
-				biblioteDeJogos.pesquisaJogoCategoria(leitor.lacoLeitura("\nInforme a categoria do jogo: ", 4));
+				if (!biblioteDeJogos.listaVazia())
+					biblioteDeJogos.pesquisaJogoNome(leitor.lacoLeitura("\nInforme o nome do jogo: ", 4));
 				break;
 			case 5:
-				biblioteDeJogos.exibeJogos();
+				if (!biblioteDeJogos.listaVazia())
+					biblioteDeJogos.pesquisaJogoCategoria(leitor.lacoLeitura("\nInforme a categoria do jogo: ", 4));
 				break;
 			case 6:
+				if (!biblioteDeJogos.listaVazia())
+					biblioteDeJogos.exibeJogos();
+				break;
+			case 7:
 				System.out.print("== VOLTANDO A BIBLIOTECA! ==\n\n");
 				return;
 			default:
-				System.err.print("\nEntrada inválida! Insira uma opção válida.");
+				System.err.print("\nEntrada invalida! Insira uma opcao valida.");
 			}
 		}
 	}
+/*
+	public static int menuAltera() {
+		System.out.println("\n\n======= MENU DE ALTERACAO =======");
+		System.out.println("\n1 - Nome \n2 - Desenvolvedor "
+				+ "\n3 - Distribuidora \n4 - Data de lanÃ§amento \n5 - Categoria \n6 - Valor de venda");
+		
+	}
+	*/
 }

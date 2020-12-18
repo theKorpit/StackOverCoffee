@@ -41,6 +41,30 @@ public class Jogo {
 		return nomeJogo;
 	}
 
+	public void setNomeJogo(String nomeJogo) {
+		this.nomeJogo = nomeJogo;
+	}
+
+	public void setDesenvolvedor(String desenvolvedor) {
+		this.desenvolvedor = desenvolvedor;
+	}
+
+	public void setDistribuidora(String distribuidora) {
+		this.distribuidora = distribuidora;
+	}
+
+	public void setDataLancamento(String dataLancamento) {
+		this.dataLancamento = dataLancamento;
+	}
+
+	public void setCategoria(String categoria) {
+		this.categoria = categoria;
+	}
+
+	public void setValorDeVenda(double valorDeVenda) {
+		this.valorDeVenda = valorDeVenda;
+	}
+
 	public String getDesenvolvedor() {
 		return desenvolvedor;
 	}
