@@ -118,7 +118,7 @@ public class BibliotecaService {
 	public void pesquisaJogoNome(String nomeJogo) {
 		boolean achou = false;
 		for (Jogo j : biblioteca.getJogos()) {
-			if (j.getNomeJogo().equals(nomeJogo)) {
+			if (j.getNomeJogo().trim().equalsIgnoreCase(nomeJogo.trim())) {
 				System.out.println("\n\n" + j);
 				achou = true;
 			}
@@ -130,7 +130,7 @@ public class BibliotecaService {
 	public void pesquisaJogoCategoria(String categoriaJogo) {
 		boolean achou = false;
 		for (Jogo j : biblioteca.getJogos()) {
-			if (j.getCategoria().equals(categoriaJogo)) {
+			if (j.getCategoria().trim().equalsIgnoreCase(categoriaJogo.trim())) {
 				System.out.println("\n\n" + j);
 				achou = true;
 			}
