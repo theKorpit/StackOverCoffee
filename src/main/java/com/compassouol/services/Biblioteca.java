@@ -1,15 +1,16 @@
-package com.compassouol.model;
+package com.compassouol.services;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.LinkedList;
 
-import com.compassouol.exceptions.LeitorDeDadosComTratamento;
+import com.compassouol.model.Jogo;
 import com.compassouol.views.Menus;
 
 public class Biblioteca {
 
 	private Collection<Jogo> jogos;
+	private static LeitorComTratamento leitor = new LeitorComTratamento();
 
 	public Biblioteca() {
 		jogos = new LinkedList<Jogo>();
@@ -17,23 +18,22 @@ public class Biblioteca {
 
 	public void cadastraJogo() {
 
-		LeitorDeDadosComTratamento leitor = new LeitorDeDadosComTratamento();
+		String nomeJogo = leitor.lacoLeitura("\nDigite o nome do jogo: ", leitor.tipo.String);
 
-		String nomeJogo = leitor.lacoLeitura("\nDigite o nome do jogo: ", 4);
+		String desenvolvedor = leitor.lacoLeitura("\nDigite o nome do desenvolvedor: ", leitor.tipo.String);
 
-		String desenvolvedor = leitor.lacoLeitura("\nDigite o nome do desenvolvedor: ", 4);
+		String distribuidora = leitor.lacoLeitura("\nDigite o nome da distribuidora: ", leitor.tipo.String);
 
-		String distribuidora = leitor.lacoLeitura("\nDigite o nome da distribuidora: ", 4);
+		String dataLancamento = leitor.lacoLeitura("\nDigite a data de lancamento do jogo(DD/MM/YYYY): ", leitor.tipo.Data);
 
-		String dataLancamento = leitor.lacoLeitura("\nDigite a data de lancamento do jogo(DD/MM/YYYY): ", 2);
+		String categoria = leitor.lacoLeitura("\nDigite a categoria: ", leitor.tipo.String);
 
-		String categoria = leitor.lacoLeitura("\nDigite a categoria: ", 4);
-
-		double valorDeVenda = Double.parseDouble(leitor.lacoLeitura("\nDigite o valor: ", 3));
+		double valorDeVenda = Double.parseDouble(leitor.lacoLeitura("\nDigite o valor: ", leitor.tipo.Double));
 
 		adicionaJogoLista(nomeJogo, desenvolvedor, distribuidora, dataLancamento, categoria, valorDeVenda);
+		
 	}
-
+	
 	public void adicionaJogoLista(String nomeJogo, String desenvolvedor, String distribuidora, String dataLancamento,
 			String categoria, double valorDeVenda) {
 
@@ -44,8 +44,6 @@ public class Biblioteca {
 	
 	public void alteraJogo(int idJogo) {
 		
-		LeitorDeDadosComTratamento leitor = new LeitorDeDadosComTratamento();
-		
 		Jogo jogo = buscaPorId(idJogo);
 		
 		if(jogo == null) {
@@ -55,27 +53,27 @@ public class Biblioteca {
 		
 		switch (Menus.menuAltera()) {
 		case 1:
-			String nomeJogo = leitor.lacoLeitura("\nDigite o novo nome do jogo: ", 4);
+			String nomeJogo = leitor.lacoLeitura("\nDigite o novo nome do jogo: ", leitor.tipo.String);
 			jogo.setNomeJogo(nomeJogo);
 			break;
 		case 2:
-			String desenvolvedor = leitor.lacoLeitura("\nDigite o novo nome do desenvolvedor: ", 4);
+			String desenvolvedor = leitor.lacoLeitura("\nDigite o novo nome do desenvolvedor: ", leitor.tipo.String);
 			jogo.setDesenvolvedor(desenvolvedor);
 			break;
 		case 3:
-			String distribuidora = leitor.lacoLeitura("\nDigite o novo nome da distribuidora: ", 4);
+			String distribuidora = leitor.lacoLeitura("\nDigite o novo nome da distribuidora: ", leitor.tipo.String);
 			jogo.setDistribuidora(distribuidora);
 			break;
 		case 4:
-			String dataLancamento = leitor.lacoLeitura("\nDigite a nova data de lancamento do jogo(DD/MM/YYYY): ", 2);
+			String dataLancamento = leitor.lacoLeitura("\nDigite a nova data de lancamento do jogo(DD/MM/YYYY): ", leitor.tipo.Data);
 			jogo.setDataLancamento(dataLancamento);
 			break;
 		case 5:
-			String categoria = leitor.lacoLeitura("\nDigite a nova categoria: ", 4);
+			String categoria = leitor.lacoLeitura("\nDigite a nova categoria: ", leitor.tipo.String);
 			jogo.setCategoria(categoria);
 			break;
 		case 6: 
-			double valorDeVenda = Double.parseDouble(leitor.lacoLeitura("\nDigite o novo valor: ", 3));
+			double valorDeVenda = Double.parseDouble(leitor.lacoLeitura("\nDigite o novo valor: ", leitor.tipo.Double));
 			jogo.setValorDeVenda(valorDeVenda);
 			break;
 		case 7:
@@ -103,9 +101,7 @@ public class Biblioteca {
 
 	public void acessaJogo() {
 
-		LeitorDeDadosComTratamento leitor = new LeitorDeDadosComTratamento();
-
-		int idJogo = Integer.parseInt(leitor.lacoLeitura("\nDigite o codigo do jogo: ", 1));
+		int idJogo = Integer.parseInt(leitor.lacoLeitura("\nDigite o codigo do jogo: ", leitor.tipo.Inteiro));
 
 		if (buscaPorId(idJogo) == null)
 			System.err.println("\nJogo nao encontrado!");
@@ -114,7 +110,7 @@ public class Biblioteca {
 
 			LocalDateTime dataInicio = LocalDateTime.now();
 			LocalDateTime dataFim = LocalDateTime.now()
-					.plusHours(Integer.parseInt(leitor.lacoLeitura("\nQuantas horas voce jogou: ", 1)));
+					.plusHours(Integer.parseInt(leitor.lacoLeitura("\nQuantas horas voce jogou: ", leitor.tipo.Inteiro)));
 
 			System.out.print("\nJogo finalizado!");
 

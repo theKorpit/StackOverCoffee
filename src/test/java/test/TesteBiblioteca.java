@@ -5,8 +5,8 @@ import java.io.IOException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import com.compassouol.model.Biblioteca;
 import com.compassouol.model.Jogo;
+import com.compassouol.services.Biblioteca;
 
 public class TesteBiblioteca {
 	@Test

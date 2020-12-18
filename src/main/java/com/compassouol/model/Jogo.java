@@ -7,8 +7,8 @@ import java.util.HashSet;
 import com.compassouol.exceptions.ValorDeVendaNegativoException;
 
 public class Jogo {
-	private static int counter=0;
 	
+	private static int counter=0;
 	
 	private int codigoJogo;
 	private String nomeJogo;
