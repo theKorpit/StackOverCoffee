@@ -42,10 +42,12 @@ public class LeitorDeDadosComTratamento {
 	private boolean recebeInteger() { /// Le Integer com tratamento
 		Scanner sc = new Scanner(System.in);
 		try {
-			this.variavelInteira = Integer.toString(sc.nextInt());
+			int valor = sc.nextInt();
+			if(valor<=0)
+				throw new Exception();
+			this.variavelInteira = Integer.toString(valor);
 		} catch (Exception erroInt) {
-			sc.next();
-			System.err.println("\nEntrada inválida! Insira apenas números.");
+			System.err.println("\nEntrada invalida! Insira apenas numeros.");
 			return false;
 		}
 		return true;
@@ -59,7 +61,7 @@ public class LeitorDeDadosComTratamento {
 				throw new Exception();
 			this.variavelDouble = Double.toString(valor);
 		} catch (Exception erroDouble) {
-			System.err.println("\nEntrada inválida! Insira apenas números positivos e utilize o separador ','");
+			System.err.print("\nEntrada invalida! Insira apenas numeros positivos e utilize o separador ','");
 			return false;
 		}
 		return true;
@@ -74,7 +76,7 @@ public class LeitorDeDadosComTratamento {
 
 		} catch (Exception erroString) {
 
-			System.err.println("\nEntrada inválida! Insira um dado válido");
+			System.err.print("\nEntrada invalida! Insira um dado valido");
 			return false;
 		}
 		return true;
@@ -91,7 +93,7 @@ public class LeitorDeDadosComTratamento {
 				LocalDate.parse(variavelData, formato);
 			}	
 		} catch (Exception erroString) {
-			System.err.println("\nData inválida! Digite no formato DD/MM/YYYY.\n");
+			System.err.print("\nData invalida! Digite no formato DD/MM/YYYY.\n");
 			return false;
 		}
 		return true;

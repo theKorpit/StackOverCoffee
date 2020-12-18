@@ -1,20 +1,18 @@
 package com.compassouol.model;
 
-
-import java.io.IOException;
-
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedList;
 
 import com.compassouol.exceptions.LeitorDeDadosComTratamento;
+import com.compassouol.views.Menus;
 
 public class Biblioteca {
 
 	private Collection<Jogo> jogos;
 
 	public Biblioteca() {
-		jogos = new ArrayList<Jogo>();
+		jogos = new LinkedList<Jogo>();
 	}
 
 	public void cadastraJogo() {
@@ -43,6 +41,65 @@ public class Biblioteca {
 		jogos.add(j);
 		System.out.print("\nJogo incluido com sucesso na biblioteca!\n");
 	}
+	
+	public void alteraJogo(int idJogo) {
+		
+		LeitorDeDadosComTratamento leitor = new LeitorDeDadosComTratamento();
+		
+		Jogo jogo = buscaPorId(idJogo);
+		
+		if(jogo == null) {
+			System.err.print("\nJogo nao encontrado");
+			return;
+		}
+		
+		switch (Menus.menuAltera()) {
+		case 1:
+			String nomeJogo = leitor.lacoLeitura("\nDigite o novo nome do jogo: ", 4);
+			jogo.setNomeJogo(nomeJogo);
+			break;
+		case 2:
+			String desenvolvedor = leitor.lacoLeitura("\nDigite o novo nome do desenvolvedor: ", 4);
+			jogo.setDesenvolvedor(desenvolvedor);
+			break;
+		case 3:
+			String distribuidora = leitor.lacoLeitura("\nDigite o novo nome da distribuidora: ", 4);
+			jogo.setDistribuidora(distribuidora);
+			break;
+		case 4:
+			String dataLancamento = leitor.lacoLeitura("\nDigite a nova data de lancamento do jogo(DD/MM/YYYY): ", 2);
+			jogo.setDataLancamento(dataLancamento);
+			break;
+		case 5:
+			String categoria = leitor.lacoLeitura("\nDigite a nova categoria: ", 4);
+			jogo.setCategoria(categoria);
+			break;
+		case 6: 
+			double valorDeVenda = Double.parseDouble(leitor.lacoLeitura("\nDigite o novo valor: ", 3));
+			jogo.setValorDeVenda(valorDeVenda);
+			break;
+		case 7:
+			System.out.print("==== VOLTANDO A MENU DE JOGO! ====\n\n");
+			return;
+		default:
+			System.err.print("\nEntrada invalida! Insira uma opcao valida.");
+			return;
+		}
+		
+		System.out.print("\nJogo alterado com sucesso");
+	}
+
+	public void excluiJogo(int idJogo) {
+		Jogo j = buscaPorId(idJogo);
+
+		if (j == null)
+			System.err.print("\nJogo nao encontrado");
+
+		else {
+			jogos.remove(j);
+			System.out.print("\nJogo deletado com sucesso!");
+		}
+	}
 
 	public void acessaJogo() {
 
@@ -51,7 +108,7 @@ public class Biblioteca {
 		int idJogo = Integer.parseInt(leitor.lacoLeitura("\nDigite o codigo do jogo: ", 1));
 
 		if (buscaPorId(idJogo) == null)
-			System.out.println("\nJogo nao encontrado!");
+			System.err.println("\nJogo nao encontrado!");
 		else {
 			System.out.print("\nJogo iniado!");
 
@@ -65,44 +122,53 @@ public class Biblioteca {
 			j.adicionaTempoJogo(dataInicio, dataFim);
 		}
 	}
-	
-	public void pesquisaJogo(String nomeJogo) {
-		if (jogos.isEmpty())
-			System.out.println("\nEsta biblioteca nao possui nenhum jogo!");
-		else {
-			boolean achou = false;
-			for (Jogo j : jogos) {
-				if (j.getNomeJogo().equals(nomeJogo)) {
-					System.out.println("\n\n" + j);
-					achou = true;
-				}
-			}
-			if (!achou)
-				System.out.println("\nJogo nao encontrado!");
-		}
-	}
-	
-	public void exibeJogos() {
 
-		float totalSessoes = 0;
-		if (jogos.isEmpty())
-			System.out.println("\nEsta biblioteca nao possui nenhum jogo!");
-		else {
-			for (Jogo j : jogos) {
+	public void pesquisaJogoNome(String nomeJogo) {
+		boolean achou = false;
+		for (Jogo j : jogos) {
+			if (j.getNomeJogo().equals(nomeJogo)) {
 				System.out.println("\n\n" + j);
-				totalSessoes += j.tempoTotalJogado();
+				achou = true;
 			}
-			System.out.println("\nNesta biblioteca voce ja jogou: " + totalSessoes + " Horas");
 		}
+		if (!achou)
+			System.err.println("\nJogo nao encontrado!");
 	}
-	
+
+	public void pesquisaJogoCategoria(String categoriaJogo) {
+		boolean achou = false;
+		for (Jogo j : jogos) {
+			if (j.getCategoria().equals(categoriaJogo)) {
+				System.out.println("\n\n" + j);
+				achou = true;
+			}
+		}
+		if (!achou)
+			System.err.println("\nJogo nao encontrado!");
+	}
+
+	public void exibeJogos() {
+		float totalSessoes = 0;
+		for (Jogo j : jogos) {
+			System.out.println("\n\n" + j);
+			totalSessoes += j.tempoTotalJogado();
+		}
+		System.out.println("\nNesta biblioteca voce ja jogou: " + totalSessoes + " Horas");
+	}
+
 	public Jogo buscaPorId(int id) {
 		for (Jogo j : jogos) {
 			if (j.getCodigoJogo() == id)
 				return j;
 		}
-		if (jogos.isEmpty()) 
-			System.out.println("\nEsta biblioteca nao possui nenhum jogo!");
 		return null;
+	}
+
+	public boolean listaVazia() {
+		if (jogos.isEmpty()) {
+			System.err.println("\nEsta biblioteca nao possui nenhum jogo!");
+			return true;
+		}
+		return false;
 	}
 }
