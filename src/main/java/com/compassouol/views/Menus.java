@@ -17,7 +17,7 @@ public class Menus {
 			System.out.print("\n\n=== BIBLIOTECA DE JOGOS ===");
 			System.out.print("\n1 - Menu jogo" + "\n2 - Jogar" + "\n3 - Sair do programa");
 
-			switch (Integer.parseInt(leitor.lacoLeitura("\nDigite a opção: ", 1))) {
+			switch (Integer.parseInt(leitor.lacoLeitura("\nDigite a opcao: ", 1))) {
 
 			case 1:
 				menuJogo();
@@ -30,7 +30,7 @@ public class Menus {
 				System.out.print("== BIBLIOTECA ENCERRADA! ==\n\n");
 				return;
 			default:
-				System.err.print("\nEntrada inválida! Insira uma opção válida.");
+				System.err.print("\nEntrada invalida! Insira uma opcao valida.");
 			}
 		}
 	}
@@ -44,14 +44,14 @@ public class Menus {
 					+ "\n4 - Pesquisar jogo por nome" + "\n5 - Pesquisar jogo por categoria"
 					+ "\n6 - Exibir todos os jogos" + "\n7 - Menu anterior");
 
-			switch (Integer.parseInt(leitor.lacoLeitura("\nDigite a opção: ", 1))) {
+			switch (Integer.parseInt(leitor.lacoLeitura("\nDigite a opcao: ", 1))) {
 
 			case 1:
 				biblioteDeJogos.cadastraJogo();
 				break;
 			case 2:
-				//if (!biblioteDeJogos.listaVazia())
-					//menuAltera();
+				if (!biblioteDeJogos.listaVazia())
+					biblioteDeJogos.alteraJogo(Integer.parseInt(leitor.lacoLeitura("Informe o ID do jogo: ", 1)));
 				break;
 			case 3:
 				if (!biblioteDeJogos.listaVazia())
@@ -77,12 +77,12 @@ public class Menus {
 			}
 		}
 	}
-/*
+
 	public static int menuAltera() {
 		System.out.println("\n\n======= MENU DE ALTERACAO =======");
-		System.out.println("\n1 - Nome \n2 - Desenvolvedor "
-				+ "\n3 - Distribuidora \n4 - Data de lanÃ§amento \n5 - Categoria \n6 - Valor de venda");
-		
+		System.out.println("\n1 - Nome \n2 - Desenvolvedor \n3 - Distribuidora"
+				+ "\n4 - Data de lancamento \n5 - Categoria \n6 - Valor de venda \n7 - Menu anterior");
+
+		return Integer.parseInt(leitor.lacoLeitura("Selecione o que deseja alterar: ", 1));
 	}
-	*/
 }
