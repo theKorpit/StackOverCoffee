@@ -35,7 +35,7 @@ class TesteTempoJogo {
 		
 		
 		try {
-			TempoJogo tempoJogo = new TempoJogo(dataInicio, dataFim);
+			new TempoJogo(dataInicio, dataFim);
 			fail("Data inicio maior que data final");
 		}catch (Exception e) {}
 		

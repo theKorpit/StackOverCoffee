@@ -1,34 +1,30 @@
 package com.compassouol.services;
 
 import java.time.LocalDateTime;
-import java.util.Collection;
-import java.util.LinkedList;
 
+import com.compassouol.model.Biblioteca;
 import com.compassouol.model.Jogo;
+import com.compassouol.services.LeitorComTratamento.TiposDeDados;
 import com.compassouol.views.Menus;
 
-public class Biblioteca {
+public class BibliotecaService {
 
-	private Collection<Jogo> jogos;
+	private Biblioteca biblioteca = new Biblioteca();
 	private static LeitorComTratamento leitor = new LeitorComTratamento();
-
-	public Biblioteca() {
-		jogos = new LinkedList<Jogo>();
-	}
 
 	public void cadastraJogo() {
 
-		String nomeJogo = leitor.lacoLeitura("\nDigite o nome do jogo: ", leitor.tipo.String);
+		String nomeJogo = leitor.lacoLeitura("\nDigite o nome do jogo: ", TiposDeDados.String);
 
-		String desenvolvedor = leitor.lacoLeitura("\nDigite o nome do desenvolvedor: ", leitor.tipo.String);
+		String desenvolvedor = leitor.lacoLeitura("\nDigite o nome do desenvolvedor: ", TiposDeDados.String);
 
-		String distribuidora = leitor.lacoLeitura("\nDigite o nome da distribuidora: ", leitor.tipo.String);
+		String distribuidora = leitor.lacoLeitura("\nDigite o nome da distribuidora: ", TiposDeDados.String);
 
-		String dataLancamento = leitor.lacoLeitura("\nDigite a data de lancamento do jogo(DD/MM/YYYY): ", leitor.tipo.Data);
+		String dataLancamento = leitor.lacoLeitura("\nDigite a data de lancamento do jogo(DD/MM/YYYY): ", TiposDeDados.Data);
 
-		String categoria = leitor.lacoLeitura("\nDigite a categoria: ", leitor.tipo.String);
+		String categoria = leitor.lacoLeitura("\nDigite a categoria: ", TiposDeDados.String);
 
-		double valorDeVenda = Double.parseDouble(leitor.lacoLeitura("\nDigite o valor: ", leitor.tipo.Double));
+		double valorDeVenda = Double.parseDouble(leitor.lacoLeitura("\nDigite o valor: ", TiposDeDados.Double));
 
 		adicionaJogoLista(nomeJogo, desenvolvedor, distribuidora, dataLancamento, categoria, valorDeVenda);
 		
@@ -38,7 +34,7 @@ public class Biblioteca {
 			String categoria, double valorDeVenda) {
 
 		Jogo j = new Jogo(nomeJogo, desenvolvedor, distribuidora, dataLancamento, categoria, valorDeVenda);
-		jogos.add(j);
+		biblioteca.getJogos().add(j);
 		System.out.print("\nJogo incluido com sucesso na biblioteca!\n");
 	}
 	
@@ -53,27 +49,27 @@ public class Biblioteca {
 		
 		switch (Menus.menuAltera()) {
 		case 1:
-			String nomeJogo = leitor.lacoLeitura("\nDigite o novo nome do jogo: ", leitor.tipo.String);
+			String nomeJogo = leitor.lacoLeitura("\nDigite o novo nome do jogo: ", TiposDeDados.String);
 			jogo.setNomeJogo(nomeJogo);
 			break;
 		case 2:
-			String desenvolvedor = leitor.lacoLeitura("\nDigite o novo nome do desenvolvedor: ", leitor.tipo.String);
+			String desenvolvedor = leitor.lacoLeitura("\nDigite o novo nome do desenvolvedor: ", TiposDeDados.String);
 			jogo.setDesenvolvedor(desenvolvedor);
 			break;
 		case 3:
-			String distribuidora = leitor.lacoLeitura("\nDigite o novo nome da distribuidora: ", leitor.tipo.String);
+			String distribuidora = leitor.lacoLeitura("\nDigite o novo nome da distribuidora: ", TiposDeDados.String);
 			jogo.setDistribuidora(distribuidora);
 			break;
 		case 4:
-			String dataLancamento = leitor.lacoLeitura("\nDigite a nova data de lancamento do jogo(DD/MM/YYYY): ", leitor.tipo.Data);
+			String dataLancamento = leitor.lacoLeitura("\nDigite a nova data de lancamento do jogo(DD/MM/YYYY): ", TiposDeDados.Data);
 			jogo.setDataLancamento(dataLancamento);
 			break;
 		case 5:
-			String categoria = leitor.lacoLeitura("\nDigite a nova categoria: ", leitor.tipo.String);
+			String categoria = leitor.lacoLeitura("\nDigite a nova categoria: ", TiposDeDados.String);
 			jogo.setCategoria(categoria);
 			break;
 		case 6: 
-			double valorDeVenda = Double.parseDouble(leitor.lacoLeitura("\nDigite o novo valor: ", leitor.tipo.Double));
+			double valorDeVenda = Double.parseDouble(leitor.lacoLeitura("\nDigite o novo valor: ", TiposDeDados.Double));
 			jogo.setValorDeVenda(valorDeVenda);
 			break;
 		case 7:
@@ -94,14 +90,14 @@ public class Biblioteca {
 			System.err.print("\nJogo nao encontrado");
 
 		else {
-			jogos.remove(j);
+			biblioteca.getJogos().remove(j);
 			System.out.print("\nJogo deletado com sucesso!");
 		}
 	}
 
 	public void acessaJogo() {
 
-		int idJogo = Integer.parseInt(leitor.lacoLeitura("\nDigite o codigo do jogo: ", leitor.tipo.Inteiro));
+		int idJogo = Integer.parseInt(leitor.lacoLeitura("\nDigite o codigo do jogo: ", TiposDeDados.Inteiro));
 
 		if (buscaPorId(idJogo) == null)
 			System.err.println("\nJogo nao encontrado!");
@@ -110,7 +106,7 @@ public class Biblioteca {
 
 			LocalDateTime dataInicio = LocalDateTime.now();
 			LocalDateTime dataFim = LocalDateTime.now()
-					.plusHours(Integer.parseInt(leitor.lacoLeitura("\nQuantas horas voce jogou: ", leitor.tipo.Inteiro)));
+					.plusHours(Integer.parseInt(leitor.lacoLeitura("\nQuantas horas voce jogou: ", TiposDeDados.Inteiro)));
 
 			System.out.print("\nJogo finalizado!");
 
@@ -121,7 +117,7 @@ public class Biblioteca {
 
 	public void pesquisaJogoNome(String nomeJogo) {
 		boolean achou = false;
-		for (Jogo j : jogos) {
+		for (Jogo j : biblioteca.getJogos()) {
 			if (j.getNomeJogo().equals(nomeJogo)) {
 				System.out.println("\n\n" + j);
 				achou = true;
@@ -133,7 +129,7 @@ public class Biblioteca {
 
 	public void pesquisaJogoCategoria(String categoriaJogo) {
 		boolean achou = false;
-		for (Jogo j : jogos) {
+		for (Jogo j : biblioteca.getJogos()) {
 			if (j.getCategoria().equals(categoriaJogo)) {
 				System.out.println("\n\n" + j);
 				achou = true;
@@ -145,7 +141,7 @@ public class Biblioteca {
 
 	public void exibeJogos() {
 		float totalSessoes = 0;
-		for (Jogo j : jogos) {
+		for (Jogo j : biblioteca.getJogos()) {
 			System.out.println("\n\n" + j);
 			totalSessoes += j.tempoTotalJogado();
 		}
@@ -153,7 +149,7 @@ public class Biblioteca {
 	}
 
 	public Jogo buscaPorId(int id) {
-		for (Jogo j : jogos) {
+		for (Jogo j : biblioteca.getJogos()) {
 			if (j.getCodigoJogo() == id)
 				return j;
 		}
@@ -161,7 +157,7 @@ public class Biblioteca {
 	}
 
 	public boolean listaVazia() {
-		if (jogos.isEmpty()) {
+		if (biblioteca.getJogos().isEmpty()) {
 			System.err.println("\nEsta biblioteca nao possui nenhum jogo!");
 			return true;
 		}

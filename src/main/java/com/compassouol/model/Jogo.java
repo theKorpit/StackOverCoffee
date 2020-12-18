@@ -22,8 +22,8 @@ public class Jogo {
 
 	public Jogo(String nomeJogo, String desenvolvedor, String distribuidora, String dataLancamento,
 			String categoria, double valorDeVenda){
-		this.counter+=1;
-		this.codigoJogo = this.counter;
+		Jogo.counter+=1;
+		this.codigoJogo = Jogo.counter;
 		this.nomeJogo = nomeJogo;
 		this.desenvolvedor = desenvolvedor;
 		this.distribuidora = distribuidora;
