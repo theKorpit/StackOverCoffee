@@ -1,8 +1,7 @@
 package com.compassouol.controller;
 
-import javax.validation.Valid;
-
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,7 +21,7 @@ public class TempoJogoController {
 	public JogoDao jogoDao = new JogoDao();
 	
 	@PostMapping
-	public ResponseEntity<?> AddTempoJogoByDate(@RequestBody @Valid AddTempoJogoForm tempoJogo) {
+	public ResponseEntity<?> AddTempoJogoByDate(@Validated @RequestBody AddTempoJogoForm tempoJogo) {
 		Jogo jogo = jogoDao.FindById(tempoJogo.getIdJogo());
 		
 		if(jogo == null) 
@@ -48,28 +47,5 @@ public class TempoJogoController {
 		return ResponseEntity.ok(TempoJogoDto.convertListToDto(jogo.getTempoJogado(), jogoId));
 		
 	}
-	
-//	@GetMapping(value = "/tempoJogado")
-//	public Float GetTempoJogado(Integer jogoId) {
-//		Jogo jogo = jogoDao.FindById(jogoId);
-//		
-//		if(jogo == null) 
-//			return null;
-//		
-//		return jogo.tempoTotalJogado();
-//		
-//	}
-
-//	@GetMapping(value = "/tempoTotalJogado")
-//	public Float GetTempoJogado() {
-//		
-//		Float tempoTotal = 0f;
-//		
-//		for(Jogo jogo : BibliotecaDao.biblioteca.getJogos())
-//			tempoTotal+=jogo.tempoTotalJogado();
-//		
-//		return tempoTotal;
-//		
-//	}
 	
 }
