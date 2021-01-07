@@ -8,9 +8,9 @@ import com.compassouol.exceptions.ValorDeVendaNegativoException;
 
 public class Jogo {
 	
-	private static int counter=0;
+	private static Integer counter=0;
 	
-	private int codigoJogo;
+	private Integer codigoJogo;
 	private String nomeJogo;
 	private String desenvolvedor;
 	private String distribuidora;
@@ -36,7 +36,7 @@ public class Jogo {
 		validaValorVenda(valorDeVenda);
 	}
 
-	public int getCodigoJogo() {
+	public Integer getCodigoJogo() {
 		return codigoJogo;
 	}
 
