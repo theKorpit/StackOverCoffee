@@ -18,11 +18,14 @@ public class Jogo {
 	private String dataLancamento;
 	private String categoria;
 	private double valorDeVenda;
+	private String descricao;
 	private Collection<TempoJogo> tempoJogado;
 
 	public Jogo(String nomeJogo, String desenvolvedor, String distribuidora, String dataLancamento,
-			String categoria, double valorDeVenda){
+			String categoria, double valorDeVenda, int appIdSteam, String descricao){
 		Jogo.counter+=1;
+		this.descricao = descricao;
+		this.appIdSteam= appIdSteam;
 		this.codigoJogo = Jogo.counter;
 		this.nomeJogo = nomeJogo;
 		this.desenvolvedor = desenvolvedor;
@@ -116,9 +119,9 @@ public class Jogo {
 	@Override
 	public String toString() {
 
-		return ( "ID do jogo: "+ this.codigoJogo+ "\nNome do jogo: " + this.getNomeJogo() + "\nValor: R$" + this.valorDeVenda + "\nDesenvolvedor: "
+		return ( "ID do jogo: "+ this.codigoJogo+"\nApp ID Steam: "+ this.appIdSteam+ "\nNome do jogo: " + this.getNomeJogo() + "\nValor: R$" + this.valorDeVenda + "\nDesenvolvedor: "
 				+ this.getDesenvolvedor() + "\nDistribuidora: " + this.getDistribuidora() + "\nData de lancamento: "
-				+ this.getDataLancamento() + "\nCategoria : " + this.getCategoria() + "\nTempo total jogado: "
-				+ this.tempoTotalJogado() + " horas");
+				+ this.getDataLancamento() + "\nCategoria : " + this.getCategoria() + "\nDescricao: "+ this.descricao +
+				"\nTempo total jogado: " + this.tempoTotalJogado() + " horas");
 	}
 }
