@@ -17,7 +17,7 @@ public class JogoDao {
 	public void save(Jogo jogo) {
 		for(Jogo jogoSearch : BibliotecaDao.biblioteca.getJogos()) {
 			if(jogoSearch.getCodigoJogo() == jogo.getCodigoJogo()) {
-				return;
+				update(jogo);
 			}
 		}
 		BibliotecaDao.biblioteca.getJogos().add(jogo);
