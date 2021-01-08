@@ -5,12 +5,6 @@ import com.compassouol.model.Jogo;
 public class JogoDao {
 
 	public void save(Jogo jogo) {
-		for (Jogo jogoSearch : BibliotecaDao.biblioteca.getJogos()) {
-			if (jogoSearch.getAppIdSteam() == jogo.getAppIdSteam()) {
-				
-				return;
-			}
-		}
 		BibliotecaDao.biblioteca.getJogos().add(jogo);
 	}
 
