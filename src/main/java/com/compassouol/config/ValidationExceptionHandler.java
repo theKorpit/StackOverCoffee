@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import com.compassouol.controller.dto.ErroFormDto;
 import com.compassouol.exceptions.DataInicioMaiorQueDataFimException;
+import com.compassouol.exceptions.JogoInvalidoException;
 import com.fasterxml.jackson.databind.JsonMappingException.Reference;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 
@@ -36,6 +37,19 @@ public class ValidationExceptionHandler {
 	@ExceptionHandler(DataInicioMaiorQueDataFimException.class)
 	public ErroFormDto DataInicioMaiorQueDataFimException(DataInicioMaiorQueDataFimException exception) {		
 		ErroFormDto erro = new ErroFormDto("Data", exception.getMessage());
+		return erro;
+	}
+	
+	@ResponseStatus(code = HttpStatus.BAD_REQUEST)
+	@ExceptionHandler(JogoInvalidoException.class)
+	public ErroFormDto DataInicioMaiorQueDataFimException(JogoInvalidoException exception) {	
+		ErroFormDto erro = null;
+		
+		if(exception.getId() != null)
+			erro = new ErroFormDto("AppID", exception.getMessage());
+		else
+			erro = new ErroFormDto("Nome Jogo", exception.getMessage());
+		
 		return erro;
 	}
 	
