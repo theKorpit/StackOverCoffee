@@ -1,49 +1,65 @@
-package com.compassouol.exceptions;
+package com.compassouol.services;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 
-public class LeitorDeDadosComTratamento {
+public class LeitorComTratamento {
 
+	public enum TiposDeDados {
+
+		Inteiro(1), Data(2), Double(3), String(4);
+		
+		private final int valor;
+		
+	    private TiposDeDados(int v) {
+	        this.valor = v;
+	    }
+	}
+	
+	public TiposDeDados tipo;
 	private String variavelInteira; // 1
 	private String variavelData; // 2
 	private String variavelDouble; // 3
 	private String variavelString; // 4
+	
 
-	public String lacoLeitura(String pergunta, int tipoDeLeitura) {
+	public String lacoLeitura(String pergunta, TiposDeDados tipo) {
 
 		while (true) {
 
 			System.out.print(pergunta);
 
-			switch (tipoDeLeitura) {
+			switch (tipo) {
 
-			case 1:
-				if (recebeInteger())
+			case Inteiro:
+				if (recebeInteiro())
 					return this.variavelInteira;
 				break;
-			case 2:
+			case Data:
 				if (recebeData())
 					return this.variavelData;
 				break;
-			case 3:
+			case Double:
 				if (recebeDouble())
 					return this.variavelDouble;
 				break;
-			case 4:
+			case String:
 				if (recebeString())
 					return this.variavelString;
 				break;
 			}
 		}
 	}
-
-	private boolean recebeInteger() { /// Le Integer com tratamento
+ 
+	
+	 
+	
+	private boolean recebeInteiro() { /// Le int com tratamento
 		Scanner sc = new Scanner(System.in);
 		try {
 			int valor = sc.nextInt();
-			if(valor<=0)
+			if (valor <= 0)
 				throw new Exception();
 			this.variavelInteira = Integer.toString(valor);
 		} catch (Exception erroInt) {
@@ -53,11 +69,11 @@ public class LeitorDeDadosComTratamento {
 		return true;
 	}
 
-	private boolean recebeDouble() { /// Le Double com tratamento
+	private boolean recebeDouble() { /// Le double com tratamento
 		Scanner sc = new Scanner(System.in);
 		try {
 			double valor = sc.nextDouble();
-			if(valor<=0)
+			if (valor <= 0)
 				throw new Exception();
 			this.variavelDouble = Double.toString(valor);
 		} catch (Exception erroDouble) {
@@ -67,7 +83,7 @@ public class LeitorDeDadosComTratamento {
 		return true;
 	}
 
-	private boolean recebeString() { /// Le String com tratamento
+	private boolean recebeString() { /// Le string com tratamento
 		Scanner sc = new Scanner(System.in);
 		try {
 			this.variavelString = sc.nextLine();
@@ -81,17 +97,17 @@ public class LeitorDeDadosComTratamento {
 		}
 		return true;
 	}
-	
-	private boolean recebeData() { /// Le Data com tratamento
+
+	private boolean recebeData() { /// Le data com tratamento
 		Scanner sc = new Scanner(System.in);
 		try {
 			this.variavelData = sc.nextLine();
-			if (this.variavelData.trim().isBlank())	
+			if (this.variavelData.trim().isBlank())
 				throw new IllegalArgumentException();
 			else {
 				DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 				LocalDate.parse(variavelData, formato);
-			}	
+			}
 		} catch (Exception erroString) {
 			System.err.print("\nData invalida! Digite no formato DD/MM/YYYY.\n");
 			return false;
