@@ -16,13 +16,13 @@ import com.compassouol.model.Jogo;
 
 public class SteamAPI {
 
-	private int appIdSteam;
+	private Integer appIdSteam;
 	private String nomeJogo;
 	private String desenvolvedor;
 	private String distribuidora;
 	private String dataLancamento;
 	private String categoria;
-	private double valorDeVenda;
+	private Double valorDeVenda;
 	private String descricao;
 	private URL url;
 	private JSONParser parser;
@@ -39,10 +39,10 @@ public class SteamAPI {
 		this.nomeJogo = this.JogoPorAppid(appIdSteam);
 		this.getInfo();
 	}
-
+	
 	public Jogo retornaJogo() {
-		Jogo jogo = new Jogo(this.nomeJogo, this.desenvolvedor, this.distribuidora, this.dataLancamento, this.categoria,
-				this.valorDeVenda, this.appIdSteam, this.descricao);
+		Jogo jogo = new Jogo( this.appIdSteam, this.nomeJogo, this.desenvolvedor, this.distribuidora, this.dataLancamento, this.categoria,
+				this.valorDeVenda, this.descricao);
 		return jogo;
 	}
 
@@ -107,13 +107,13 @@ public class SteamAPI {
 		JSONObject Job2 = (JSONObject) Job.get(Long.toString(this.appIdSteam));
 		Job = (JSONObject) Job2.get("data");
 		if (Job == null)
-			throw new JogoInvalidoException("Entrada invalida, isso é um jogo de testes da steam", this.appIdSteam);
+			throw new JogoInvalidoException("Entrada invalida, isso ï¿½ um jogo de testes da steam", this.appIdSteam);
 		String saida = Job.get("type").toString();
 		if (saida.equals("game")) {
 			this.descricao = (String) Job.get("short_description");
 			JSONArray array = (JSONArray) Job.get("categories");
 			if (array == null) {
-				throw new JogoInvalidoException("isso é um software e não um jogo", this.appIdSteam);
+				throw new JogoInvalidoException("isso ï¿½ um software e nï¿½o um jogo", this.appIdSteam);
 			}
 			String cat = array.get(0).toString();
 
@@ -145,10 +145,10 @@ public class SteamAPI {
 				val = val.replace(",", ".");
 				this.valorDeVenda = Double.valueOf(val);
 			} catch (Exception e) {
-				this.valorDeVenda = 0;
+				this.valorDeVenda = 0.0;
 			}
 		} else {
-			throw new JogoInvalidoException("isso não é um jogo é um/uma " + saida, this.appIdSteam);
+			throw new JogoInvalidoException("isso nï¿½o ï¿½ um jogo ï¿½ um/uma " + saida, this.appIdSteam);
 		}
 
 	}
