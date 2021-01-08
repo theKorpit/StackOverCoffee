@@ -1,5 +1,7 @@
 package com.compassouol.dao;
 
+import java.util.List;
+
 import com.compassouol.model.Jogo;
 
 public class JogoDao {
@@ -22,6 +24,10 @@ public class JogoDao {
 				return jogo;
 		}
 		return null;
+	}
+	
+	public List<Jogo> findAll(){
+		return BibliotecaDao.biblioteca.getJogos();
 	}
 
 }

@@ -1,5 +1,6 @@
 package com.compassouol.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,27 +12,30 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.compassouol.controller.dto.TempoJogoDto;
 import com.compassouol.controller.form.AddTempoJogoForm;
-import com.compassouol.dao.JogoDao;
 import com.compassouol.model.Jogo;
+import com.compassouol.model.TempoJogo;
+import com.compassouol.services.TempoJogoService;
 
 @RestController
 @RequestMapping(value = "/api/tempoJogo")
 public class TempoJogoController {
 
-	public JogoDao jogoDao = new JogoDao();
+	@Autowired
+	private TempoJogoService tempoJogoService;
 	
 	@PostMapping
-	public ResponseEntity<?> AddTempoJogoByDate(@Validated @RequestBody AddTempoJogoForm tempoJogo) {
-		Jogo jogo = jogoDao.FindById(tempoJogo.getIdJogo());
+	public ResponseEntity<?> AddTempoJogoByDate(@Validated @RequestBody AddTempoJogoForm tempoJogoForm) {
+		
+		Jogo jogo = tempoJogoService.getJogoById(tempoJogoForm.getIdJogo());
+	
+		TempoJogo tempoJogo = new TempoJogo(tempoJogoForm.getDataInicial(), tempoJogoForm.getDataFinal());
 		
 		if(jogo == null) 
 			return ResponseEntity.notFound().build();
 		
-		jogo.adicionaTempoJogo(tempoJogo.getDataInicial(), tempoJogo.getDataFinal());
+		tempoJogoService.addTempoJogo(jogo, tempoJogo);
 		
-		jogoDao.save(jogo);
-		
-		TempoJogoDto tempoJogoDto = new TempoJogoDto(tempoJogo.getIdJogo(),tempoJogo.getDataInicial(),tempoJogo.getDataFinal());
+		TempoJogoDto tempoJogoDto = new TempoJogoDto(jogo.getAppIdSteam(),tempoJogo.getDataInicio(),tempoJogo.getDataFim());
 		
 		return ResponseEntity.ok(tempoJogoDto);
 		
@@ -39,7 +43,7 @@ public class TempoJogoController {
 	
 	@GetMapping("/{id}")
 	public ResponseEntity<?> GetAllTempoJogoByJogo(@PathVariable("id") Integer jogoId){
-		Jogo jogo = jogoDao.FindById(jogoId);
+		Jogo jogo = tempoJogoService.getJogoById(jogoId);
 		
 		if(jogo == null) 
 			return ResponseEntity.notFound().build();
