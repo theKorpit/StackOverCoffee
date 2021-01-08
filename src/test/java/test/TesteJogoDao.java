@@ -14,7 +14,7 @@ class TesteJogoDao {
 	void testAddNewJogo() {
 		JogoDao jogoDao = new JogoDao();
 		
-		Jogo jogo = new Jogo("Nome","Desenvolvedora","Distribuidora", "20/10/20","Categoria", 50.0);
+		Jogo jogo = new Jogo(10, "Nome Jogo","Desenvolvedora", "Distribuidora","26/07/1998", "Categoria", 100.0, "Descrição");
 	
 		Integer jogoId = jogo.getAppIdSteam();
 		
