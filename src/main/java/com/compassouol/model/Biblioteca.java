@@ -1,17 +1,18 @@
 package com.compassouol.model;
 
-import java.util.Collection;
-import java.util.LinkedList;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class Biblioteca {
 
-	private Collection<Jogo> jogos;
+	private List<Jogo> jogos;
 	
 	public Biblioteca() {
-		jogos = new LinkedList<Jogo>();
+		jogos = Collections.synchronizedList(new ArrayList());
 	}
 
-	public Collection<Jogo> getJogos() {
+	public List<Jogo> getJogos() {
 		return jogos;
 	}
 	
