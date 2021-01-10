@@ -6,7 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter @AllArgsConstructor
-public class ErroJogosEmMesmoHorarioExceptionDto {
+public class JogosEmMesmoHorarioExceptionDto {
 
 	private LocalDateTime dataInicio;
 	
@@ -17,5 +17,4 @@ public class ErroJogosEmMesmoHorarioExceptionDto {
 	private LocalDateTime dataFimToAdd;
 	
 	private String mensagem;
-	
 }

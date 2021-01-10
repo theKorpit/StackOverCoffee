@@ -4,6 +4,9 @@ import java.time.LocalDateTime;
 
 import javax.validation.constraints.NotNull;
 
+import lombok.Getter;
+
+@Getter
 public class AddTempoJogoForm {
 
 	@NotNull
@@ -12,29 +15,4 @@ public class AddTempoJogoForm {
 	private LocalDateTime dataInicial;
 	@NotNull 
 	private LocalDateTime dataFinal;
-
-	public Integer getIdJogo() {
-		return idJogo;
-	}
-
-	public void setIdJogo(Integer idJogo) {
-		this.idJogo = idJogo;
-	}
-
-	public LocalDateTime getDataInicial() {
-		return dataInicial;
-	}
-
-	public void setDataInicial(LocalDateTime dataInicial) {
-		this.dataInicial = dataInicial;
-	}
-
-	public LocalDateTime getDataFinal() {
-		return dataFinal;
-	}
-
-	public void setDataFinal(LocalDateTime dataFinal) {
-		this.dataFinal = dataFinal;
-	}
-	
 }

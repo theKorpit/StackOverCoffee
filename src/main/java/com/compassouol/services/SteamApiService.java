@@ -10,11 +10,13 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import org.springframework.stereotype.Service;
 
 import com.compassouol.exceptions.JogoInvalidoException;
 import com.compassouol.model.Jogo;
 
-public class SteamAPI {
+@Service
+public class SteamApiService {
 
 	private Integer appIdSteam;
 	private String nomeJogo;
@@ -28,15 +30,15 @@ public class SteamAPI {
 	private JSONParser parser;
 	private InputStream is;
 
-	public SteamAPI(String nomeJogo) throws IOException, ParseException {
+	public SteamApiService(String nomeJogo) throws IOException, ParseException {
 		this.nomeJogo = nomeJogo;
-		this.appIdSteam = this.IdPorNomeJogo(nomeJogo);
+		this.appIdSteam = this.jogoPorNome(nomeJogo);
 		this.getInfo();
 	}
 
-	public SteamAPI(int appIdSteam) throws IOException, ParseException {
+	public SteamApiService(int appIdSteam) throws IOException, ParseException {
 		this.appIdSteam = appIdSteam;
-		this.nomeJogo = this.JogoPorAppid(appIdSteam);
+		this.nomeJogo = this.jogoPorId(appIdSteam);
 		this.getInfo();
 	}
 	
@@ -46,7 +48,7 @@ public class SteamAPI {
 		return jogo;
 	}
 
-	public String JogoPorAppid(int appId) throws IOException, ParseException {
+	public String jogoPorId(int appId) throws IOException, ParseException {
 
 		parser = new JSONParser();
 		url = new URL("https://api.steampowered.com/ISteamApps/GetAppList/v2/");
@@ -69,10 +71,9 @@ public class SteamAPI {
 			}
 		}
 		throw new JogoInvalidoException("ID invalido", this.appIdSteam);
-
 	}
 
-	public Integer IdPorNomeJogo(String jogoNome) throws IOException, ParseException {
+	public Integer jogoPorNome(String jogoNome) throws IOException, ParseException {
 		parser = new JSONParser();
 		url = new URL("https://api.steampowered.com/ISteamApps/GetAppList/v2/");
 		is = url.openConnection().getInputStream();
@@ -107,13 +108,13 @@ public class SteamAPI {
 		JSONObject Job2 = (JSONObject) Job.get(Long.toString(this.appIdSteam));
 		Job = (JSONObject) Job2.get("data");
 		if (Job == null)
-			throw new JogoInvalidoException("Entrada invalida, isso � um jogo de testes da steam", this.appIdSteam);
+			throw new JogoInvalidoException("Entrada invalida, isso e um jogo de testes da steam", this.appIdSteam);
 		String saida = Job.get("type").toString();
 		if (saida.equals("game")) {
 			this.descricao = (String) Job.get("short_description");
 			JSONArray array = (JSONArray) Job.get("categories");
 			if (array == null) {
-				throw new JogoInvalidoException("isso � um software e n�o um jogo", this.appIdSteam);
+				throw new JogoInvalidoException("isso e um software e nao um jogo", this.appIdSteam);
 			}
 			String cat = array.get(0).toString();
 
@@ -148,9 +149,8 @@ public class SteamAPI {
 				this.valorDeVenda = 0.0;
 			}
 		} else {
-			throw new JogoInvalidoException("isso n�o � um jogo � um/uma " + saida, this.appIdSteam);
+			throw new JogoInvalidoException("isso nao e um jogo e um/uma " + saida, this.appIdSteam);
 		}
-
 	}
 
 	private String limparLixo(String string) {
@@ -159,5 +159,4 @@ public class SteamAPI {
 		string = string.replace("]", "");
 		return string;
 	}
-
 }

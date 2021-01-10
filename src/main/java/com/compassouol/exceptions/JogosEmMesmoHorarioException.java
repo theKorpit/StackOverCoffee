@@ -3,6 +3,7 @@ package com.compassouol.exceptions;
 import java.time.LocalDateTime;
 
 import lombok.Getter;
+
 @Getter
 public class JogosEmMesmoHorarioException extends RuntimeException{
 
@@ -31,5 +32,4 @@ public class JogosEmMesmoHorarioException extends RuntimeException{
         this.dataInicioToAdd = dataInicioToAdd;
         this.dataFimToAdd = dataFimToAdd;
     }
-
 }

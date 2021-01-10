@@ -10,6 +10,5 @@ public class ValorDeVendaNegativoException extends RuntimeException{
 
     public ValorDeVendaNegativoException(String msg, Throwable cause){
         super(msg, cause);
-    }
-	
+    }	
 }

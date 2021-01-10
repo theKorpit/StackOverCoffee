@@ -17,7 +17,7 @@ import com.compassouol.model.TempoJogo;
 import com.compassouol.services.TempoJogoService;
 
 @RestController
-@RequestMapping(value = "/api/tempoJogo")
+@RequestMapping(value = "/Jogar")
 public class TempoJogoController {
 
 	@Autowired
@@ -26,14 +26,14 @@ public class TempoJogoController {
 	@PostMapping
 	public ResponseEntity<?> AddTempoJogoByDate(@Validated @RequestBody AddTempoJogoForm tempoJogoForm) {
 		
-		Jogo jogo = tempoJogoService.getJogoById(tempoJogoForm.getIdJogo());
+		Jogo jogo = tempoJogoService.buscaJogoPorId(tempoJogoForm.getIdJogo());
 	
 		TempoJogo tempoJogo = new TempoJogo(tempoJogoForm.getDataInicial(), tempoJogoForm.getDataFinal());
 		
 		if(jogo == null) 
 			return ResponseEntity.notFound().build();
 		
-		tempoJogoService.addTempoJogo(jogo, tempoJogo);
+		tempoJogoService.adicionaTempoJogo(jogo, tempoJogo);
 		
 		TempoJogoDto tempoJogoDto = new TempoJogoDto(jogo.getAppIdSteam(),tempoJogo.getDataInicio(),tempoJogo.getDataFim());
 		
@@ -43,13 +43,11 @@ public class TempoJogoController {
 	
 	@GetMapping("/{id}")
 	public ResponseEntity<?> GetAllTempoJogoByJogo(@PathVariable("id") Integer jogoId){
-		Jogo jogo = tempoJogoService.getJogoById(jogoId);
+		Jogo jogo = tempoJogoService.buscaJogoPorId(jogoId);
 		
 		if(jogo == null) 
 			return ResponseEntity.notFound().build();
 		
-		return ResponseEntity.ok(TempoJogoDto.convertListToDto(jogo.getTempoJogado(), jogoId));
-		
-	}
-	
+		return ResponseEntity.ok(TempoJogoDto.converteListaParaDto(jogo.getTempoJogado(), jogoId));	
+	}	
 }

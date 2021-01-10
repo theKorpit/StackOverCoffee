@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import com.compassouol.controller.dto.ErroFormDto;
-import com.compassouol.controller.dto.ErroJogosEmMesmoHorarioExceptionDto;
+import com.compassouol.controller.dto.JogosEmMesmoHorarioExceptionDto;
 import com.compassouol.exceptions.DataInicioMaiorQueDataFimException;
 import com.compassouol.exceptions.JogoInvalidoException;
 import com.compassouol.exceptions.JogosEmMesmoHorarioException;
@@ -30,8 +30,7 @@ public class ValidationExceptionHandler {
 			ErroFormDto erro = new ErroFormDto(e.getFieldName(), exception.getCause().getMessage());
 			erros.add(erro);
 		});
-		
-		
+
 		return erros;
 	}
 	
@@ -57,11 +56,9 @@ public class ValidationExceptionHandler {
 
 	@ResponseStatus(code = HttpStatus.CONFLICT)
 	@ExceptionHandler(JogosEmMesmoHorarioException.class)
-	public ErroJogosEmMesmoHorarioExceptionDto JogosEmMesmoHorarioExceptionHandler(JogosEmMesmoHorarioException exception) {	
-		ErroJogosEmMesmoHorarioExceptionDto erroJogosEmMesmoHorarioExceptionDto = new ErroJogosEmMesmoHorarioExceptionDto(exception.getDataInicio(), 
+	public JogosEmMesmoHorarioExceptionDto JogosEmMesmoHorarioExceptionHandler(JogosEmMesmoHorarioException exception) {	
+		JogosEmMesmoHorarioExceptionDto erroJogosEmMesmoHorarioExceptionDto = new JogosEmMesmoHorarioExceptionDto(exception.getDataInicio(), 
 				exception.getDataFim(), exception.getDataInicioToAdd(), exception.getDataFimToAdd(),exception.getMessage());
 		return erroJogosEmMesmoHorarioExceptionDto;
-	}
-	
-	
+	}		
 }

@@ -11,5 +11,4 @@ public class DataInicioMaiorQueDataFimException extends RuntimeException{
     public DataInicioMaiorQueDataFimException(String msg, Throwable cause){
         super(msg, cause);
     }
-
 }

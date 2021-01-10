@@ -10,7 +10,7 @@ public class JogoDao {
 		BibliotecaDao.biblioteca.getJogos().add(jogo);
 	}
 
-	public Jogo FindById(Integer id) {
+	public Jogo findById(Integer id) {
 		for (Jogo jogo : BibliotecaDao.biblioteca.getJogos()) {
 			if (jogo.getAppIdSteam().equals(id))
 				return jogo;
@@ -18,7 +18,7 @@ public class JogoDao {
 		return null;
 	}
 
-	public Jogo FindByName(String nome) {
+	public Jogo findByName(String nome) { 
 		for (Jogo jogo : BibliotecaDao.biblioteca.getJogos()) {
 			if (jogo.getNomeJogo().equalsIgnoreCase(nome))
 				return jogo;
@@ -26,8 +26,7 @@ public class JogoDao {
 		return null;
 	}
 	
-	public List<Jogo> findAll(){
+	public List<Jogo> findAll(){ //Sobreescreveu metodo?
 		return BibliotecaDao.biblioteca.getJogos();
 	}
-
 }

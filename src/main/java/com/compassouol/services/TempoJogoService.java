@@ -2,20 +2,17 @@ package com.compassouol.services;
 
 import org.springframework.stereotype.Service;
 
-import com.compassouol.dao.JogoDao;
 import com.compassouol.dao.TempoJogoDao;
 import com.compassouol.exceptions.JogosEmMesmoHorarioException;
 import com.compassouol.model.Jogo;
 import com.compassouol.model.TempoJogo;
+
 @Service
 public class TempoJogoService {
 
-	private JogoDao jogoDao = new JogoDao();
-	
 	private TempoJogoDao tempoJogoDao = new TempoJogoDao();
 	
-	
-	public void addTempoJogo(Jogo jogo, TempoJogo tempoJogo) {
+	public void adicionaTempoJogo(Jogo jogo, TempoJogo tempoJogo) {
 		
 		tempoJogoDao.findAll().forEach(e -> {
 
@@ -26,9 +23,4 @@ public class TempoJogoService {
 		
 		jogo.adicionaTempoJogo(tempoJogo.getDataInicio(), tempoJogo.getDataFim());
 	}
-	
-	public Jogo getJogoById(Integer id) {//Transferir este metodo para a classe JogoService
-		return jogoDao.FindById(id);
-	}
-	
 }

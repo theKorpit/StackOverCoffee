@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.compassouol.dao.BibliotecaDao;
 import com.compassouol.dao.JogoDao;
 import com.compassouol.model.Jogo;
-import com.compassouol.services.SteamAPI;
+import com.compassouol.services.SteamApiService;
 
 @RestController
 @RequestMapping(value = "/Jogo")
@@ -31,9 +31,9 @@ public class JogoController {
 			throws IOException, ParseException {
 		try {
 			int idJogo = Integer.parseInt(campoDeBusca);
-			Jogo jogo = jogoDao.FindById(idJogo);
+			Jogo jogo = jogoDao.findById(idJogo);
 			if (jogo == null) {
-				SteamAPI steam = new SteamAPI(idJogo);
+				SteamApiService steam = new SteamApiService(idJogo);
 				jogo = steam.retornaJogo();
 				jogoDao.save(jogo);
 				return ResponseEntity.ok(jogo);
@@ -43,9 +43,9 @@ public class JogoController {
 
 		} catch (NumberFormatException e) {
 
-			Jogo jogo = jogoDao.FindByName(campoDeBusca);
+			Jogo jogo = jogoDao.findByName(campoDeBusca);
 			if (jogo == null) {
-				SteamAPI steam = new SteamAPI(campoDeBusca);
+				SteamApiService steam = new SteamApiService(campoDeBusca);
 				jogo = steam.retornaJogo();
 				jogoDao.save(jogo);
 				return ResponseEntity.ok(jogo);
@@ -62,7 +62,7 @@ public class JogoController {
 
 	@GetMapping("/{id}")
 	public ResponseEntity<?> buscaJogoPorId(@PathVariable("id") Integer jogoId) {
-		Jogo jogo = jogoDao.FindById(jogoId);
+		Jogo jogo = jogoDao.findById(jogoId);
 
 		if (jogo == null)
 			return ResponseEntity.notFound().build();
@@ -72,7 +72,7 @@ public class JogoController {
 
 	@DeleteMapping("/{id}")
 	public ResponseEntity<?> removeJogo(@PathVariable("id") Integer jogoId) {
-		Jogo jogo = jogoDao.FindById(jogoId);
+		Jogo jogo = jogoDao.findById(jogoId);
 		if (jogo == null)
 			return ResponseEntity.notFound().build();
 		else {
