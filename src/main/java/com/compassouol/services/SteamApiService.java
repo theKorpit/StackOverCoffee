@@ -58,6 +58,7 @@ public class SteamApiService {
 
 		Object obj = parser.parse(new BufferedReader(new InputStreamReader(is)));
 		JSONObject jsonObject = (JSONObject) obj;
+		
 		Object obj2 = jsonObject.get("applist");
 		JSONObject jsonObject2 = (JSONObject) obj2;
 
@@ -66,12 +67,14 @@ public class SteamApiService {
 		for (int i = 0; i < jsonEntries.size(); i++) {
 			JSONObject o = (JSONObject) jsonEntries.get(i);
 			Long idApp = (Long) o.get("appid");
+		
 			if (idApp == appId) {
 				String saida = (String) o.get("name");
 				return saida;
 
 			}
 		}
+		
 		throw new JogoInvalidoException("ID invalido", this.appIdSteam);
 	}
 
@@ -82,6 +85,7 @@ public class SteamApiService {
 
 		Object obj = parser.parse(new BufferedReader(new InputStreamReader(is)));
 		JSONObject jsonObject = (JSONObject) obj;
+		
 		Object obj2 = jsonObject.get("applist");
 		JSONObject jsonObject2 = (JSONObject) obj2;
 
@@ -90,6 +94,7 @@ public class SteamApiService {
 		for (int i = 0; i < jsonEntries.size(); i++) {
 			JSONObject o = (JSONObject) jsonEntries.get(i);
 			String nomeJogo = (String) o.get("name");
+			
 			if (nomeJogo.equalsIgnoreCase(jogoNome)) {
 				String oh = o.get("appid").toString();
 				int id = Integer.parseInt(oh);
@@ -97,6 +102,7 @@ public class SteamApiService {
 
 			}
 		}
+		
 		throw new JogoInvalidoException("Nome de jogo invalido", this.nomeJogo);
 	}
 
@@ -109,15 +115,19 @@ public class SteamApiService {
 		JSONObject Job = (JSONObject) obj;
 		JSONObject Job2 = (JSONObject) Job.get(Long.toString(this.appIdSteam));
 		Job = (JSONObject) Job2.get("data");
+		
 		if (Job == null)
 			throw new JogoInvalidoException("Entrada invalida, isso e um jogo de testes da steam", this.appIdSteam);
+		
 		String saida = Job.get("type").toString();
 		if (saida.equals("game")) {
 			this.descricao = (String) Job.get("short_description");
 			JSONArray array = (JSONArray) Job.get("categories");
+			
 			if (array == null) {
 				throw new JogoInvalidoException("isso e um software e nao um jogo", this.appIdSteam);
 			}
+			
 			String cat = array.get(0).toString();
 
 			int o1 = cat.indexOf(":\"") + 2;
@@ -125,21 +135,29 @@ public class SteamApiService {
 			cat = cat.substring(o1, o);
 			this.categoria = cat + ",";
 			JSONArray array2 = (JSONArray) Job.get("genres");
+			
 			for (int i = 0; i < array2.size(); i++) {
 				Job = (JSONObject) array2.get(i);
+				
 				if (i == array2.size() - 1)
 					this.categoria += ((String) Job.get("description"));
+				
 				else
 					this.categoria += ((String) Job.get("description") + ",");
 			}
+			
 			Job = (JSONObject) Job2.get("data");
 			this.desenvolvedor = limparLixo(Job.get("developers").toString());
+			
 			this.distribuidora = limparLixo(Job.get("publishers").toString());
+			
 			String data = Job.get("release_date").toString();
 			o = data.indexOf("date");
 			data = data.substring(o + 7, o + 19);
 			data = data.replace(",", "");
+			data = limparLixo(data);
 			this.dataLancamento = data;
+			
 			try {
 				String val = Job.get("price_overview").toString();
 				o = val.indexOf(":") + 2;
@@ -147,9 +165,11 @@ public class SteamApiService {
 				val = val.substring(o + 3, o1);
 				val = val.replace(",", ".");
 				this.valorDeVenda = Double.valueOf(val);
+			
 			} catch (Exception e) {
 				this.valorDeVenda = 0.0;
 			}
+			
 		} else {
 			throw new JogoInvalidoException("isso nao e um jogo e um/uma " + saida, this.appIdSteam);
 		}
