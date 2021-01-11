@@ -7,10 +7,11 @@ import java.util.Collection;
 import com.compassouol.model.TempoJogo;
 
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Setter @AllArgsConstructor @NoArgsConstructor
+@Setter @Getter @AllArgsConstructor @NoArgsConstructor 
 public class TempoJogoDto { ///Precisa dos setter? Nao da para usar apenas this.Variavel?
 	
 	private Integer jogoId;

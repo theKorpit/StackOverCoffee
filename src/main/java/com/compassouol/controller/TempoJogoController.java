@@ -23,6 +23,7 @@ public class TempoJogoController {
 
 	@Autowired
 	private TempoJogoService tempoJogoService;
+	@Autowired
 	private JogoService jogoService;
 	
 	@PostMapping
@@ -38,6 +39,7 @@ public class TempoJogoController {
 		tempoJogoService.adicionaTempoJogo(jogo, tempoJogo);
 		
 		TempoJogoDto tempoJogoDto = new TempoJogoDto(jogo.getAppIdSteam(),tempoJogo.getDataInicio(),tempoJogo.getDataFim());
+		System.out.println("oieeee");
 		
 		return ResponseEntity.ok(tempoJogoDto);
 		
