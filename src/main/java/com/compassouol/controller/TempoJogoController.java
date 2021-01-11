@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.compassouol.controller.dto.TempoJogoDto;
 import com.compassouol.controller.form.AddTempoJogoForm;
+import com.compassouol.exceptions.JogoInvalidoException;
 import com.compassouol.model.Jogo;
 import com.compassouol.model.TempoJogo;
 import com.compassouol.services.JogoService;
@@ -49,7 +50,7 @@ public class TempoJogoController {
 		Jogo jogo = jogoService.retornaJogoPorId(jogoId);
 		
 		if(jogo == null) 
-			return ResponseEntity.notFound().build();
+			throw new JogoInvalidoException("Jogo não existente", jogoId);
 		
 		return ResponseEntity.ok(TempoJogoDto.converteListaParaDto(jogo.getTempoJogado(), jogoId));	
 	}	
