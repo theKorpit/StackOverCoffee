@@ -14,6 +14,7 @@ import com.compassouol.controller.dto.TempoJogoDto;
 import com.compassouol.controller.form.AddTempoJogoForm;
 import com.compassouol.model.Jogo;
 import com.compassouol.model.TempoJogo;
+import com.compassouol.services.JogoService;
 import com.compassouol.services.TempoJogoService;
 
 @RestController
@@ -22,11 +23,12 @@ public class TempoJogoController {
 
 	@Autowired
 	private TempoJogoService tempoJogoService;
+	private JogoService jogoService;
 	
 	@PostMapping
 	public ResponseEntity<?> AddTempoJogoByDate(@Validated @RequestBody AddTempoJogoForm tempoJogoForm) {
 		
-		Jogo jogo = tempoJogoService.buscaJogoPorId(tempoJogoForm.getIdJogo());
+		Jogo jogo = jogoService.retornaJogoPorId(tempoJogoForm.getIdJogo());
 	
 		TempoJogo tempoJogo = new TempoJogo(tempoJogoForm.getDataInicial(), tempoJogoForm.getDataFinal());
 		
@@ -43,7 +45,7 @@ public class TempoJogoController {
 	
 	@GetMapping("/{id}")
 	public ResponseEntity<?> GetAllTempoJogoByJogo(@PathVariable("id") Integer jogoId){
-		Jogo jogo = tempoJogoService.buscaJogoPorId(jogoId);
+		Jogo jogo = jogoService.retornaJogoPorId(jogoId);
 		
 		if(jogo == null) 
 			return ResponseEntity.notFound().build();

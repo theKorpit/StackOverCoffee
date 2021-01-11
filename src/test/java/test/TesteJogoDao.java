@@ -1,7 +1,6 @@
 package test;
 
 import static org.junit.Assert.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 
@@ -18,9 +17,9 @@ class TesteJogoDao {
 	
 		Integer jogoId = jogo.getAppIdSteam();
 		
-		jogoDao.save(jogo);
+		jogoDao.salva(jogo);
 		
-		assertNotNull(jogoDao.FindById(jogoId));
+		assertNotNull(jogoDao.buscaPorId(jogoId));
 	}
 	
 }

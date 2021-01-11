@@ -15,7 +15,9 @@ import org.springframework.stereotype.Service;
 import com.compassouol.exceptions.JogoInvalidoException;
 import com.compassouol.model.Jogo;
 
-@Service
+import lombok.NoArgsConstructor;
+
+@Service @NoArgsConstructor
 public class SteamApiService {
 
 	private Integer appIdSteam;

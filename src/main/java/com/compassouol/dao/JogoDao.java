@@ -6,11 +6,11 @@ import com.compassouol.model.Jogo;
 
 public class JogoDao {
 
-	public void save(Jogo jogo) {
+	public void salva(Jogo jogo) {
 		BibliotecaDao.biblioteca.getJogos().add(jogo);
 	}
 
-	public Jogo findById(Integer id) {
+	public Jogo buscaPorId(Integer id) {
 		for (Jogo jogo : BibliotecaDao.biblioteca.getJogos()) {
 			if (jogo.getAppIdSteam().equals(id))
 				return jogo;
@@ -18,7 +18,7 @@ public class JogoDao {
 		return null;
 	}
 
-	public Jogo findByName(String nome) { 
+	public Jogo buscaPorNome(String nome) { 
 		for (Jogo jogo : BibliotecaDao.biblioteca.getJogos()) {
 			if (jogo.getNomeJogo().equalsIgnoreCase(nome))
 				return jogo;
