@@ -2,6 +2,7 @@ package com.compassouol.controller;
 
 import java.io.IOException;
 import java.util.Collection;
+import java.util.List;
 
 import javax.validation.constraints.NotNull;
 
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.compassouol.controller.dto.JogoDto;
 import com.compassouol.dao.BibliotecaDao;
 import com.compassouol.exceptions.JogoInvalidoException;
 import com.compassouol.model.Jogo;
@@ -35,8 +37,8 @@ public class JogoController {
 	}
 
 	@GetMapping
-	public Collection<Jogo> buscaJogos() {
-		return BibliotecaDao.biblioteca.getJogos();
+	public ResponseEntity<List<JogoDto>> buscaJogos() {	
+		return ResponseEntity.ok(new JogoDto().converteJogoParaJogoDto(BibliotecaDao.biblioteca.getJogos()));
 	}
 
 	@GetMapping("/{id}")

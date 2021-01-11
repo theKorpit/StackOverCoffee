@@ -39,7 +39,6 @@ public class TempoJogoController {
 		tempoJogoService.adicionaTempoJogo(jogo, tempoJogo);
 		
 		TempoJogoDto tempoJogoDto = new TempoJogoDto(jogo.getAppIdSteam(),tempoJogo.getDataInicio(),tempoJogo.getDataFim());
-		System.out.println("oieeee");
 		
 		return ResponseEntity.ok(tempoJogoDto);
 		

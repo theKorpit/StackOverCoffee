@@ -17,7 +17,8 @@ public class TempoJogoService {
 		tempoJogoDao.findAll().forEach(e -> {
 
 			if((tempoJogo.getDataFim().isAfter(e.getDataInicio()) && tempoJogo.getDataFim().isBefore(e.getDataFim())) || 
-			   (tempoJogo.getDataInicio().isAfter(e.getDataInicio()) && tempoJogo.getDataInicio().isBefore(e.getDataFim()))) 
+			   (tempoJogo.getDataInicio().isAfter(e.getDataInicio()) && tempoJogo.getDataInicio().isBefore(e.getDataFim())) ||
+			   (tempoJogo.getDataInicio().isEqual(e.getDataInicio())) && tempoJogo.getDataFim().isEqual(e.getDataFim())) 
 				throw new JogosEmMesmoHorarioException("Jogos não podem ser jogados no mesmo horario",e.getDataInicio(),e.getDataFim(),tempoJogo.getDataInicio(), tempoJogo.getDataFim());
 		});
 		
