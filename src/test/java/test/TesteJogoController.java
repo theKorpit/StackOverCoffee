@@ -27,7 +27,7 @@ class TesteJogoController {
 	public String variavelStringNomeValido = "Half-life";
 	public String variavelStringNomeInvalido = "saddawedaea";
 	public Integer variavelIdValido = 70;
-	public Integer variavelIdInvalido = 70;
+	public Integer variavelIdInvalido = 0;
 
 	void metodoAdicionaJogo(String dado) throws IOException, ParseException {
 		jogoController.adicionaJogo(dado);

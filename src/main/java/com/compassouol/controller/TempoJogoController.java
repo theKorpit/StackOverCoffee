@@ -35,7 +35,7 @@ public class TempoJogoController {
 		TempoJogo tempoJogo = new TempoJogo(tempoJogoForm.getDataInicial(), tempoJogoForm.getDataFinal());
 		
 		if(jogo == null) 
-			return ResponseEntity.notFound().build();
+			throw new JogoInvalidoException("Jogo não existente", tempoJogoForm.getIdJogo());
 		
 		tempoJogoService.adicionaTempoJogo(jogo, tempoJogo);
 		
