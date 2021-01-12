@@ -1,6 +1,7 @@
-package test;
+package testController;
 
 import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.IOException;
@@ -14,7 +15,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import com.compassouol.controller.JogoController;
 import com.compassouol.dao.BibliotecaDao;
 import com.compassouol.exceptions.JogoInvalidoException;
-import com.compassouol.services.SteamApiService;
 
 @SpringBootTest(classes = com.compassouol.Starter.class)
 class TesteJogoController {
@@ -22,39 +22,24 @@ class TesteJogoController {
 	@Autowired
 	JogoController jogoController;
 
-	public String variavelStringIdValido = "70";
-	public String variavelStringIdInvalido = "1";
-	public String variavelStringNomeValido = "Half-life";
-	public String variavelStringNomeInvalido = "saddawedaea";
-	public Integer variavelIdValido = 70;
-	public Integer variavelIdInvalido = 0;
-
-	void metodoAdicionaJogo(String dado) throws IOException, ParseException {
-		jogoController.adicionaJogo(dado);
-	}
-
-	void metodoBuscaJogoId(Integer dado) {
-		jogoController.buscaJogoPorId(dado);
-	}
-	
-
 	@Test
 	void testAdicionaJogoIdValido() throws IOException, ParseException {
-		this.metodoAdicionaJogo(this.variavelStringIdValido);
+		jogoController.adicionaJogo("70");
 		assertTrue(BibliotecaDao.biblioteca.getJogos().size() > 0);
 	}
 
 	@Test
 	void testAdicionaJogoNomeValido() throws IOException, ParseException {
-		this.metodoAdicionaJogo(this.variavelStringNomeValido);
+		jogoController.adicionaJogo("Half-life");
 		assertTrue(BibliotecaDao.biblioteca.getJogos().size() > 0);
 	}
 
 	@Test
 	void testAdicionaJogoIdInvalido() throws IOException, ParseException {
 		try {
-			this.metodoAdicionaJogo(this.variavelStringIdInvalido);
-		} catch (JogoInvalidoException e) {}
+			jogoController.adicionaJogo("1");
+		} catch (JogoInvalidoException e) {
+		}
 
 		assertTrue(BibliotecaDao.biblioteca.getJogos().size() == 0);
 	}
@@ -62,23 +47,27 @@ class TesteJogoController {
 	@Test
 	void testAdicionaJogoNomeInvalido() throws IOException, ParseException {
 		try {
-			this.metodoAdicionaJogo(this.variavelStringNomeInvalido);
-		} catch (JogoInvalidoException e) {}
-		
+			jogoController.adicionaJogo("saskjendw");
+		} catch (JogoInvalidoException e) {
+		}
+
 		assertTrue(BibliotecaDao.biblioteca.getJogos().size() == 0);
 	}
 
 	@Test
 	void testBuscaJogoIdValido() throws IOException, ParseException {
-		jogoController.adicionaJogo(this.variavelStringIdValido);
-		this.metodoBuscaJogoId(this.variavelIdValido);
+		jogoController.adicionaJogo("70");
+		assertDoesNotThrow(() -> {
+			jogoController.buscaJogoPorId(70);
+		});
+
 	}
-	
+
 	@Test
 	void testBuscaJogoIdInvalido() throws IOException, ParseException {
-		jogoController.adicionaJogo(this.variavelStringIdValido);
+		jogoController.adicionaJogo("70");
 		assertThrows(JogoInvalidoException.class, () -> {
-			this.metodoBuscaJogoId(this.variavelIdInvalido);
+			jogoController.buscaJogoPorId(1);
 		});
 	}
 
