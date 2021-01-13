@@ -1,4 +1,4 @@
-package testController;
+package com.compassouol.controller;
 
 import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
