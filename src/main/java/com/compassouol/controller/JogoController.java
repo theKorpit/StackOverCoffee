@@ -22,7 +22,7 @@ import com.compassouol.exceptions.JogoInvalidoException;
 import com.compassouol.services.JogoService;
 
 @RestController
-@RequestMapping(value = "/Jogo")
+@RequestMapping(value = "/jogo")
 public class JogoController {
 
 	@Autowired

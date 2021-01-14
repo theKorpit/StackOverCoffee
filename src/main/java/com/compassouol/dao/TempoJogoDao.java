@@ -3,8 +3,11 @@ package com.compassouol.dao;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.stereotype.Component;
+
 import com.compassouol.model.TempoJogo;
 
+@Component
 public class TempoJogoDao {
 
 	 public List<TempoJogo> findAll(){ //Sobreescreveu metodo?

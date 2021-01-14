@@ -1,5 +1,6 @@
 package com.compassouol.services;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.compassouol.dao.TempoJogoDao;
@@ -10,7 +11,9 @@ import com.compassouol.model.TempoJogo;
 @Service
 public class TempoJogoService {
 
-	private TempoJogoDao tempoJogoDao = new TempoJogoDao();
+	@Autowired
+	private TempoJogoDao tempoJogoDao;
+	
 	
 	public void adicionaTempoJogo(Jogo jogo, TempoJogo tempoJogo) {
 		

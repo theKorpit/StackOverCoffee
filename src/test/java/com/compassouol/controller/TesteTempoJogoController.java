@@ -25,6 +25,7 @@ import com.compassouol.services.TempoJogoService;
 
 import io.restassured.http.ContentType;
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
+
 @WebMvcTest
 class TesteTempoJogoController {
 
@@ -114,7 +115,6 @@ class TesteTempoJogoController {
 			      .andExpect(status().isBadRequest())
 			      .andExpect(result -> assertTrue(result.getResolvedException() instanceof DataInicioMaiorQueDataFimException))
 			      .andExpect(result -> assertEquals("A data inicial nao pode ser menor que a data final", result.getResolvedException().getMessage()));
-
 	}
 
 }

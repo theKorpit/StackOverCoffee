@@ -19,7 +19,7 @@ import com.compassouol.services.JogoService;
 import com.compassouol.services.TempoJogoService;
 
 @RestController
-@RequestMapping(value = "/Jogar")
+@RequestMapping(value = "/jogar")
 public class TempoJogoController {
 
 	@Autowired
