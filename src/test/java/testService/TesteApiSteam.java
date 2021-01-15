@@ -55,7 +55,7 @@ public class TesteApiSteam {
 		Assertions.assertEquals(j.getDesenvolvedor(), "Valve");
 		Assertions.assertEquals(j.getDistribuidora(), "Valve");
 		Assertions.assertEquals(j.getDataLancamento(), "8 Nov 1998");
-		Assertions.assertEquals(j.getCategoria(), "Single-player,Action");
+		Assertions.assertEquals(j.getCategoria(), "Single-player,Action Games");
 		Assertions.assertEquals(j.getValorDeVenda(), 20.69);
 		Assertions.assertEquals(j.getDescricao(), "Named Game of the Year by over 50 publications, "
 				+ "Valve's debut title blends action and adventure with award-winning technology to create a frighteningly realistic world "
@@ -73,7 +73,7 @@ public class TesteApiSteam {
 		Assertions.assertEquals(j.getDesenvolvedor(), "Valve,Hidden Path Entertainment");
 		Assertions.assertEquals(j.getDistribuidora(), "Valve");
 		Assertions.assertEquals(j.getDataLancamento(), "21 Aug 2012");
-		Assertions.assertEquals(j.getCategoria(), "Multi-player,Action,Free to Play");
+		Assertions.assertEquals(j.getCategoria(), "Multi-player,Action Games,Free to Play");
 		Assertions.assertEquals(j.getValorDeVenda(), 0.0);
 		Assertions.assertEquals(j.getDescricao(),
 				"Counter-Strike: Global Offensive (CS: GO) expands upon the team-based action gameplay that "

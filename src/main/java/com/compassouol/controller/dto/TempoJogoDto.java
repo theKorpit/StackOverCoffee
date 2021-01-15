@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Setter @Getter @AllArgsConstructor @NoArgsConstructor 
-public class TempoJogoDto { ///Precisa dos setter? Nao da para usar apenas this.Variavel?
+public class TempoJogoDto {
 	
 	private Integer jogoId;
 

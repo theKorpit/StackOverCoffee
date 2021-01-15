@@ -26,7 +26,7 @@ public class JogoDao {
 		return null;
 	}
 	
-	public List<Jogo> findAll(){ //Sobreescreveu metodo?
+	public List<Jogo> findAll(){
 		return BibliotecaDao.biblioteca.getJogos();
 	}
 }

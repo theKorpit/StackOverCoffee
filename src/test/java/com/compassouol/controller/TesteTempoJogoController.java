@@ -54,7 +54,7 @@ class TesteTempoJogoController {
 		given()
 			.accept(ContentType.JSON)
 		.when()
-			.get("/Jogar/{id}",10)
+			.get("/jogar/{id}",10)
 		.then()
 			.statusCode(HttpStatus.OK.value());
 		
@@ -65,7 +65,7 @@ class TesteTempoJogoController {
 		
 		when(this.jogoService.retornaJogoPorId(10)).thenReturn(null);
 		
-		mvc.perform(get("/Jogar/{id}", 10)
+		mvc.perform(get("/jogar/{id}", 10)
 			      .contentType(MediaType.APPLICATION_JSON))
 			      .andExpect(status().isBadRequest())
 			      .andExpect(result -> assertTrue(result.getResolvedException() instanceof JogoInvalidoException))
@@ -77,7 +77,7 @@ class TesteTempoJogoController {
 		
 		when(this.jogoService.retornaJogoPorId(730)).thenReturn(new Jogo(730, "Nome Jogo","Desenvolvedora", "Distribuidora","26/07/1998", "Categoria", 100.0, "Descrição"));
 
-		mvc.perform(post("/Jogar").content("{\n"
+		mvc.perform(post("/jogar").content("{\n"
 				+ "    \"idJogo\":730,\n"
 				+ "    \"dataInicial\":\"2021-01-09T20:30:00.000000\",\n"
 				+ "    \"dataFinal\":\"2021-01-09T22:45:00.000000\"\n"
@@ -93,7 +93,7 @@ class TesteTempoJogoController {
 		when(this.jogoService.retornaJogoPorId(10)).thenReturn(null);
 		
 		
-		mvc.perform(get("/Jogar/{id}", 10)
+		mvc.perform(get("/jogar/{id}", 10)
 			      .contentType(MediaType.APPLICATION_JSON))
 			      .andExpect(status().isBadRequest())
 			      .andExpect(result -> assertTrue(result.getResolvedException() instanceof JogoInvalidoException))
@@ -106,7 +106,7 @@ class TesteTempoJogoController {
 		
 		when(this.jogoService.retornaJogoPorId(10)).thenReturn(null);
 		
-		mvc.perform(post("/Jogar").content("{\n"
+		mvc.perform(post("/jogar").content("{\n"
 				+ "    \"idJogo\":730,\n"
 				+ "    \"dataInicial\":\"2021-01-09T23:00:00.000000\",\n"
 				+ "    \"dataFinal\":\"2021-01-09T22:00:00.000000\"\n"

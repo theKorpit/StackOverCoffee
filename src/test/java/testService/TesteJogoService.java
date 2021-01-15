@@ -18,24 +18,19 @@ class TesteJogoService {
 	
 	JogoService jogoService = new JogoService();
 	
-	private String variavelStringIdValido = "70"; 
-	private String variavelStringIdInvalido = "awdwda";
-	private String variavelStringValida = "70";
-	
-	
 	@Test
 	void testVerificaIdValido() {
-		assertTrue(jogoService.verificaId(this.variavelStringIdValido));
+		assertTrue(jogoService.verificaId("70"));
 	}
 
 	@Test
 	void testVerificaIdInvalido() {
-		assertFalse(jogoService.verificaId(this.variavelStringIdInvalido));
+		assertFalse(jogoService.verificaId("Half-life"));
 	}
 	
 	@Test
 	void testAdicionaJogoNovoNaBibliotecaPorId() throws IOException, ParseException {
-		assertTrue(jogoService.adicionaJogoBiblioteca("70"));
+		assertTrue(jogoService.adicionaJogoBiblioteca("730"));
 	}
 	
 	@Test
@@ -54,7 +49,7 @@ class TesteJogoService {
 	@Test
 	void testRetornaJogoPorId() throws IOException, ParseException {
 		jogoService.adicionaJogoBiblioteca("Half-life");
-		assertTrue(jogoService.retornaJogoPorId(80) != null);
+		assertTrue(jogoService.retornaJogoPorId(70) != null);
 	}
 	
 	@AfterEach

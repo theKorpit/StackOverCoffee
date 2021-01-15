@@ -10,7 +10,7 @@ import com.compassouol.model.TempoJogo;
 @Component
 public class TempoJogoDao {
 
-	 public List<TempoJogo> findAll(){ //Sobreescreveu metodo?
+	 public List<TempoJogo> findAll(){
 		 JogoDao jogoDao = new JogoDao();
 		 List<TempoJogo> tempoJogo = new ArrayList<>();
 		 
