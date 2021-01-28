@@ -6,6 +6,12 @@ import java.util.Collection;
 
 import com.compassouol.model.TempoJogo;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Setter @Getter @AllArgsConstructor @NoArgsConstructor 
 public class TempoJogoDto {
 	
 	private Integer jogoId;
@@ -13,33 +19,8 @@ public class TempoJogoDto {
 	private LocalDateTime DataInicial;
 	
 	private LocalDateTime DataFinal;
-
-	public TempoJogoDto(Integer jogoId, LocalDateTime dataInicial, LocalDateTime dataFinal) {
-		this.jogoId = jogoId;
-		this.DataInicial = dataInicial;
-		this.DataFinal = dataFinal;
-	}
-
-	public TempoJogoDto() {
-	}
-
-	public LocalDateTime getDataInicial() {
-		return DataInicial;
-	}
-
-	public void setDataInicial(LocalDateTime dataInicial) {
-		DataInicial = dataInicial;
-	}
-
-	public LocalDateTime getDataFinal() {
-		return DataFinal;
-	}
-
-	public void setDataFinal(LocalDateTime dataFinal) {
-		DataFinal = dataFinal;
-	}
 	
-	public static Collection<TempoJogoDto> convertListToDto(Collection<TempoJogo> tempoJogoList, Integer JogoId){
+	public static Collection<TempoJogoDto> converteListaParaDto(Collection<TempoJogo> tempoJogoList, Integer JogoId){
 		
 		Collection<TempoJogoDto> tempoJogoDtos = new ArrayList<TempoJogoDto>();
 		
@@ -50,17 +31,6 @@ public class TempoJogoDto {
 			tempoJogoDto.setDataFinal(tempoJogo.getDataFim());
 			tempoJogoDtos.add(tempoJogoDto);
 		}
-		
-		return tempoJogoDtos;
-		
-	}
-
-	public Integer getJogoId() {
-		return jogoId;
-	}
-
-	public void setJogoId(Integer jogoId) {
-		this.jogoId = jogoId;
-	}
-	
+		return tempoJogoDtos;	
+	}	
 }

@@ -1,20 +1,16 @@
 package com.compassouol.dao;
 
+import java.util.List;
+
 import com.compassouol.model.Jogo;
 
 public class JogoDao {
 
-	public void save(Jogo jogo) {
-		for (Jogo jogoSearch : BibliotecaDao.biblioteca.getJogos()) {
-			if (jogoSearch.getAppIdSteam() == jogo.getAppIdSteam()) {
-				
-				return;
-			}
-		}
+	public void salva(Jogo jogo) {
 		BibliotecaDao.biblioteca.getJogos().add(jogo);
 	}
 
-	public Jogo FindById(Integer id) {
+	public Jogo buscaPorId(Integer id) {
 		for (Jogo jogo : BibliotecaDao.biblioteca.getJogos()) {
 			if (jogo.getAppIdSteam().equals(id))
 				return jogo;
@@ -22,12 +18,15 @@ public class JogoDao {
 		return null;
 	}
 
-	public Jogo FindByName(String nome) {
+	public Jogo buscaPorNome(String nome) { 
 		for (Jogo jogo : BibliotecaDao.biblioteca.getJogos()) {
 			if (jogo.getNomeJogo().equalsIgnoreCase(nome))
 				return jogo;
 		}
 		return null;
 	}
-
+	
+	public List<Jogo> findAll(){
+		return BibliotecaDao.biblioteca.getJogos();
+	}
 }

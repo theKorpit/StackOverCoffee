@@ -1,5 +1,8 @@
 package com.compassouol.exceptions;
 
+import lombok.Getter;
+
+@Getter
 public class JogoInvalidoException extends RuntimeException {
 
 	private Integer id;
@@ -25,13 +28,4 @@ public class JogoInvalidoException extends RuntimeException {
 		this.nomeJogo = nomeJogo;
 		this.id = null;
 	}
-
-	public Integer getId() {
-		return id;
-	}
-
-	public String getNomeJogo() {
-		return nomeJogo;
-	}
-
 }

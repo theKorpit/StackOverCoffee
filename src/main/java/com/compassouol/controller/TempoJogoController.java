@@ -1,5 +1,6 @@
 package com.compassouol.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,27 +12,34 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.compassouol.controller.dto.TempoJogoDto;
 import com.compassouol.controller.form.AddTempoJogoForm;
-import com.compassouol.dao.JogoDao;
+import com.compassouol.exceptions.JogoInvalidoException;
 import com.compassouol.model.Jogo;
+import com.compassouol.model.TempoJogo;
+import com.compassouol.services.JogoService;
+import com.compassouol.services.TempoJogoService;
 
 @RestController
-@RequestMapping(value = "/api/tempoJogo")
+@RequestMapping(value = "/jogar")
 public class TempoJogoController {
 
-	public JogoDao jogoDao = new JogoDao();
+	@Autowired
+	private TempoJogoService tempoJogoService;
+	@Autowired
+	private JogoService jogoService;
 	
 	@PostMapping
-	public ResponseEntity<?> AddTempoJogoByDate(@Validated @RequestBody AddTempoJogoForm tempoJogo) {
-		Jogo jogo = jogoDao.FindById(tempoJogo.getIdJogo());
+	public ResponseEntity<?> AddTempoJogoByDate(@Validated @RequestBody AddTempoJogoForm tempoJogoForm) {
+		
+		Jogo jogo = jogoService.retornaJogoPorId(tempoJogoForm.getIdJogo());
+	
+		TempoJogo tempoJogo = new TempoJogo(tempoJogoForm.getDataInicial(), tempoJogoForm.getDataFinal());
 		
 		if(jogo == null) 
-			return ResponseEntity.notFound().build();
+			throw new JogoInvalidoException("Jogo não existente", tempoJogoForm.getIdJogo());
 		
-		jogo.adicionaTempoJogo(tempoJogo.getDataInicial(), tempoJogo.getDataFinal());
+		tempoJogoService.adicionaTempoJogo(jogo, tempoJogo);
 		
-		jogoDao.save(jogo);
-		
-		TempoJogoDto tempoJogoDto = new TempoJogoDto(tempoJogo.getIdJogo(),tempoJogo.getDataInicial(),tempoJogo.getDataFinal());
+		TempoJogoDto tempoJogoDto = new TempoJogoDto(jogo.getAppIdSteam(),tempoJogo.getDataInicio(),tempoJogo.getDataFim());
 		
 		return ResponseEntity.ok(tempoJogoDto);
 		
@@ -39,13 +47,11 @@ public class TempoJogoController {
 	
 	@GetMapping("/{id}")
 	public ResponseEntity<?> GetAllTempoJogoByJogo(@PathVariable("id") Integer jogoId){
-		Jogo jogo = jogoDao.FindById(jogoId);
+		Jogo jogo = jogoService.retornaJogoPorId(jogoId);
 		
 		if(jogo == null) 
-			return ResponseEntity.notFound().build();
+			throw new JogoInvalidoException("Jogo não existente", jogoId);
 		
-		return ResponseEntity.ok(TempoJogoDto.convertListToDto(jogo.getTempoJogado(), jogoId));
-		
-	}
-	
+		return ResponseEntity.ok(TempoJogoDto.converteListaParaDto(jogo.getTempoJogado(), jogoId));	
+	}	
 }

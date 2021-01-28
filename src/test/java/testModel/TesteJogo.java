@@ -1,4 +1,4 @@
-package test;
+package testModel;
 
 import java.time.LocalDateTime;
 
@@ -11,7 +11,7 @@ class TesteJogo {
 
 	@Test
 	void testAdicionaTempoJogo() {
-		Jogo jogo = new Jogo("Nome Jogo","Desenvolvedora", "Distribuidora","26/07/1998", "Categoria", 100.0);
+		Jogo jogo = new Jogo(10, "Nome Jogo","Desenvolvedora", "Distribuidora","26/07/1998", "Categoria", 100.0, "Descrição");
 		
 		jogo.adicionaTempoJogo(LocalDateTime.now(), LocalDateTime.now().plusHours(2));
 		
@@ -21,7 +21,7 @@ class TesteJogo {
 	
 	@Test
 	void testTempoTotalJogado() {
-		Jogo jogo = new Jogo("Nome Jogo","Desenvolvedora", "Distribuidora","26/07/1998", "Categoria", 100.0);
+		Jogo jogo = new Jogo(10, "Nome Jogo","Desenvolvedora", "Distribuidora","26/07/1998", "Categoria", 100.0, "Descrição");
 		
 		jogo.adicionaTempoJogo(LocalDateTime.now(), LocalDateTime.now().plusHours(2));
 		jogo.adicionaTempoJogo(LocalDateTime.now(), LocalDateTime.now().plusHours(4));
