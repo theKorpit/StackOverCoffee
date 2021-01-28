@@ -3,16 +3,26 @@ package com.compassouol.model;
 import java.time.Duration;
 import java.time.LocalDateTime;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.OneToOne;
+
 import com.compassouol.exceptions.DataInicioMaiorQueDataFimException;
 
 import lombok.Getter;
 
-@Getter
+@Getter @Entity
 public class TempoJogo {
+	
+	@Id
+	private Integer id;
 
 	private LocalDateTime dataInicio;
 	
 	private LocalDateTime dataFim;
+	
+	@OneToOne
+	private Jogo jogo;
 	
 	public TempoJogo(LocalDateTime dataInicio, LocalDateTime dataFim) {
 		if(dataInicio.isAfter(dataFim))

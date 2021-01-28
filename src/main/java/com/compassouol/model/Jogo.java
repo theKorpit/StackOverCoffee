@@ -4,11 +4,15 @@ import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.HashSet;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+
 import lombok.Getter;
 
-@Getter
+@Getter @Entity
 public class Jogo {
-
+	@Id
 	private Integer appIdSteam;
 	private String nomeJogo;
 	private String desenvolvedor;
@@ -17,6 +21,7 @@ public class Jogo {
 	private String categoria;
 	private Double valorDeVenda;
 	private String descricao;
+	@OneToMany(mappedBy = "jogo")
 	private Collection<TempoJogo> tempoJogado;
 
 	public Jogo(Integer appIdSteam, String nomeJogo, String desenvolvedor, String distribuidora, String dataLancamento,
