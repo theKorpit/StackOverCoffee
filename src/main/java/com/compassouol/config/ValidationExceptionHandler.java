@@ -41,7 +41,7 @@ public class ValidationExceptionHandler {
 		return erro;
 	}
 	
-	@ResponseStatus(code = HttpStatus.BAD_REQUEST)
+	@ResponseStatus(code = HttpStatus.NOT_FOUND)
 	@ExceptionHandler(JogoInvalidoException.class)
 	public ErroFormDto DataInicioMaiorQueDataFimException(JogoInvalidoException exception) {	
 		ErroFormDto erro = null;
