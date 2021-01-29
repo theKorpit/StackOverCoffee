@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import com.compassouol.controller.dto.ErroFormDto;
 import com.compassouol.controller.dto.JogosEmMesmoHorarioExceptionDto;
 import com.compassouol.exceptions.DataInicioMaiorQueDataFimException;
+import com.compassouol.exceptions.JogoDuplicadoException;
 import com.compassouol.exceptions.JogoInvalidoException;
 import com.compassouol.exceptions.JogosEmMesmoHorarioException;
 import com.fasterxml.jackson.databind.JsonMappingException.Reference;
@@ -43,7 +44,7 @@ public class ValidationExceptionHandler {
 	
 	@ResponseStatus(code = HttpStatus.NOT_FOUND)
 	@ExceptionHandler(JogoInvalidoException.class)
-	public ErroFormDto DataInicioMaiorQueDataFimException(JogoInvalidoException exception) {	
+	public ErroFormDto JogoInvalidoException(JogoInvalidoException exception) {	
 		ErroFormDto erro = null;
 		
 		if(exception.getId() != null)
@@ -61,4 +62,17 @@ public class ValidationExceptionHandler {
 				exception.getDataFim(), exception.getDataInicioToAdd(), exception.getDataFimToAdd(),exception.getMessage());
 		return erroJogosEmMesmoHorarioExceptionDto;
 	}		
+	
+	@ResponseStatus(code = HttpStatus.CONFLICT)
+	@ExceptionHandler(JogoDuplicadoException.class)
+	public ErroFormDto JogoDuplicado(JogoDuplicadoException exception) {	
+		ErroFormDto erro = null;
+		
+		if(exception.getId() != null)
+			erro = new ErroFormDto("AppID", exception.getMessage());
+		else
+			erro = new ErroFormDto("Nome Jogo", exception.getMessage());
+		
+		return erro;
+	}
 }

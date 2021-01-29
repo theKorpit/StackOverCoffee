@@ -6,6 +6,7 @@ import org.json.simple.parser.ParseException;
 import org.springframework.stereotype.Service;
 
 import com.compassouol.dao.JogoDao;
+import com.compassouol.exceptions.JogoDuplicadoException;
 import com.compassouol.exceptions.JogoInvalidoException;
 import com.compassouol.model.Jogo;
 
@@ -38,7 +39,7 @@ public class JogoService {
 				jogoDao.salva(jogo);
 				return true;
 			} else
-				throw new JogoInvalidoException("Jogo ja adicionado!", this.converteStringIdParaIntegerId(dado));
+				throw new JogoDuplicadoException("Jogo ja adicionado!", this.converteStringIdParaIntegerId(dado));
 		} else {
 			Jogo jogo = jogoDao.buscaPorNome(dado);
 
@@ -48,7 +49,7 @@ public class JogoService {
 				jogoDao.salva(jogo);
 				return true;
 			} else
-				throw new JogoInvalidoException("Jogo ja adicionado!", dado);
+				throw new JogoDuplicadoException("Jogo ja adicionado!", dado);
 		}
 	}
 
