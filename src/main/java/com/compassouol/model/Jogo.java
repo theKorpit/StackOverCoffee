@@ -9,8 +9,9 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
 import lombok.Getter;
+import lombok.Setter;
 
-@Getter @Entity
+@Getter @Entity @Setter 
 public class Jogo {
 	@Id
 	private Integer appIdSteam;
@@ -24,6 +25,8 @@ public class Jogo {
 	@OneToMany(mappedBy = "jogo")
 	private Collection<TempoJogo> tempoJogado;
 
+	
+	
 	public Jogo(Integer appIdSteam, String nomeJogo, String desenvolvedor, String distribuidora, String dataLancamento,
 			String categoria, Double valorDeVenda, String descricao) {
 
@@ -49,5 +52,9 @@ public class Jogo {
 			tempo += tempojogo.totalTempoJogado();
 		}
 		return tempo;
+	}
+
+	public Jogo() {
+		this.tempoJogado = new HashSet<TempoJogo>();
 	}
 }

@@ -6,8 +6,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
 
-import org.springframework.stereotype.Component;
-
+import org.springframework.stereotype.Service;
+@Service
 public class SteamConnection {
 
 	

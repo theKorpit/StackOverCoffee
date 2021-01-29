@@ -12,3 +12,5 @@ buildNumber.properties
 .project
 .settings/
 bin/
+src/main/resources/application.properties
+

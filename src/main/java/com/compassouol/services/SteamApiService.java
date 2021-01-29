@@ -13,33 +13,36 @@ import com.compassouol.connection.SteamConnection;
 import com.compassouol.exceptions.JogoInvalidoException;
 import com.compassouol.model.Jogo;
 
-import lombok.NoArgsConstructor;
-
-@Service
-@NoArgsConstructor
+@Service 
 public class SteamApiService {
 
-	private Integer appIdSteam;
-	private String nomeJogo, desenvolvedor,distribuidora;
-	private String dataLancamento, categoria,descricao;
-	private Double valorDeVenda;
+	@Autowired
+	private final SteamConnection steamCon;
+	
+	Jogo jogo = new Jogo();
 	private JSONParser parser = new JSONParser();
-	SteamConnection steamCon = new SteamConnection();
+
 
 	public SteamApiService(String nomeJogo) throws IOException, ParseException {
-		this.nomeJogo = nomeJogo;
-		this.appIdSteam = this.jogoPorNome(nomeJogo);
+		this.steamCon = new SteamConnection();
+		this.jogo.setNomeJogo(nomeJogo);
+		this.jogo.setAppIdSteam(this.jogoPorNome(nomeJogo));
 		this.getInfo();
 	}
 
+	public SteamApiService() {
+		this.steamCon = new SteamConnection();
+	}
+
 	public SteamApiService(int appIdSteam) throws IOException, ParseException {
-		this.appIdSteam = appIdSteam;
-		this.nomeJogo = this.jogoPorId(appIdSteam);
+		this.steamCon = new SteamConnection();
+		this.jogo.setAppIdSteam(appIdSteam);
+		this.jogo.setNomeJogo(jogoPorId(appIdSteam));
 		this.getInfo();
 	}
 
 	public Jogo retornaJogo() {
-		Jogo jogo = new Jogo(this.appIdSteam, this.nomeJogo, this.desenvolvedor, this.distribuidora,this.dataLancamento, this.categoria, this.valorDeVenda, this.descricao);
+		System.out.println(jogo.getNomeJogo());
 		return jogo;
 	}
 
@@ -57,7 +60,7 @@ public class SteamApiService {
 			}
 		}
 
-		throw new JogoInvalidoException("ID invalido", this.appIdSteam);
+		throw new JogoInvalidoException("ID invalido", appId);
 	}
 
 	public Integer jogoPorNome(String jogoNome) throws IOException, ParseException {
@@ -75,56 +78,55 @@ public class SteamApiService {
 			}
 		}
 
-		throw new JogoInvalidoException("Nome de jogo invalido", this.nomeJogo);
+		throw new JogoInvalidoException("Nome de jogo invalido", jogoNome);
 	}
 
 	private void getInfo() throws IOException, ParseException {
 
-		Object obj = parser.parse(steamCon.getThisGame(this.appIdSteam));
+		Object obj = parser.parse(steamCon.getThisGame(jogo.getAppIdSteam()));
 		JSONObject Job = (JSONObject) obj;
-		JSONObject Job2 = (JSONObject) Job.get(Long.toString(this.appIdSteam));
+		JSONObject Job2 = (JSONObject) Job.get(Long.toString(jogo.getAppIdSteam()));
 		Job = (JSONObject) Job2.get("data");
 
 		if (Job == null)
-			throw new JogoInvalidoException("Entrada invalida, isso e um jogo de testes da steam", this.appIdSteam);
+			throw new JogoInvalidoException("Entrada invalida, isso e um jogo de testes da steam", jogo.getAppIdSteam());
 
 		String saida = Job.get("type").toString();
 		if (saida.equals("game")) {
-			this.descricao = (String) Job.get("short_description");
+			jogo.setDescricao((String) Job.get("short_description"));
 			JSONArray array = (JSONArray) Job.get("categories");
 
 			if (array == null) {
-				throw new JogoInvalidoException("isso e um software e nao um jogo", this.appIdSteam);
+				throw new JogoInvalidoException("isso e um software e nao um jogo", jogo.getAppIdSteam());
 			}
 
 			String cat = array.get(0).toString();
 			cat = cat.substring((cat.indexOf(":\"") + 2), (cat.indexOf("\",")));
-			this.categoria = cat + ",";
+			jogo.setCategoria(cat + ",");
 			array = (JSONArray) Job.get("genres");
 			for (int i = 0; i < array.size(); i++) {
 				Job = (JSONObject) array.get(i);
 				if (i == array.size() - 1)
-					this.categoria += ((String) Job.get("description"));
+					jogo.setCategoria(jogo.getCategoria() + (String) Job.get("description"));
 				else
-					this.categoria += ((String) Job.get("description") + ",");
+					jogo.setCategoria(jogo.getCategoria() + (String) Job.get("description") + ",");
 			}
 
 			Job = (JSONObject) Job2.get("data");
-			this.desenvolvedor = limparLixo(Job.get("developers").toString());
-			this.distribuidora = limparLixo(Job.get("publishers").toString());
+			jogo.setDesenvolvedor(limparLixo(Job.get("developers").toString()));
+			jogo.setDistribuidora(limparLixo(Job.get("publishers").toString()));
 
 			String data = Job.get("release_date").toString();
-			this.dataLancamento = limparLixo(data.substring((data.indexOf("date")) + 7, (data.indexOf("date")) + 19).replace(",", ""));
-			
+			jogo.setDataLancamento(limparLixo(data.substring((data.indexOf("date")) + 7, (data.indexOf("date")) + 19).replace(",", "")));
 			try {
-				this.valorDeVenda = Double.valueOf(gettingGameValue(Job.get("price_overview").toString()));
+				jogo.setValorDeVenda(Double.valueOf(gettingGameValue(Job.get("price_overview").toString()))); 
 
 			} catch (Exception e) {
-				this.valorDeVenda = 0.0;
+				jogo.setValorDeVenda(0.0);
 			}
 
 		} else {
-			throw new JogoInvalidoException("isso nao e um jogo e um/uma " + saida, this.appIdSteam);
+			throw new JogoInvalidoException("isso nao e um jogo e um/uma " + saida, jogo.getAppIdSteam());
 		}
 	}
 
