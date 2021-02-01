@@ -8,4 +8,5 @@ import com.compassouol.model.Jogo;
 @Repository
 public interface JogoRepository extends JpaRepository<Jogo, Integer>{
 
+	public Jogo findByNomeJogo(String nome);
 }

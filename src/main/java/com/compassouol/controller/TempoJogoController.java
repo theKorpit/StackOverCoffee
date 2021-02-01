@@ -1,5 +1,7 @@
 package com.compassouol.controller;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -27,6 +29,7 @@ public class TempoJogoController {
 	@Autowired
 	private JogoService jogoService;
 	
+	
 	@PostMapping
 	public ResponseEntity<?> AddTempoJogoByDate(@Validated @RequestBody AddTempoJogoForm tempoJogoForm) {
 		
@@ -38,6 +41,7 @@ public class TempoJogoController {
 			throw new JogoInvalidoException("Jogo não existente", tempoJogoForm.getIdJogo());
 		
 		tempoJogoService.adicionaTempoJogo(jogo, tempoJogo);
+		
 		
 		TempoJogoDto tempoJogoDto = new TempoJogoDto(jogo.getAppIdSteam(),tempoJogo.getDataInicio(),tempoJogo.getDataFim());
 		

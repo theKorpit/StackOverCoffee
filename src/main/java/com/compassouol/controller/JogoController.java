@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.compassouol.controller.dto.JogoDto;
-import com.compassouol.dao.BibliotecaDao;
 import com.compassouol.exceptions.JogoInvalidoException;
 import com.compassouol.services.JogoService;
 
@@ -38,7 +37,7 @@ public class JogoController {
 
 	@GetMapping
 	public ResponseEntity<List<JogoDto>> buscaJogos() {	
-		return ResponseEntity.ok(new JogoDto().converteJogoParaJogoDto(BibliotecaDao.biblioteca.getJogos()));
+		return ResponseEntity.ok(new JogoDto().converteJogoParaJogoDto(jogoService.retornaJogos()));
 	}
 
 	@GetMapping("/{id}")
@@ -51,14 +50,11 @@ public class JogoController {
 	}
 
 	@DeleteMapping("/{id}")
-	public ResponseEntity<?> removeJogo(@PathVariable("id") Integer jogoId) {
+	public ResponseEntity<String> removeJogo(@PathVariable("id") Integer jogoId) {
 		
-		if (jogoService.retornaJogoPorId(jogoId) == null) {
-			throw new JogoInvalidoException("Jogo nao encontrado!", jogoId);
-		}
-		else {
-			BibliotecaDao.biblioteca.getJogos().remove(jogoService.retornaJogoPorId(jogoId));
-			return ResponseEntity.ok().build();
-		}
+		jogoService.deletaJogo(jogoId);
+		
+		return ResponseEntity.ok("Jogo deletado");
+		
 	}
 }

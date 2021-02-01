@@ -1,11 +1,9 @@
 package com.compassouol.controller.dto;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import com.compassouol.model.Jogo;
-import com.compassouol.model.TempoJogo;
 
 import lombok.Getter;
 import lombok.Setter;

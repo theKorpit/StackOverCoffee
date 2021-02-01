@@ -8,6 +8,8 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
+import org.hibernate.validator.constraints.Length;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -21,6 +23,7 @@ public class Jogo {
 	private String dataLancamento;
 	private String categoria;
 	private Double valorDeVenda;
+	@Length(max = 1000)
 	private String descricao;
 	@OneToMany(mappedBy = "jogo")
 	private Collection<TempoJogo> tempoJogado;
