@@ -1,4 +1,4 @@
-package com.compassouol.config;
+package com.compassouol.configuration;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +18,7 @@ import com.fasterxml.jackson.databind.JsonMappingException.Reference;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 
 @RestControllerAdvice
-public class ValidationExceptionHandler {
+public class ControleDeValidacaoDeExcecao {
 	
 	@ResponseStatus(code = HttpStatus.BAD_REQUEST)
 	@ExceptionHandler(InvalidFormatException.class)
@@ -47,7 +47,7 @@ public class ValidationExceptionHandler {
 	public ErroFormDto JogoInvalidoException(JogoInvalidoException exception) {	
 		ErroFormDto erro = null;
 		
-		if(exception.getId() != null)
+		if(exception.getIdSteam() != null)
 			erro = new ErroFormDto("AppID", exception.getMessage());
 		else
 			erro = new ErroFormDto("Nome Jogo", exception.getMessage());

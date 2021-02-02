@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
+import com.compassouol.dto.entrada.JogoDtoEntrada;
 import com.compassouol.exceptions.JogoDuplicadoException;
 import com.compassouol.exceptions.JogoInvalidoException;
 import com.compassouol.model.Jogo;
@@ -20,49 +21,40 @@ public class JogoService {
 	@Autowired
 	private JogoRepository jogoRepository;
 
-	public boolean verificaId(String dado) {
-		try {
-			Integer.parseInt(dado);
-			return true;
-		} catch (NumberFormatException e) {
-			return false;
-		}
-	}
+	public Jogo adicionaJogoBiblioteca(JogoDtoEntrada jogoDtoEntrada) throws IOException, ParseException {
 
-	public Integer converteStringIdParaIntegerId(String dado) {
-		return Integer.parseInt(dado);
-	}
-
-	public boolean adicionaJogoBiblioteca(String dado) throws IOException, ParseException {
-
-		if (this.verificaId(dado)) {
-			Optional<Jogo> jogoOptional = jogoRepository.findById(this.converteStringIdParaIntegerId(dado));
-			Jogo jogo = jogoOptional.isPresent() ? jogoOptional.get() : null;
+		if (jogoDtoEntrada.getIdSteam() != null) {
+			
+			Jogo jogo = this.retornaJogoPorId(jogoDtoEntrada.getIdSteam());
 
 			if (jogo == null) {
-				SteamApiService steam = new SteamApiService(this.converteStringIdParaIntegerId(dado));
+				SteamApiService steam = new SteamApiService(jogoDtoEntrada.getIdSteam());
 				jogo = steam.retornaJogo();
 				jogoRepository.save(jogo);
-				return true;
+				return jogo;
 			} else
-				throw new JogoDuplicadoException("Jogo ja adicionado!", this.converteStringIdParaIntegerId(dado));
+				throw new JogoDuplicadoException("Jogo ja adicionado!", jogoDtoEntrada.getIdSteam());
 		} else {
-			Jogo jogo = jogoRepository.findByNomeJogo(dado);
+			Jogo jogo = jogoRepository.findByNomeJogo(jogoDtoEntrada.getNomeJogo());
 
 			if (jogo == null) {
-				SteamApiService steam = new SteamApiService(dado);
+				SteamApiService steam = new SteamApiService(jogoDtoEntrada.getNomeJogo());
 				jogo = steam.retornaJogo();
 				jogoRepository.save(jogo);
-				return true;
+				return jogo;
 			} else
-				throw new JogoDuplicadoException("Jogo ja adicionado!", dado);
+				throw new JogoDuplicadoException("Jogo ja adicionado!", jogoDtoEntrada.getNomeJogo());
 		}
 
 	}
 
-	public Jogo retornaJogoPorId(Integer id) {
-		Optional<Jogo> jogoOptional = jogoRepository.findById(id);
-		return jogoOptional.isPresent() ? jogoOptional.get() : null;
+	public Jogo retornaJogoPorId(Integer idSteam) {
+		Optional<Jogo> jogoOptional = jogoRepository.findById(idSteam);
+		if(jogoOptional.isPresent())
+			return jogoOptional.get();
+		else {
+			throw new JogoInvalidoException(idSteam);
+		}
 	}
 
 	public List<Jogo> retornaJogos() {
