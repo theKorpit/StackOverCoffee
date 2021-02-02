@@ -14,23 +14,28 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.compassouol.controller.dto.TempoJogoDto;
 import com.compassouol.dto.entrada.JogoDtoEntrada;
+import com.compassouol.dto.entrada.TempoJogoDtoEntrada;
 import com.compassouol.dto.saida.JogoDtoSaida;
 import com.compassouol.exceptions.JogoInvalidoException;
 import com.compassouol.model.Jogo;
 import com.compassouol.services.JogoService;
+import com.compassouol.services.TempoJogoService;
 
 @RestController
 @RequestMapping(value = "/jogo")
 public class JogoController {
 
 	@Autowired
+	private TempoJogoService tempoJogoService;
+	
+	@Autowired
 	public JogoService jogoService;
 
 	@PostMapping
 	public ResponseEntity<JogoDtoSaida> adicionaJogo(@RequestBody JogoDtoEntrada jogoDtoEntrada) throws IOException, ParseException {
 		jogoDtoEntrada.aplicaValidacoes();
-		/*faco aqui ou direto na service e só chamo o metodo da service*/
 		JogoDtoSaida jogoDtoSaida = new JogoDtoSaida(jogoService.adicionaJogoBiblioteca(jogoDtoEntrada));
 		
 		return ResponseEntity.ok(jogoDtoSaida);
@@ -64,6 +69,25 @@ public class JogoController {
 		jogoService.deletaJogo(jogoId);
 		
 		return ResponseEntity.ok("Jogo deletado");
+		
+	}
+	
+	@PostMapping("/{id}/jogar")
+
+	public ResponseEntity<?> AddTempoJogoByDate(@PathVariable("id") Integer jogoId ,@RequestBody TempoJogoDtoEntrada tempoJogadoDtoEntrada) {
+		
+		tempoJogadoDtoEntrada.aplicaValidacoes();
+		
+		Jogo jogo = jogoService.retornaJogoPorId(jogoId);
+		
+		if(jogo == null)
+			throw new JogoInvalidoException("Jogo nao encontrado!");
+		
+		tempoJogoService.adicionaTempoJogo(jogo, tempoJogadoDtoEntrada.getDataInicial(), tempoJogadoDtoEntrada.getDataFinal());
+		
+		TempoJogoDto tempoJogoDto = new TempoJogoDto(jogo.getAppIdSteam(),tempoJogadoDtoEntrada.getDataInicial(),tempoJogadoDtoEntrada.getDataFinal());
+		
+		return ResponseEntity.ok(tempoJogoDto);
 		
 	}
 }

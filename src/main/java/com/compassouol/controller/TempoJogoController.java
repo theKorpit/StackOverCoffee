@@ -22,30 +22,12 @@ import com.compassouol.services.TempoJogoService;
 @RequestMapping(value = "/jogar")
 public class TempoJogoController {
 
-	@Autowired
-	private TempoJogoService tempoJogoService;
+
 	@Autowired
 	private JogoService jogoService;
 	
 	
-	@PostMapping
-
-	public ResponseEntity<?> AddTempoJogoByDate(@RequestBody TempoJogoDtoEntrada tempoJogadoDtoEntrada) {
-		
-		tempoJogadoDtoEntrada.aplicaValidacoes();
-		
-		Jogo jogo = jogoService.retornaJogoPorId(tempoJogadoDtoEntrada.getIdSteam());
-		
-		if(jogo == null)
-			throw new JogoInvalidoException("Jogo nao encontrado!");
-		
-		tempoJogoService.adicionaTempoJogo(jogo, tempoJogadoDtoEntrada.getDataInicial(), tempoJogadoDtoEntrada.getDataFinal());
-		
-		TempoJogoDto tempoJogoDto = new TempoJogoDto(jogo.getAppIdSteam(),tempoJogadoDtoEntrada.getDataInicial(),tempoJogadoDtoEntrada.getDataFinal());
-		
-		return ResponseEntity.ok(tempoJogoDto);
-		
-	}
+	
 	
 	@GetMapping("/{id}")
 	public ResponseEntity<Collection<TempoJogoDto>> GetAllTempoJogoByJogo(@PathVariable("id") Integer jogoId){

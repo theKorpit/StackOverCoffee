@@ -14,12 +14,16 @@ import com.compassouol.exceptions.JogoDuplicadoException;
 import com.compassouol.exceptions.JogoInvalidoException;
 import com.compassouol.model.Jogo;
 import com.compassouol.repository.JogoRepository;
+import com.compassouol.repository.TempoJogoRepository;
 
 @Service
 public class JogoService {
 
 	@Autowired
 	private JogoRepository jogoRepository;
+	
+	@Autowired
+	private TempoJogoRepository tempoJogoRep;
 
 	public Jogo adicionaJogoBiblioteca(JogoDtoEntrada jogoDtoEntrada) throws IOException, ParseException {
 
@@ -64,6 +68,7 @@ public class JogoService {
 
 	public void deletaJogo(Integer id) {
 		try {
+			tempoJogoRep.deleteByJogo_appIdSteam(id);
 			jogoRepository.deleteById(id);
 		}catch(EmptyResultDataAccessException erro) {
 			throw new JogoInvalidoException("Jogo nao encontrado!");

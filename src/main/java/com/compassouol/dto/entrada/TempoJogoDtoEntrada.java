@@ -13,7 +13,6 @@ import lombok.Getter;
 @AllArgsConstructor
 public class TempoJogoDtoEntrada implements ValidacaoDadosDeEntrada {
 
-	private Integer idSteam;
 	private LocalDateTime dataInicial;
 	private LocalDateTime dataFinal;
 	
@@ -25,8 +24,8 @@ public class TempoJogoDtoEntrada implements ValidacaoDadosDeEntrada {
 	
 	@Override
 	public void entradaVazia() {
-		if (this.idSteam == null || this.dataInicial == null || this.dataFinal == null)
-			throw new CamposNulosException(this.idSteam, this.dataInicial, this.dataFinal);
+		if (this.dataInicial == null || this.dataFinal == null)
+			throw new CamposNulosException(this.dataInicial, this.dataFinal);
 	}
 	
 	@Override

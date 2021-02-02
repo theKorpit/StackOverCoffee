@@ -18,9 +18,8 @@ public class CamposNulosException extends RuntimeException{
 	}
 	
 	
-	public CamposNulosException(Integer idSteam, LocalDateTime dataInicial, LocalDateTime dataFinal) {
+	public CamposNulosException(LocalDateTime dataInicial, LocalDateTime dataFinal) {
 		super("Entrada invalida! Todos os campos devem estrar preenchidos: ");
-		this.idSteam = idSteam;
 		this.dataInicial = dataInicial;
 		this.dataFinal = dataFinal;
 	}
