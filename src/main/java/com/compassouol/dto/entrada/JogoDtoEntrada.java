@@ -31,8 +31,5 @@ public class JogoDtoEntrada implements ValidacaoDadosDeEntrada {
 		if (this.nomeJogo.length() > 255)
 			throw new EntradaInvalidaException(this.nomeJogo);
 		
-		if(this.nomeJogo != null && this.idSteam != null)
-			throw new EntradaInvalidaException(this.nomeJogo);
-			
 	}
 }

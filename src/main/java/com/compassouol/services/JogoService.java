@@ -25,7 +25,8 @@ public class JogoService {
 
 		if (jogoDtoEntrada.getIdSteam() != null) {
 			
-			Jogo jogo = this.retornaJogoPorId(jogoDtoEntrada.getIdSteam());
+			Optional<Jogo> jogoOptional = jogoRepository.findById(jogoDtoEntrada.getIdSteam());
+			Jogo jogo = jogoOptional.isPresent() ? jogoOptional.get() : null;
 
 			if (jogo == null) {
 				SteamApiService steam = new SteamApiService(jogoDtoEntrada.getIdSteam());
@@ -53,7 +54,7 @@ public class JogoService {
 		if(jogoOptional.isPresent())
 			return jogoOptional.get();
 		else {
-			throw new JogoInvalidoException(idSteam);
+			return null;
 		}
 	}
 

@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.compassouol.dto.entrada.JogoDtoEntrada;
 import com.compassouol.dto.saida.JogoDtoSaida;
 import com.compassouol.exceptions.JogoInvalidoException;
+import com.compassouol.model.Jogo;
 import com.compassouol.services.JogoService;
 
 @RestController
@@ -45,8 +46,16 @@ public class JogoController {
 
 	@GetMapping("/{id}")
 	public ResponseEntity<JogoDtoSaida> buscaJogoPorId(@PathVariable("id") Integer jogoId) {
-			JogoDtoSaida jogoDtoSaida = new JogoDtoSaida(jogoService.retornaJogoPorId(jogoId));
-			return ResponseEntity.ok(jogoDtoSaida);
+			Jogo jogo = jogoService.retornaJogoPorId(jogoId);
+			JogoDtoSaida JogoDtoSaida;
+			if(jogo != null) {
+				JogoDtoSaida = new JogoDtoSaida(jogo);
+				return ResponseEntity.ok(JogoDtoSaida);
+			}
+			else 
+				throw new JogoInvalidoException("Jogo nao encontrado!");
+			
+			
 	}
 
 	@DeleteMapping("/{id}")

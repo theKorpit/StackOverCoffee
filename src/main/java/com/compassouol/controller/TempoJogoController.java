@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.compassouol.controller.dto.TempoJogoDto;
 import com.compassouol.dto.entrada.TempoJogoDtoEntrada;
+import com.compassouol.exceptions.JogoInvalidoException;
 import com.compassouol.model.Jogo;
 import com.compassouol.services.JogoService;
 import com.compassouol.services.TempoJogoService;
@@ -35,6 +36,9 @@ public class TempoJogoController {
 		
 		Jogo jogo = jogoService.retornaJogoPorId(tempoJogadoDtoEntrada.getIdSteam());
 		
+		if(jogo == null)
+			throw new JogoInvalidoException("Jogo nao encontrado!");
+		
 		tempoJogoService.adicionaTempoJogo(jogo, tempoJogadoDtoEntrada.getDataInicial(), tempoJogadoDtoEntrada.getDataFinal());
 		
 		TempoJogoDto tempoJogoDto = new TempoJogoDto(jogo.getAppIdSteam(),tempoJogadoDtoEntrada.getDataInicial(),tempoJogadoDtoEntrada.getDataFinal());
@@ -46,6 +50,9 @@ public class TempoJogoController {
 	@GetMapping("/{id}")
 	public ResponseEntity<Collection<TempoJogoDto>> GetAllTempoJogoByJogo(@PathVariable("id") Integer jogoId){
 		Jogo jogo = jogoService.retornaJogoPorId(jogoId);
+		
+		if(jogo == null)
+			throw new JogoInvalidoException("Jogo nao encontrado!");
 
 		return ResponseEntity.ok(TempoJogoDto.converteListaParaDto(jogo.getTempoJogado(), jogoId));	
 	}	
