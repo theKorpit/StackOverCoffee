@@ -1,6 +1,7 @@
 package com.compassouol.controller;
 
 import java.util.Collection;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,7 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.compassouol.controller.dto.TempoJogoDto;
 import com.compassouol.dto.entrada.TempoJogoDtoEntrada;
-import com.compassouol.exceptions.JogoInvalidoException;
 import com.compassouol.model.Jogo;
 import com.compassouol.services.JogoService;
 import com.compassouol.services.TempoJogoService;
@@ -34,12 +34,10 @@ public class TempoJogoController {
 		tempoJogadoDtoEntrada.aplicaValidacoes();
 		
 		Jogo jogo = jogoService.retornaJogoPorId(tempoJogadoDtoEntrada.getIdSteam());
-	
-		TempoJogo tempoJogo = new TempoJogo(tempoJogadoDtoEntrada.getDataInicial(), tempoJogadoDtoEntrada.getDataFinal());
 		
-		tempoJogoService.adicionaTempoJogo(jogo, tempoJogoForm.getDataInicial(), tempoJogoForm.getDataFinal());
+		tempoJogoService.adicionaTempoJogo(jogo, tempoJogadoDtoEntrada.getDataInicial(), tempoJogadoDtoEntrada.getDataFinal());
 		
-		TempoJogoDto tempoJogoDto = new TempoJogoDto(jogo.getAppIdSteam(),tempoJogoForm.getDataInicial(),tempoJogoForm.getDataFinal());
+		TempoJogoDto tempoJogoDto = new TempoJogoDto(jogo.getAppIdSteam(),tempoJogadoDtoEntrada.getDataInicial(),tempoJogadoDtoEntrada.getDataFinal());
 		
 		return ResponseEntity.ok(tempoJogoDto);
 		
