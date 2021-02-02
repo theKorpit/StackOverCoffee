@@ -3,8 +3,6 @@ package com.compassouol.controller;
 import java.io.IOException;
 import java.util.List;
 
-import javax.validation.constraints.NotNull;
-
 import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +14,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.compassouol.controller.dto.JogoDto;
+import com.compassouol.dto.entrada.JogoDtoEntrada;
+import com.compassouol.dto.saida.JogoDtoSaida;
 import com.compassouol.exceptions.JogoInvalidoException;
 import com.compassouol.services.JogoService;
 
@@ -28,25 +27,26 @@ public class JogoController {
 	public JogoService jogoService;
 
 	@PostMapping
-	public ResponseEntity<?> adicionaJogo(@NotNull @RequestBody String campoDeBusca) throws IOException, ParseException {
-		if(jogoService.adicionaJogoBiblioteca(campoDeBusca))
-			return ResponseEntity.ok().build();
-		else
-			return ResponseEntity.badRequest().build();
+	public ResponseEntity<JogoDtoSaida> adicionaJogo(@RequestBody JogoDtoEntrada jogoDtoEntrada) throws IOException, ParseException {
+		jogoDtoEntrada.aplicaValidacoes();
+		/*faco aqui ou direto na service e só chamo o metodo da service*/
+		JogoDtoSaida jogoDtoSaida = new JogoDtoSaida(jogoService.adicionaJogoBiblioteca(jogoDtoEntrada));
+		
+		return ResponseEntity.ok(jogoDtoSaida);
 	}
 
 	@GetMapping
-	public ResponseEntity<List<JogoDto>> buscaJogos() {	
-		return ResponseEntity.ok(new JogoDto().converteJogoParaJogoDto(jogoService.retornaJogos()));
+	public ResponseEntity<List<JogoDtoSaida>> buscaTodosJogos() {
+		
+		JogoDtoSaida jogoDtoSaida = new JogoDtoSaida();
+		
+		return ResponseEntity.ok(jogoDtoSaida.retornaListaJogos(jogoService.retornaJogos()));
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<?> buscaJogoPorId(@PathVariable("id") Integer jogoId) {
-		
-		if (jogoService.retornaJogoPorId(jogoId) == null)
-			throw new JogoInvalidoException("Jogo nao encontrado!", jogoId);
-
-		return ResponseEntity.ok(jogoService.retornaJogoPorId(jogoId));
+	public ResponseEntity<JogoDtoSaida> buscaJogoPorId(@PathVariable("id") Integer jogoId) {
+			JogoDtoSaida jogoDtoSaida = new JogoDtoSaida(jogoService.retornaJogoPorId(jogoId));
+			return ResponseEntity.ok(jogoDtoSaida);
 	}
 
 	@DeleteMapping("/{id}")

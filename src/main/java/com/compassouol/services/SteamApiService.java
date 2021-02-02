@@ -60,7 +60,7 @@ public class SteamApiService {
 			}
 		}
 
-		throw new JogoInvalidoException("ID invalido", appId);
+		throw new JogoInvalidoException(appId);
 	}
 
 	public Integer jogoPorNome(String jogoNome) throws IOException, ParseException {
@@ -78,7 +78,7 @@ public class SteamApiService {
 			}
 		}
 
-		throw new JogoInvalidoException("Nome de jogo invalido", jogoNome);
+		throw new JogoInvalidoException(jogoNome);
 	}
 
 	private void getInfo() throws IOException, ParseException {
@@ -89,7 +89,7 @@ public class SteamApiService {
 		Job = (JSONObject) Job2.get("data");
 
 		if (Job == null)
-			throw new JogoInvalidoException("Entrada invalida, isso e um jogo de testes da steam", jogo.getAppIdSteam());
+			throw new JogoInvalidoException(jogo.getAppIdSteam());
 
 		String saida = Job.get("type").toString();
 		if (saida.equals("game")) {
@@ -97,7 +97,7 @@ public class SteamApiService {
 			JSONArray array = (JSONArray) Job.get("categories");
 
 			if (array == null) {
-				throw new JogoInvalidoException("isso e um software e nao um jogo", jogo.getAppIdSteam());
+				throw new JogoInvalidoException( jogo.getAppIdSteam());
 			}
 
 			String cat = array.get(0).toString();
@@ -126,7 +126,7 @@ public class SteamApiService {
 			}
 
 		} else {
-			throw new JogoInvalidoException("isso nao e um jogo e um/uma " + saida, jogo.getAppIdSteam());
+			throw new JogoInvalidoException( jogo.getAppIdSteam());
 		}
 	}
 

@@ -1,10 +1,7 @@
 package com.compassouol.controller;
 
-import javax.transaction.Transactional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.compassouol.controller.dto.TempoJogoDto;
-import com.compassouol.controller.form.AddTempoJogoForm;
+import com.compassouol.dto.entrada.TempoJogoDtoEntrada;
 import com.compassouol.exceptions.JogoInvalidoException;
 import com.compassouol.model.Jogo;
 import com.compassouol.model.TempoJogo;
@@ -31,14 +28,13 @@ public class TempoJogoController {
 	
 	
 	@PostMapping
-	public ResponseEntity<?> AddTempoJogoByDate(@Validated @RequestBody AddTempoJogoForm tempoJogoForm) {
+	public ResponseEntity<?> AddTempoJogoByDate(@RequestBody TempoJogoDtoEntrada tempoJogadoDtoEntrada) {
 		
-		Jogo jogo = jogoService.retornaJogoPorId(tempoJogoForm.getIdJogo());
+		tempoJogadoDtoEntrada.aplicaValidacoes();
+		
+		Jogo jogo = jogoService.retornaJogoPorId(tempoJogadoDtoEntrada.getIdSteam());
 	
-		TempoJogo tempoJogo = new TempoJogo(tempoJogoForm.getDataInicial(), tempoJogoForm.getDataFinal());
-		
-		if(jogo == null) 
-			throw new JogoInvalidoException("Jogo não existente", tempoJogoForm.getIdJogo());
+		TempoJogo tempoJogo = new TempoJogo(tempoJogadoDtoEntrada.getDataInicial(), tempoJogadoDtoEntrada.getDataFinal());
 		
 		tempoJogoService.adicionaTempoJogo(jogo, tempoJogo);
 		
@@ -52,10 +48,7 @@ public class TempoJogoController {
 	@GetMapping("/{id}")
 	public ResponseEntity<?> GetAllTempoJogoByJogo(@PathVariable("id") Integer jogoId){
 		Jogo jogo = jogoService.retornaJogoPorId(jogoId);
-		
-		if(jogo == null) 
-			throw new JogoInvalidoException("Jogo não existente", jogoId);
-		
+
 		return ResponseEntity.ok(TempoJogoDto.converteListaParaDto(jogo.getTempoJogado(), jogoId));	
 	}	
 }
