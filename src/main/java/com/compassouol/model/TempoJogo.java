@@ -15,34 +15,37 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Getter @Setter @Entity @NoArgsConstructor
+@Getter
+@Setter
+@Entity
+@NoArgsConstructor
 public class TempoJogo {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 
 	private LocalDateTime dataInicio;
-	
+
 	private LocalDateTime dataFim;
-	
+
 	@OneToOne
 	private Jogo jogo;
-	
+
 	public TempoJogo(LocalDateTime dataInicio, LocalDateTime dataFim) {
-		if(dataInicio.isAfter(dataFim))
+		if (dataInicio.isAfter(dataFim))
 			throw new DataInicioMaiorQueDataFimException("A data inicial nao pode ser menor que a data final");
-		
+
 		this.dataInicio = dataInicio;
 		this.dataFim = dataFim;
 	}
 
 	public Float totalTempoJogado() {
-		
+
 		Duration dur = Duration.between(this.dataInicio, this.dataFim);
-		
-		Float horas = (float) dur.toMinutes()/60;
-		
+
+		Float horas = (float) dur.toMinutes() / 60;
+
 		return horas;
 	}
 
