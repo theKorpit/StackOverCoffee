@@ -19,15 +19,12 @@ import com.compassouol.services.JogoService;
 import com.compassouol.services.TempoJogoService;
 
 @RestController
-@RequestMapping(value = "/jogar")
+@RequestMapping(value = "/tempojogado")
 public class TempoJogoController {
 
-
+	
 	@Autowired
 	private JogoService jogoService;
-	
-	
-	
 	
 	@GetMapping("/{id}")
 	public ResponseEntity<Collection<TempoJogoDto>> GetAllTempoJogoByJogo(@PathVariable("id") Integer jogoId){
