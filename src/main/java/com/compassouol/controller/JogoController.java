@@ -5,6 +5,8 @@ import java.util.List;
 
 import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.compassouol.controller.dto.TempoJogoDto;
@@ -28,6 +31,9 @@ import com.compassouol.services.TempoJogoService;
 public class JogoController {
 
 	@Autowired
+	public JogoDtoSaida jogoDtoSaida;
+	
+	@Autowired
 	private TempoJogoService tempoJogoService;
 	
 	@Autowired
@@ -42,11 +48,18 @@ public class JogoController {
 	}
 
 	@GetMapping
-	public ResponseEntity<List<JogoDtoSaida>> buscaTodosJogos() {
+	public ResponseEntity<List<JogoDtoSaida>> buscaTodosJogos(@RequestParam int pagina) {
 		
-		JogoDtoSaida jogoDtoSaida = new JogoDtoSaida();
+		Pageable paginacao = PageRequest.of(pagina, 2);
 		
-		return ResponseEntity.ok(jogoDtoSaida.retornaListaJogos(jogoService.retornaJogos()));
+		
+		return ResponseEntity.ok(jogoDtoSaida.retornaListaJogos(jogoService.retornaJogos(paginacao)));
+	}
+	
+	@GetMapping("/categoria/")
+	public ResponseEntity<List<JogoDtoSaida>> buscaJogoPorCategoria(@RequestParam String categoria) {	
+		
+		return ResponseEntity.ok(jogoDtoSaida.retornaListaJogos(jogoService.retornaJogoPorCategoria(categoria)));
 	}
 
 	@GetMapping("/{id}")

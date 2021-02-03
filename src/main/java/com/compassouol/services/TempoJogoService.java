@@ -1,6 +1,7 @@
 package com.compassouol.services;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.compassouol.exceptions.JogosEmMesmoHorarioException;
 import com.compassouol.model.Jogo;
 import com.compassouol.model.TempoJogo;
+import com.compassouol.repository.JogoRepository;
 import com.compassouol.repository.TempoJogoRepository;
 
 @Service
@@ -15,6 +17,8 @@ public class TempoJogoService {
 
 	@Autowired
 	private TempoJogoRepository tempoJogoRepository;
+	@Autowired
+	private JogoRepository jogoRep;
 	
 	
 	public void adicionaTempoJogo(Jogo jogo, LocalDateTime dataInicio, LocalDateTime dataFim) {
@@ -35,6 +39,15 @@ public class TempoJogoService {
 		jogo.adicionaTempoJogo(tempoJogo.getDataInicio(), tempoJogo.getDataFim());
 		
 		tempoJogoRepository.save(tempoJogo);
+		
+	}
+	
+	public Float calculaTempoTotalJogado() {
+		Float tempoTotal=0f;
+		for(Jogo jogo : jogoRep.findAll()) {
+			tempoTotal+=jogo.tempoTotalJogado();
+		}
+		return tempoTotal;
 		
 	}
 }

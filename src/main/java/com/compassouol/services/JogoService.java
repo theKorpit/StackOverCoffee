@@ -7,6 +7,8 @@ import java.util.Optional;
 import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.compassouol.dto.entrada.JogoDtoEntrada;
@@ -61,9 +63,20 @@ public class JogoService {
 			return null;
 		}
 	}
-
+	
 	public List<Jogo> retornaJogos() {
 		return jogoRepository.findAll();
+		 
+	}
+	
+	public List<Jogo> retornaJogoPorCategoria(String cat) {
+		return jogoRepository.findByCategoria(cat);
+		 
+	}
+
+	public Page<Jogo> retornaJogos(Pageable paginacao) {
+		return jogoRepository.findAll(paginacao);
+		 
 	}
 
 	public void deletaJogo(Integer id) {
