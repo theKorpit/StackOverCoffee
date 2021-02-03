@@ -48,11 +48,13 @@ public class JogoController {
 	}
 
 	@GetMapping
-	public ResponseEntity<List<JogoDtoSaida>> buscaTodosJogos(@RequestParam int pagina) {
-		
-		Pageable paginacao = PageRequest.of(pagina, 2);
-		
-		
+	public ResponseEntity<List<JogoDtoSaida>> buscaTodosJogos(@RequestParam(required = false) Integer pagina) {
+		Pageable paginacao = null;
+		if(pagina==null) {
+			paginacao = PageRequest.of(0, 2);
+		}else
+			paginacao = PageRequest.of(pagina, 2);
+							
 		return ResponseEntity.ok(jogoDtoSaida.retornaListaJogos(jogoService.retornaJogos(paginacao)));
 	}
 	
