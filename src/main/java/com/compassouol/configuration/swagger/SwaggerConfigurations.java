@@ -19,7 +19,9 @@ public class SwaggerConfigurations {
           .apis(RequestHandlerSelectors.basePackage("com.compassouol.controller"))              
           .paths(PathSelectors.ant("/**"))                          
           .build()
-          .apiInfo(apiInfo());
+          .apiInfo(apiInfo())
+          .useDefaultResponseMessages(false);
+        
     }
 	private ApiInfo apiInfo() {
 
