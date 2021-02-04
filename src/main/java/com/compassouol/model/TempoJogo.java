@@ -9,6 +9,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 
+import com.compassouol.exceptions.DataInicioMaiorQueDataFimException;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -29,6 +31,8 @@ public class TempoJogo {
 	private Jogo jogo;
 
 	public TempoJogo(LocalDateTime dataInicio, LocalDateTime dataFim) {
+		if(dataInicio.isAfter(dataFim))
+			throw new DataInicioMaiorQueDataFimException();
 		this.dataInicio = dataInicio;
 		this.dataFim = dataFim;
 	}

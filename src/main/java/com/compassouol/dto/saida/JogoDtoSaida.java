@@ -29,15 +29,8 @@ public class JogoDtoSaida {
 		this.tempoJogado = jogo.tempoTotalJogado();
 	}
 	
-	public List<JogoDtoSaida> retornaListaJogos(Page<Jogo> jogos) {
-
-		List<JogoDtoSaida> listaJogoDtoSaida = new ArrayList<JogoDtoSaida>();
-
-		for (Jogo jogo : jogos) {
-			JogoDtoSaida jogoDtoSaida = new JogoDtoSaida(jogo);
-			listaJogoDtoSaida.add(jogoDtoSaida);
-		}
-		return listaJogoDtoSaida;
+	public Page<JogoDtoSaida> retornaListaJogos(Page<Jogo> jogos) {
+		return jogos.map(JogoDtoSaida::new);
 	}
 	
 	public List<JogoDtoSaida> retornaListaJogos(List<Jogo> jogos) {

@@ -1,16 +1,13 @@
 package com.compassouol.controller;
 
-import java.util.Collection;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.compassouol.controller.dto.TempoJogoDto;
@@ -31,7 +28,7 @@ import io.swagger.annotations.ApiResponses;
 public class TempoJogoController {
 
 	@Autowired
-	private TempoJogoRepository tempoJogoRep;
+	private TempoJogoRepository tempoJogoRepository;
 	
 	@Autowired
 	private JogoService jogoService;
@@ -46,23 +43,15 @@ public class TempoJogoController {
 		    @ApiResponse(code = 404, message = "Jogo não encontrado na Steam") })
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<Collection<TempoJogoDto>> GetAllTempoJogoByJogo(@PathVariable("id") Integer jogoId, @RequestParam(required = false) Integer pagina){
+	public ResponseEntity<Page<TempoJogoDto>> GetAllTempoJogoByJogo(@PathVariable("id") Integer jogoId,@PageableDefault(size = 10) Pageable paginacao){
 		Jogo jogo = jogoService.retornaJogoPorId(jogoId);
 		
 		if(jogo == null)
 			throw new JogoInvalidoException("Jogo nao encontrado!");
 		
-		Pageable paginacao =null;
-		
-		if(pagina==null) 
-			paginacao = PageRequest.of(0, 2);
-		
-		else 
-			paginacao = PageRequest.of(pagina, 2);
-		
-		Page<TempoJogo> pageList =tempoJogoRep.FindByJogo_appIdSteam(jogoId, paginacao);
+		Page<TempoJogo> pageList = tempoJogoRepository.FindByJogo_appIdSteam(jogoId, paginacao);
 
-		return ResponseEntity.ok(TempoJogoDto.converteListaParaDto(pageList.getContent(), jogoId));	
+		return ResponseEntity.ok(TempoJogoDto.converteListaParaDto(pageList, jogoId));	
 	}	
 	
 	@GetMapping

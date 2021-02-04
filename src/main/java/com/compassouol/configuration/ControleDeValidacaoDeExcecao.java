@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -23,7 +24,6 @@ public class ControleDeValidacaoDeExcecao {
 	@ResponseStatus(code = HttpStatus.BAD_REQUEST)
 	@ExceptionHandler(InvalidFormatException.class)
 	public List<ErroFormDto> InvalidFormatExceptionHandler(InvalidFormatException exception) {
-		
 		List<ErroFormDto> erros = new ArrayList<ErroFormDto>();	
 		List<Reference> references = exception.getPath();
 		
@@ -75,4 +75,11 @@ public class ControleDeValidacaoDeExcecao {
 		
 		return erro;
 	}
+	
+	@ResponseStatus(code = HttpStatus.BAD_REQUEST)
+	@ExceptionHandler(MethodArgumentNotValidException.class)
+	public ErroFormDto JogoDuplicado(MethodArgumentNotValidException exception) {	
+		return new ErroFormDto(exception.getFieldError().getField(), exception.getFieldError().getDefaultMessage());
+	}
+	
 }

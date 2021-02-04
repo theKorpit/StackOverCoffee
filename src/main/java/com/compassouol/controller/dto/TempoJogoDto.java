@@ -2,7 +2,10 @@ package com.compassouol.controller.dto;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.List;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 
 import com.compassouol.model.TempoJogo;
 
@@ -20,9 +23,9 @@ public class TempoJogoDto {
 	
 	private LocalDateTime DataFinal;
 	
-	public static Collection<TempoJogoDto> converteListaParaDto(Collection<TempoJogo> tempoJogoList, Integer JogoId){
+	public static Page<TempoJogoDto> converteListaParaDto(Page<TempoJogo> tempoJogoList, Integer JogoId){
 		
-		Collection<TempoJogoDto> tempoJogoDtos = new ArrayList<TempoJogoDto>();
+		List<TempoJogoDto> tempoJogoDtos = new ArrayList<TempoJogoDto>();
 		
 		for(TempoJogo tempoJogo : tempoJogoList) {
 			TempoJogoDto tempoJogoDto = new TempoJogoDto();
@@ -31,6 +34,6 @@ public class TempoJogoDto {
 			tempoJogoDto.setDataFinal(tempoJogo.getDataFim());
 			tempoJogoDtos.add(tempoJogoDto);
 		}
-		return tempoJogoDtos;	
+		return new PageImpl<TempoJogoDto>(tempoJogoDtos);	
 	}	
 }

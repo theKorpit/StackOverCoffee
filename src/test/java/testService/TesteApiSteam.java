@@ -33,7 +33,7 @@ public class TesteApiSteam {
 	void testIdIncorreto() throws IOException, ParseException {
 
 		assertThrows(JogoInvalidoException.class, () -> {
-			SteamApiService sapi = new SteamApiService(1);
+			new SteamApiService(1);
 		});
 	}
 
@@ -41,7 +41,7 @@ public class TesteApiSteam {
 	void testNomeJogoIncorreto() throws IOException, ParseException {
 
 		assertThrows(JogoInvalidoException.class, () -> {
-			SteamApiService sapi = new SteamApiService("RAUFI LAIFI");
+			new SteamApiService("RAUFI LAIFI");
 		});
 	}
 

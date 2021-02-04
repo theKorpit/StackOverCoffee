@@ -7,6 +7,7 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.mockito.ArgumentMatchers.any;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +17,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
@@ -23,6 +26,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import com.compassouol.dto.entrada.JogoDtoEntrada;
 import com.compassouol.exceptions.JogoInvalidoException;
 import com.compassouol.model.Jogo;
+import com.compassouol.repository.TempoJogoRepository;
 import com.compassouol.services.JogoService;
 import com.compassouol.services.TempoJogoService;
 
@@ -41,6 +45,9 @@ class TesteJogoController {
 	@MockBean
 	TempoJogoService tempojogoService;
 	
+	@MockBean
+	private TempoJogoRepository tempoJogoRepository;
+	
 	@Autowired
 	private MockMvc mvc;
 	
@@ -55,30 +62,27 @@ class TesteJogoController {
 	@Test
 	void testAdicionaJogoIdValido() throws Exception {
 		
-		JogoDtoEntrada jogoDtoEntrada = new JogoDtoEntrada(730, null);
-		
-		when(this.jogoService.adicionaJogoBiblioteca(jogoDtoEntrada)).thenReturn(jogoCs);
+		when(this.jogoService.adicionaJogoBiblioteca(any(JogoDtoEntrada.class))).thenReturn(jogoCs);
 		
 		mvc.perform(post("/jogo").content("{\n"
 				+ "    \"idSteam\":\"730\",\n"
 				+ "    \"nomeJogo\":\"\"\n"
 				+ "}")
 			      .contentType(MediaType.APPLICATION_JSON))
-			      .andExpect(status().isOk());
+			      .andExpect(status().isCreated());
 	}
 
 	@Test
 	void testAdicionaJogoNomeValido() throws Exception {
-		JogoDtoEntrada jogoDtoEntrada = new JogoDtoEntrada(null, "Counter-Strike: Global Offensive");
 		
-		when(this.jogoService.adicionaJogoBiblioteca(jogoDtoEntrada)).thenReturn(jogoCs);
+		when(this.jogoService.adicionaJogoBiblioteca(any(JogoDtoEntrada.class))).thenReturn(jogoCs);
 		
 		mvc.perform(post("/jogo").content("{\n"
 				+ "    \"idSteam\":\"\",\n"
 				+ "    \"nomeJogo\":\"Counter-Strike: Global Offensive\"\n"
 				+ "}")
 			      .contentType(MediaType.APPLICATION_JSON))
-			      .andExpect(status().isOk());
+			      .andExpect(status().isCreated());
 	}
 
 	@Test
@@ -87,14 +91,11 @@ class TesteJogoController {
 		List<Jogo> jogos = new ArrayList<Jogo>();
 		jogos.add(jogoCs);
 		
-		when(this.jogoService.retornaJogos()).thenReturn(jogos);
+		when(this.jogoService.retornaJogos(PageRequest.of(0, 10))).thenReturn(new PageImpl<Jogo>(jogos));
 		
-		given()
-			.accept(ContentType.JSON)
-		.when()
-			.get("/jogo")
-		.then()
-			.statusCode(HttpStatus.OK.value());
+		mvc.perform(get("/jogo")
+			      .contentType(MediaType.APPLICATION_JSON))
+			      .andExpect(status().isOk());
 	}
 	
 	@Test

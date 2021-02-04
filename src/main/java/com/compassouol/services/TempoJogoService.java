@@ -1,7 +1,6 @@
 package com.compassouol.services;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,7 +17,7 @@ public class TempoJogoService {
 	@Autowired
 	private TempoJogoRepository tempoJogoRepository;
 	@Autowired
-	private JogoRepository jogoRep;
+	private JogoRepository jogoRepository;
 	
 	
 	public void adicionaTempoJogo(Jogo jogo, LocalDateTime dataInicio, LocalDateTime dataFim) {
@@ -44,7 +43,7 @@ public class TempoJogoService {
 	
 	public Float calculaTempoTotalJogado() {
 		Float tempoTotal=0f;
-		for(Jogo jogo : jogoRep.findAll()) {
+		for(Jogo jogo : jogoRepository.findAll()) {
 			tempoTotal+=jogo.tempoTotalJogado();
 		}
 		return tempoTotal;
