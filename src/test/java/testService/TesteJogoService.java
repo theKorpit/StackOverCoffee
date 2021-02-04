@@ -14,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
-import com.compassouol.dto.entrada.JogoDtoEntrada;
 import com.compassouol.exceptions.JogoDuplicadoException;
 import com.compassouol.model.Jogo;
 import com.compassouol.repository.JogoRepository;
@@ -28,8 +27,7 @@ class TesteJogoService {
 	
 	@MockBean
 	JogoRepository jogoRepository;
-	
-	private JogoDtoEntrada jogoDtoEntrada;
+
 	
 	private Jogo jogoCs = new Jogo(730, "Counter-Strike: Global Offensive", "Valve,Hidden Path Entertainment", "Valve", "21 Aug 2012", "Multi-player,Action,Free to Play", 0.0, null);
 	
@@ -37,10 +35,9 @@ class TesteJogoService {
 	void testAdicionaJogoNovoNaBibliotecaPorIdQuandoJogoNaoEstaNoBancoDeDados() throws IOException, ParseException {
 		
 		when(this.jogoRepository.findById(730)).thenReturn(Optional.empty());
+	
 		
-		jogoDtoEntrada = new JogoDtoEntrada(730, null);
-		
-		Jogo jogo = jogoService.adicionaJogoBiblioteca(jogoDtoEntrada);
+		Jogo jogo = jogoService.adicionaJogoBiblioteca(730, null);
 		
 		assertEquals(730, jogo.getAppIdSteam());
 		assertEquals("Counter-Strike: Global Offensive", jogo.getNomeJogo());
@@ -51,9 +48,8 @@ class TesteJogoService {
 		
 		when(this.jogoRepository.findById(730)).thenReturn(Optional.of(jogoCs));
 		
-		jogoDtoEntrada = new JogoDtoEntrada(730, null);
 		
-		assertThrows(JogoDuplicadoException.class, () ->  jogoService.adicionaJogoBiblioteca(jogoDtoEntrada));
+		assertThrows(JogoDuplicadoException.class, () ->  jogoService.adicionaJogoBiblioteca(730, null));
 		
 	}
 	
@@ -62,9 +58,7 @@ class TesteJogoService {
 		
 		when(this.jogoRepository.findByNomeJogo("Half-life")).thenReturn(null);
 		
-		JogoDtoEntrada jogoDtoEntrada = new JogoDtoEntrada(null, "Half-life");
-		
-		Jogo jogo = jogoService.adicionaJogoBiblioteca(jogoDtoEntrada);
+		Jogo jogo = jogoService.adicionaJogoBiblioteca(null, "Half-life");
 		
 		assertEquals(70, jogo.getAppIdSteam());
 		assertEquals("Half-life", jogo.getNomeJogo());
@@ -74,10 +68,9 @@ class TesteJogoService {
 	void testAdicionaJogoNovoNaBibliotecaPorNomeQuandoJogoEstaNoBancoDeDados() throws IOException, ParseException {
 		
 		when(this.jogoRepository.findByNomeJogo("Counter-Strike: Global Offensive")).thenReturn(jogoCs);
+
 		
-		jogoDtoEntrada = new JogoDtoEntrada(null, "Counter-Strike: Global Offensive");
-		
-		assertThrows(JogoDuplicadoException.class, () ->  jogoService.adicionaJogoBiblioteca(jogoDtoEntrada));
+		assertThrows(JogoDuplicadoException.class, () ->  jogoService.adicionaJogoBiblioteca(null, "Counter-Strike: Global Offensive"));
 	}
 	
 

@@ -17,32 +17,20 @@ import com.compassouol.model.Jogo;
 public class SteamApiService {
 
 	@Autowired
-	private final SteamConnection steamCon;
+	private SteamConnection steamCon;
 	
 	Jogo jogo = new Jogo();
-	private JSONParser parser = new JSONParser();
 
-
-	public SteamApiService(String nomeJogo) throws IOException, ParseException {
-		this.steamCon = new SteamConnection();
-		this.jogo.setNomeJogo(nomeJogo);
-		this.jogo.setAppIdSteam(this.jogoPorNome(nomeJogo));
-		this.getInfo();
-	}
-
-	public SteamApiService() {
-		this.steamCon = new SteamConnection();
-	}
-
-	public SteamApiService(int appIdSteam) throws IOException, ParseException {
-		this.steamCon = new SteamConnection();
-		this.jogo.setAppIdSteam(appIdSteam);
-		this.jogo.setNomeJogo(jogoPorId(appIdSteam));
-		this.getInfo();
-	}
-
-	public Jogo retornaJogo() {
-		System.out.println(jogo.getNomeJogo());
+	public Jogo retornaJogo(Integer appIdSteam,String nomeJogo) throws IOException, ParseException {
+		if(appIdSteam==null) {
+			this.jogo.setNomeJogo(nomeJogo);
+			this.jogo.setAppIdSteam(this.jogoPorNome(nomeJogo));
+			this.getInfo();
+		}else {
+			this.jogo.setAppIdSteam(appIdSteam);
+			this.jogo.setNomeJogo(jogoPorId(appIdSteam));
+			this.getInfo();
+		}
 		return jogo;
 	}
 
@@ -54,10 +42,9 @@ public class SteamApiService {
 			JSONObject o = (JSONObject) jsonEntries.get(i);
 			Long idApp = (Long) o.get("appid");
 
-			if (idApp == appId) {
-				String saida = (String) o.get("name");
-				return saida;
-			}
+			if (idApp == appId) 
+				return (String) o.get("name");
+			
 		}
 
 		throw new JogoInvalidoException(appId);
@@ -71,11 +58,9 @@ public class SteamApiService {
 			JSONObject o = (JSONObject) jsonEntries.get(i);
 			String nomeJogo = (String) o.get("name");
 
-			if (nomeJogo.equalsIgnoreCase(jogoNome)) {
-				String oh = o.get("appid").toString();
-				int id = Integer.parseInt(oh);
-				return id;
-			}
+			if (nomeJogo.equalsIgnoreCase(jogoNome)) 
+				return Integer.parseInt(o.get("appid").toString());
+			
 		}
 
 		throw new JogoInvalidoException(jogoNome);
@@ -83,7 +68,7 @@ public class SteamApiService {
 
 	private void getInfo() throws IOException, ParseException {
 
-		Object obj = parser.parse(steamCon.getThisGame(jogo.getAppIdSteam()));
+		Object obj = new JSONParser().parse(steamCon.getThisGame(jogo.getAppIdSteam()));
 		JSONObject Job = (JSONObject) obj;
 		JSONObject Job2 = (JSONObject) Job.get(Long.toString(jogo.getAppIdSteam()));
 		Job = (JSONObject) Job2.get("data");
@@ -139,7 +124,7 @@ public class SteamApiService {
 	}
 
 	private JSONArray getAppsField() throws IOException, ParseException {
-		Object obj = parser.parse(steamCon.getAllGames());
+		Object obj = new JSONParser().parse(steamCon.getAllGames());
 		JSONObject jsonObject = (JSONObject) obj;
 
 		jsonObject = (JSONObject) jsonObject.get("applist");

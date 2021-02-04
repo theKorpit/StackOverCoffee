@@ -7,7 +7,6 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.mockito.ArgumentMatchers.any;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +22,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import com.compassouol.dto.entrada.JogoDtoEntrada;
 import com.compassouol.exceptions.JogoInvalidoException;
 import com.compassouol.model.Jogo;
 import com.compassouol.repository.TempoJogoRepository;
@@ -62,7 +60,7 @@ class TesteJogoController {
 	@Test
 	void testAdicionaJogoIdValido() throws Exception {
 		
-		when(this.jogoService.adicionaJogoBiblioteca(any(JogoDtoEntrada.class))).thenReturn(jogoCs);
+		when(this.jogoService.adicionaJogoBiblioteca(730,"")).thenReturn(jogoCs);
 		
 		mvc.perform(post("/jogo").content("{\n"
 				+ "    \"idSteam\":\"730\",\n"
@@ -75,7 +73,7 @@ class TesteJogoController {
 	@Test
 	void testAdicionaJogoNomeValido() throws Exception {
 		
-		when(this.jogoService.adicionaJogoBiblioteca(any(JogoDtoEntrada.class))).thenReturn(jogoCs);
+		when(this.jogoService.adicionaJogoBiblioteca(null,"Counter-Strike: Global Offensive")).thenReturn(jogoCs);
 		
 		mvc.perform(post("/jogo").content("{\n"
 				+ "    \"idSteam\":\"\",\n"

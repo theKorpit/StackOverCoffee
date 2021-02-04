@@ -1,7 +1,6 @@
 package com.compassouol.controller;
 
 import java.io.IOException;
-import java.util.List;
 
 import javax.validation.Valid;
 
@@ -53,7 +52,7 @@ public class JogoController {
 	public ResponseEntity<JogoDtoSaida> adicionaJogo(@RequestBody JogoDtoEntrada jogoDtoEntrada)
 			throws IOException, ParseException {
 		jogoDtoEntrada.aplicaValidacoes();
-		JogoDtoSaida jogoDtoSaida = new JogoDtoSaida(jogoService.adicionaJogoBiblioteca(jogoDtoEntrada));
+		JogoDtoSaida jogoDtoSaida = new JogoDtoSaida(jogoService.adicionaJogoBiblioteca(jogoDtoEntrada.getIdSteam(),jogoDtoEntrada.getNomeJogo()));
 
 		return ResponseEntity.status(201).body(jogoDtoSaida);
 	}
@@ -68,8 +67,8 @@ public class JogoController {
 	}
 
 	@GetMapping("/categoria")
-	public ResponseEntity<List<JogoDtoSaida>> buscaJogoPorCategoria(@RequestParam String categoria) {
-		return ResponseEntity.ok(new JogoDtoSaida().retornaListaJogos(jogoService.retornaJogoPorCategoria(categoria)));
+	public ResponseEntity<Page<JogoDtoSaida>> buscaJogoPorCategoria(@PageableDefault(size = 10) Pageable paginacao,@RequestParam String categoria) {
+		return ResponseEntity.ok(new JogoDtoSaida().retornaListaJogos(jogoService.retornaJogoPorCategoria(categoria,paginacao)));
 	}
 
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Jogo encontrado com sucesso"),

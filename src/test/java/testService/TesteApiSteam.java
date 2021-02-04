@@ -7,24 +7,28 @@ import java.io.IOException;
 import org.json.simple.parser.ParseException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import com.compassouol.exceptions.JogoInvalidoException;
 import com.compassouol.model.Jogo;
 import com.compassouol.services.SteamApiService;
-
+@SpringBootTest(classes = com.compassouol.Starter.class)
 public class TesteApiSteam {
+	@Autowired
+	private SteamApiService steamAPI;
 	@Test
 	void testAdicionaJogoPorId() throws IOException, ParseException {
-		SteamApiService apiTeste = new SteamApiService(70);
-		Jogo j = apiTeste.retornaJogo();
+		Jogo j=steamAPI.retornaJogo(70,"");
+
 
 		Assertions.assertEquals(j.getNomeJogo(), "Half-Life");
 	}
 
 	@Test
 	void testAdicionaJogoPorNome() throws IOException, ParseException {
-		SteamApiService apiTeste = new SteamApiService("Half-Life");
-		Jogo j = apiTeste.retornaJogo();
+
+		Jogo j = steamAPI.retornaJogo(null, "Half-Life");
 
 		Assertions.assertEquals(j.getAppIdSteam(), 70);
 	}
@@ -33,7 +37,7 @@ public class TesteApiSteam {
 	void testIdIncorreto() throws IOException, ParseException {
 
 		assertThrows(JogoInvalidoException.class, () -> {
-			new SteamApiService(1);
+			steamAPI.retornaJogo(1,"");
 		});
 	}
 
@@ -41,15 +45,14 @@ public class TesteApiSteam {
 	void testNomeJogoIncorreto() throws IOException, ParseException {
 
 		assertThrows(JogoInvalidoException.class, () -> {
-			new SteamApiService("RAUFI LAIFI");
+			steamAPI.retornaJogo(null,"RAUFI LAIFI");
 		});
 	}
 
 	@Test
 	void testRetornaInfoCorretaJogoPago() throws IOException, ParseException {
 
-		SteamApiService apiTeste = new SteamApiService(70);
-		Jogo j = apiTeste.retornaJogo();
+		Jogo j = steamAPI.retornaJogo(70,"");
 
 		Assertions.assertEquals(j.getNomeJogo(), "Half-Life");
 		Assertions.assertEquals(j.getDesenvolvedor(), "Valve");
@@ -66,8 +69,7 @@ public class TesteApiSteam {
 	@Test
 	void testRetornaInfoCorretaJogoGratis() throws IOException, ParseException {
 
-		SteamApiService apiTeste = new SteamApiService(730);
-		Jogo j = apiTeste.retornaJogo();
+		Jogo j = steamAPI.retornaJogo(730, "");
 
 		Assertions.assertEquals(j.getNomeJogo(), "Counter-Strike: Global Offensive");
 		Assertions.assertEquals(j.getDesenvolvedor(), "Valve,Hidden Path Entertainment");
