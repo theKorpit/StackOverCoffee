@@ -1,8 +1,6 @@
 package com.compassouol.services;
 
 import java.io.IOException;
-import java.util.List;
-import java.util.Optional;
 
 import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,69 +20,42 @@ public class JogoService {
 
 	@Autowired
 	private JogoRepository jogoRepository;
-
 	@Autowired
-	private TempoJogoRepository tempoJogoRep;
+	private TempoJogoRepository tempoJogoRepository;
 	@Autowired
 	private SteamApiService steamAPI;
 
 	public Jogo adicionaJogoBiblioteca(Integer idSteam, String nomeJogo) throws IOException, ParseException {
-
 		if (idSteam != null) {
-			Optional<Jogo> jogoOptional = jogoRepository.findById(idSteam);
-			Jogo jogo = jogoOptional.isPresent() ? jogoOptional.get() : null;
-
-			if (jogo == null) {
-				jogo = steamAPI.retornaJogo(idSteam, nomeJogo);
-				jogoRepository.save(jogo);
-				return jogo;
-			}
+			if (jogoRepository.findByAppIdSteam(idSteam) != null)
+				throw new JogoDuplicadoException(idSteam);
 		} else {
-			Jogo jogo = jogoRepository.findByNomeJogo(nomeJogo);
-
-			if (jogo == null) {
-				jogo = steamAPI.retornaJogo(idSteam, nomeJogo);
-				jogoRepository.save(jogo);
-				return jogo;
-
-			}
-
+			if (jogoRepository.findByNomeJogo(nomeJogo) != null)
+				throw new JogoDuplicadoException(nomeJogo);
 		}
-
-		throw new JogoDuplicadoException(nomeJogo);
+		Jogo jogo = steamAPI.retornaJogo(idSteam, nomeJogo);
+		jogoRepository.save(jogo);
+		return jogo;
 	}
 
 	public Jogo retornaJogoPorId(Integer idSteam) {
-		Optional<Jogo> jogoOptional = jogoRepository.findById(idSteam);
-		if (jogoOptional.isPresent())
-			return jogoOptional.get();
-		else {
-			return null;
-		}
-	}
-
-	public List<Jogo> retornaJogos() {
-		return jogoRepository.findAll();
-
+		return jogoRepository.findByAppIdSteam(idSteam);
 	}
 
 	public Page<Jogo> retornaJogoPorCategoria(String cat, Pageable paginacao) {
 		return jogoRepository.findByCategoria(cat, paginacao);
-
 	}
 
 	public Page<Jogo> retornaJogos(Pageable paginacao) {
 		return jogoRepository.findAll(paginacao);
-
 	}
 
 	public void deletaJogo(Integer id) {
 		try {
-			tempoJogoRep.deleteByJogo_appIdSteam(id);
+			tempoJogoRepository.deleteByJogo_appIdSteam(id);
 			jogoRepository.deleteById(id);
 		} catch (EmptyResultDataAccessException erro) {
 			throw new JogoInvalidoException("Jogo nao encontrado!");
 		}
 	}
-
 }

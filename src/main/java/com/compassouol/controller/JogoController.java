@@ -19,10 +19,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.compassouol.controller.dto.JogoDetalhadoDto;
+import com.compassouol.controller.dto.JogoDto;
 import com.compassouol.controller.dto.TempoJogoDto;
-import com.compassouol.dto.entrada.JogoDtoEntrada;
-import com.compassouol.dto.entrada.TempoJogoDtoEntrada;
-import com.compassouol.dto.saida.JogoDtoSaida;
+import com.compassouol.controller.form.JogoForm;
+import com.compassouol.controller.form.TempoJogoForm;
 import com.compassouol.exceptions.JogoInvalidoException;
 import com.compassouol.model.Jogo;
 import com.compassouol.services.JogoService;
@@ -32,7 +33,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 
-@ApiOperation(value = "Lista todas as Avaliações", notes = "Lista todas as Avaliações", response = JogoDtoSaida.class, responseContainer = "List")
+@ApiOperation(value = "Lista todas as Avaliações", notes = "Lista todas as Avaliações", response = JogoDto.class, responseContainer = "List")
 
 @RestController
 @RequestMapping(value = "/jogo")
@@ -49,10 +50,10 @@ public class JogoController {
 			@ApiResponse(code = 404, message = "Jogo não encontrado na Steam") })
 
 	@PostMapping
-	public ResponseEntity<JogoDtoSaida> adicionaJogo(@RequestBody JogoDtoEntrada jogoDtoEntrada)
+	public ResponseEntity<JogoDetalhadoDto> adicionaJogo(@RequestBody JogoForm jogoForm)
 			throws IOException, ParseException {
-		jogoDtoEntrada.aplicaValidacoes();
-		JogoDtoSaida jogoDtoSaida = new JogoDtoSaida(jogoService.adicionaJogoBiblioteca(jogoDtoEntrada.getIdSteam(),jogoDtoEntrada.getNomeJogo()));
+		jogoForm.aplicaValidacoes();
+		JogoDetalhadoDto jogoDtoSaida = new JogoDetalhadoDto(jogoService.adicionaJogoBiblioteca(jogoForm.getIdSteam(),jogoForm.getNomeJogo()));
 
 		return ResponseEntity.status(201).body(jogoDtoSaida);
 	}
@@ -62,13 +63,13 @@ public class JogoController {
 			@ApiResponse(code = 404, message = "Biblioteca Vazia") })
 
 	@GetMapping
-	public ResponseEntity<Page<JogoDtoSaida>> buscaTodosJogos(@PageableDefault(size = 10) Pageable paginacao) {	
-		return ResponseEntity.ok(new JogoDtoSaida().retornaListaJogos(jogoService.retornaJogos(paginacao)));
+	public ResponseEntity<Page<JogoDto>> buscaTodosJogos(@PageableDefault(size = 10) Pageable paginacao) {	
+		return ResponseEntity.ok(new JogoDto().retornaListaJogos(jogoService.retornaJogos(paginacao)));
 	}
 
 	@GetMapping("/categoria")
-	public ResponseEntity<Page<JogoDtoSaida>> buscaJogoPorCategoria(@PageableDefault(size = 10) Pageable paginacao,@RequestParam String categoria) {
-		return ResponseEntity.ok(new JogoDtoSaida().retornaListaJogos(jogoService.retornaJogoPorCategoria(categoria,paginacao)));
+	public ResponseEntity<Page<JogoDto>> buscaJogoPorCategoria(@PageableDefault(size = 10) Pageable paginacao,@RequestParam String categoria) {
+		return ResponseEntity.ok(new JogoDto().retornaListaJogos(jogoService.retornaJogoPorCategoria(categoria,paginacao)));
 	}
 
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Jogo encontrado com sucesso"),
@@ -76,10 +77,10 @@ public class JogoController {
 			@ApiResponse(code = 404, message = "Jogo não encontrado na biblioteca") })
 
 	@GetMapping("/{id}")
-	public ResponseEntity<JogoDtoSaida> buscaJogoPorId(@PathVariable("id") Integer jogoId) {
+	public ResponseEntity<JogoDetalhadoDto> buscaJogoPorId(@PathVariable("id") Integer jogoId) {
 		Jogo jogo = jogoService.retornaJogoPorId(jogoId);
 		if (jogo != null)
-			return ResponseEntity.ok(new JogoDtoSaida(jogo));
+			return ResponseEntity.ok(new JogoDetalhadoDto(jogo));
 		else
 			throw new JogoInvalidoException("Jogo nao encontrado!");
 
@@ -100,16 +101,16 @@ public class JogoController {
 			@ApiResponse(code = 404, message = "Jogo não encontrado na Steam") })
 
 	@PostMapping("/{id}/jogar")
-	public ResponseEntity<TempoJogoDto> AddTempoJogoByDate(@PathVariable("id") Integer jogoId, @Valid @RequestBody TempoJogoDtoEntrada tempoJogadoDtoEntrada) {
+	public ResponseEntity<TempoJogoDto> AddTempoJogoByDate(@PathVariable("id") Integer jogoId, @Valid @RequestBody TempoJogoForm tempoJogoForm) {
 
 		Jogo jogo = jogoService.retornaJogoPorId(jogoId);
 
 		if (jogo == null)
 			throw new JogoInvalidoException("Jogo nao encontrado!");
 
-		tempoJogoService.adicionaTempoJogo(jogo, tempoJogadoDtoEntrada.getDataInicial(), tempoJogadoDtoEntrada.getDataFinal());
+		tempoJogoService.adicionaTempoJogo(jogo, tempoJogoForm.getDataInicial(), tempoJogoForm.getDataFinal());
 
-		TempoJogoDto tempoJogoDto = new TempoJogoDto(jogo.getAppIdSteam(), tempoJogadoDtoEntrada.getDataInicial(), tempoJogadoDtoEntrada.getDataFinal());
+		TempoJogoDto tempoJogoDto = new TempoJogoDto(jogo.getAppIdSteam(), tempoJogoForm.getDataInicial(), tempoJogoForm.getDataFinal());
 
 		return ResponseEntity.status(201).body(tempoJogoDto);
 

@@ -15,4 +15,8 @@ public interface JogoRepository extends JpaRepository<Jogo, Integer>{
 	
 	@Query("SELECT t FROM Jogo t WHERE t.categoria like %:cat%")
 	public Page<Jogo> findByCategoria(String cat, Pageable paginacao);
+	
+	public Jogo findByAppIdSteam(Integer id);
+	
+	
 }

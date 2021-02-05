@@ -29,11 +29,8 @@ public class TempoJogoController {
 
 	@Autowired
 	private TempoJogoRepository tempoJogoRepository;
-	
 	@Autowired
 	private JogoService jogoService;
-	
-	
 	@Autowired
 	private TempoJogoService tempoJogoService;
 	

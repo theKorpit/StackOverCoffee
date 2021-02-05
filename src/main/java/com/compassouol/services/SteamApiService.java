@@ -41,10 +41,8 @@ public class SteamApiService {
 		for (int i = 0; i < jsonEntries.size(); i++) {
 			JSONObject o = (JSONObject) jsonEntries.get(i);
 			Long idApp = (Long) o.get("appid");
-
 			if (idApp == appId) 
 				return (String) o.get("name");
-			
 		}
 
 		throw new JogoInvalidoException(appId);
@@ -60,7 +58,6 @@ public class SteamApiService {
 
 			if (nomeJogo.equalsIgnoreCase(jogoNome)) 
 				return Integer.parseInt(o.get("appid").toString());
-			
 		}
 
 		throw new JogoInvalidoException(jogoNome);
