@@ -14,14 +14,17 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.compassouol.controller.dto.GenericDto;
 import com.compassouol.controller.dto.JogoDetalhadoDto;
 import com.compassouol.controller.dto.JogoDto;
 import com.compassouol.controller.dto.TempoJogoDto;
+import com.compassouol.controller.form.AvaliacaoForm;
 import com.compassouol.controller.form.JogoForm;
 import com.compassouol.controller.form.TempoJogoForm;
 import com.compassouol.exceptions.JogoInvalidoException;
@@ -85,7 +88,28 @@ public class JogoController {
 			throw new JogoInvalidoException("Jogo nao encontrado!");
 
 	}
+	
+	@ApiResponses(value = { @ApiResponse(code = 201, message = "Avaliação criada"),
+			@ApiResponse(code = 404, message = "Jogo não encontrado"),
+			@ApiResponse(code = 409, message = "Jogo ja avaliado") 
+	})
 
+	@PostMapping("/{id}/avaliar")
+	public ResponseEntity<GenericDto> AdicionarAvaliacao(@PathVariable("id") Integer jogoId ,@Valid @RequestBody AvaliacaoForm avaliacaoForm) {
+		jogoService.adicionarAvaliacao(jogoId, avaliacaoForm.getComentario(), avaliacaoForm.getNota());
+		return ResponseEntity.status(201).body(new GenericDto("Comentario: "+avaliacaoForm.getComentario(), "Nota: "+avaliacaoForm.getNota().toString()));
+	}
+	
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "Avaliação alterada com sucesso"),
+			@ApiResponse(code = 404, message = "Jogo não encontrado")
+	})
+
+	@PutMapping("/{id}/avaliar")
+	public ResponseEntity<GenericDto> AlterarAvaliacaoJogo(@PathVariable("id") Integer jogoId ,@Valid @RequestBody AvaliacaoForm avaliacaoForm) {
+		jogoService.alteraAvaliacao(jogoId, avaliacaoForm.getComentario(), avaliacaoForm.getNota());
+		return ResponseEntity.ok().body(new GenericDto("Comentario: "+avaliacaoForm.getComentario(), "Nota: "+avaliacaoForm.getNota().toString()));
+	}
+			
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Jogo removido com sucesso"),
 			@ApiResponse(code = 400, message = "Entrada invalida"),
 			@ApiResponse(code = 404, message = "Jogo não encontrado na Biblioteca") })

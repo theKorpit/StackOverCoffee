@@ -20,6 +20,8 @@ public class JogoDetalhadoDto {
 	private Double valorDeVenda;
 	private String descricao;
 	private Float tempoJogado;
+	private String comentario;
+	private String nota;
 
 	public JogoDetalhadoDto(Jogo jogo) {
 		this.appIdSteam = jogo.getAppIdSteam();
@@ -31,5 +33,16 @@ public class JogoDetalhadoDto {
 		this.valorDeVenda = jogo.getValorDeVenda();
 		this.descricao = jogo.getDescricao();
 		this.tempoJogado = jogo.tempoTotalJogado();
+		if(jogo.getAvaliacao() != null) {
+			this.comentario = jogo.getAvaliacao().getComentario() != null ? jogo.getAvaliacao().getComentario() : ""; 
+			this.nota = jogo.getAvaliacao().getNota() != null ? jogo.getAvaliacao().getNota().toString() : "";
+		}else {
+			this.comentario = "";
+			this.nota = "";
+		}
+			
+		
+			
+		
 	}
 }

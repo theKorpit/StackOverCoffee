@@ -4,9 +4,11 @@ import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.HashSet;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 
 import org.hibernate.validator.constraints.Length;
 
@@ -27,12 +29,13 @@ public class Jogo {
 	private String descricao;
 	@OneToMany(mappedBy = "jogo")
 	private Collection<TempoJogo> tempoJogado;
+	@OneToOne(mappedBy= "jogo",cascade = CascadeType.PERSIST)
+	private Avaliacao avaliacao;
 
 	
 	
 	public Jogo(Integer appIdSteam, String nomeJogo, String desenvolvedor, String distribuidora, String dataLancamento,
 			String categoria, Double valorDeVenda, String descricao) {
-
 		this.appIdSteam = appIdSteam;
 		this.nomeJogo = nomeJogo;
 		this.desenvolvedor = desenvolvedor;

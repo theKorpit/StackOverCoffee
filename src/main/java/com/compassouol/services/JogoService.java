@@ -9,15 +9,20 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import com.compassouol.exceptions.AvaliacaoDuplicadaException;
 import com.compassouol.exceptions.JogoDuplicadoException;
 import com.compassouol.exceptions.JogoInvalidoException;
+import com.compassouol.model.Avaliacao;
 import com.compassouol.model.Jogo;
+import com.compassouol.repository.AvaliacaoRepository;
 import com.compassouol.repository.JogoRepository;
 import com.compassouol.repository.TempoJogoRepository;
 
 @Service
 public class JogoService {
 
+	@Autowired
+	private AvaliacaoRepository avaliacaoRepository;
 	@Autowired
 	private JogoRepository jogoRepository;
 	@Autowired
@@ -52,10 +57,35 @@ public class JogoService {
 
 	public void deletaJogo(Integer id) {
 		try {
+			avaliacaoRepository.deleteByJogo_appIdSteam(id);
 			tempoJogoRepository.deleteByJogo_appIdSteam(id);
 			jogoRepository.deleteById(id);
 		} catch (EmptyResultDataAccessException erro) {
 			throw new JogoInvalidoException("Jogo nao encontrado!");
+		}
+	}
+
+	public void adicionarAvaliacao(Integer id, String comentario, Integer nota) {
+		Jogo jogo = jogoRepository.findByAppIdSteam(id);
+		if (jogo == null)
+			throw new JogoInvalidoException(id);
+		if(jogo.getAvaliacao() ==null) {
+			Avaliacao avaliacao = new Avaliacao(nota, comentario, jogo);
+			jogo.setAvaliacao(avaliacao);
+			jogoRepository.save(jogo);
+		}else 
+			throw new AvaliacaoDuplicadaException();
+
+	}
+	public void alteraAvaliacao(Integer id, String comentario, Integer nota) {
+		Jogo jogo = jogoRepository.findByAppIdSteam(id);
+		if (jogo == null)
+			throw new JogoInvalidoException(id);
+		if(jogo.getAvaliacao() !=null) {
+			Avaliacao avaliacao = jogo.getAvaliacao();
+			avaliacao.setComentario(comentario);
+			avaliacao.setNota(nota);
+			jogoRepository.save(jogo);
 		}
 	}
 }

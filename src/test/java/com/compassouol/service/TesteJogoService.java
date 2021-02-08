@@ -1,6 +1,7 @@
 package com.compassouol.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
@@ -14,8 +15,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
+import com.compassouol.exceptions.AvaliacaoDuplicadaException;
 import com.compassouol.exceptions.JogoDuplicadoException;
+import com.compassouol.exceptions.JogoInvalidoException;
+import com.compassouol.model.Avaliacao;
 import com.compassouol.model.Jogo;
+import com.compassouol.repository.AvaliacaoRepository;
 import com.compassouol.repository.JogoRepository;
 import com.compassouol.services.JogoService;
 import com.compassouol.services.SteamApiService;
@@ -31,6 +36,9 @@ class TesteJogoService {
 
 	@MockBean
 	SteamApiService steamApiService;
+
+	@MockBean
+	AvaliacaoRepository avaliacaoRepository;
 
 	private Jogo jogoCs = new Jogo(730, "Counter-Strike: Global Offensive", "Valve,Hidden Path Entertainment", "Valve",
 			"21 Aug 2012", "Multi-player,Action,Free to Play", 0.0, null);
@@ -93,4 +101,26 @@ class TesteJogoService {
 		assertTrue(jogoService.retornaJogoPorId(730) == null);
 	}
 
+	@Test
+	void testAdicionaAvaliacaoJogoInvalido() {
+		when(this.jogoRepository.findByAppIdSteam(730)).thenReturn(null);
+		
+		assertThrows(JogoInvalidoException.class,() -> jogoService.adicionarAvaliacao(730, "", 10));
+	}
+	
+	@Test
+	void testAdicionaAvaliacaoJogoValidoAvaliacaoDuplicada() {
+		when(this.jogoRepository.findByAppIdSteam(730)).thenReturn(jogoCs);
+		jogoCs.setAvaliacao(new Avaliacao(10,"muito bom",jogoCs));
+		
+		assertThrows(AvaliacaoDuplicadaException.class,() -> jogoService.adicionarAvaliacao(730, "", 10));
+	}
+	
+	@Test
+	void testAdicionaAvaliacaoJogoValidoCorreto() {
+		when(this.jogoRepository.findByAppIdSteam(730)).thenReturn(jogoCs);
+		
+		jogoService.adicionarAvaliacao(730, "", 10);
+		assertNotEquals(null,jogoCs.getAvaliacao());
+	}
 }

@@ -4,9 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter @AllArgsConstructor
-public class ErroValidacaoCampoDto {
+public class GenericDto {
 
 	private String campo;
 	
-	private String erro;
+	private String mensagem;
 }

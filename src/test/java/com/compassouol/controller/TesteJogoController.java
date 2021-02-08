@@ -43,6 +43,7 @@ class TesteJogoController {
 	@MockBean
 	TempoJogoService tempojogoService;
 	
+	
 	@MockBean
 	private TempoJogoRepository tempoJogoRepository;
 	
@@ -120,5 +121,30 @@ class TesteJogoController {
 			      .andExpect(result -> assertTrue(result.getResolvedException() instanceof JogoInvalidoException))
 			      .andExpect(result -> assertEquals("Nao foi localizado nenhum jogo com os dados informados no campo de busca acima!", result.getResolvedException().getMessage()));
 	}
+	
+	@Test
+	void testAvaliaJogo() throws Exception {
+		
+		
+		mvc.perform(post("/jogo/{id}/avaliar",730).content("{\n"
+				+ "    \"comentario\":\"Jogo muito bom\",\n"
+				+ "    \"nota\":\"10\"\n"
+				+ "}")
+			      .contentType(MediaType.APPLICATION_JSON))
+			      .andExpect(status().isCreated());
+	}
+	
+	@Test
+	void testAvaliaJogoSemNota() throws Exception {
+		
+		
+		mvc.perform(post("/jogo/{id}/avaliar",730).content("{\n"
+				+ "    \"comentario\":\"Jogo muito bom\",\n"
+				+ "    \"nota\":\"\"\n"
+				+ "}")
+			      .contentType(MediaType.APPLICATION_JSON))
+			      .andExpect(status().isBadRequest());
+	}
+
 	
 }
