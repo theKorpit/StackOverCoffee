@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 
 import javax.validation.constraints.NotNull;
 
+import com.compassouol.exceptions.DataInicioMaiorQueDataFimException;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -16,4 +18,8 @@ public class TempoJogoForm {
 	@NotNull
 	private LocalDateTime dataFinal;
 
+	public void aplicaValidacoes() {
+		if (this.dataInicial.isAfter(this.dataFinal))
+			throw new DataInicioMaiorQueDataFimException();
+	}
 }

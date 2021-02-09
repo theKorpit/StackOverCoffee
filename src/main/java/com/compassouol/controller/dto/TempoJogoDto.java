@@ -18,22 +18,15 @@ import lombok.Setter;
 public class TempoJogoDto {
 	
 	private Integer jogoId;
-
 	private LocalDateTime DataInicial;
-	
 	private LocalDateTime DataFinal;
 	
-	public static Page<TempoJogoDto> converteListaParaDto(Page<TempoJogo> tempoJogoList, Integer JogoId){
+	public  Page<TempoJogoDto> retornaListaTempoJogo(Page<TempoJogo> listaTempoJogo, Integer jogoId){
 		
-		List<TempoJogoDto> tempoJogoDtos = new ArrayList<TempoJogoDto>();
-		
-		for(TempoJogo tempoJogo : tempoJogoList) {
-			TempoJogoDto tempoJogoDto = new TempoJogoDto();
-			tempoJogoDto.setJogoId(JogoId);
-			tempoJogoDto.setDataInicial(tempoJogo.getDataInicio());
-			tempoJogoDto.setDataFinal(tempoJogo.getDataFim());
-			tempoJogoDtos.add(tempoJogoDto);
-		}
-		return new PageImpl<TempoJogoDto>(tempoJogoDtos);	
+		List<TempoJogoDto> listaTempoJogoDto = new ArrayList<TempoJogoDto>();
+		for(TempoJogo tempoJogo : listaTempoJogo) 
+			listaTempoJogoDto.add(new TempoJogoDto(jogoId, tempoJogo.getDataInicio(), tempoJogo.getDataFim()));
+			
+		return new PageImpl<TempoJogoDto>(listaTempoJogoDto);	
 	}	
 }

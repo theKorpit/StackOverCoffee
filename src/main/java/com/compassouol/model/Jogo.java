@@ -28,28 +28,12 @@ public class Jogo {
 	@Length(max = 1000)
 	private String descricao;
 	@OneToMany(mappedBy = "jogo")
-	private Collection<TempoJogo> tempoJogado;
+	private Collection<TempoJogo> tempoJogado = new HashSet<TempoJogo>();;
 	@OneToOne(mappedBy= "jogo",cascade = CascadeType.PERSIST)
 	private Avaliacao avaliacao;
 
-	
-	
-	public Jogo(Integer appIdSteam, String nomeJogo, String desenvolvedor, String distribuidora, String dataLancamento,
-			String categoria, Double valorDeVenda, String descricao) {
-		this.appIdSteam = appIdSteam;
-		this.nomeJogo = nomeJogo;
-		this.desenvolvedor = desenvolvedor;
-		this.distribuidora = distribuidora;
-		this.dataLancamento = dataLancamento;
-		this.categoria = categoria;
-		this.valorDeVenda = valorDeVenda;
-		this.descricao = descricao;
-		this.tempoJogado = new HashSet<TempoJogo>();
-	}
-
 	public void adicionaTempoJogo(LocalDateTime dataInicio, LocalDateTime dataFim) {
-		TempoJogo tempo = new TempoJogo(dataInicio, dataFim);
-		tempoJogado.add(tempo);
+		tempoJogado.add(new TempoJogo(dataInicio, dataFim));
 	}
 
 	public float tempoTotalJogado() {
@@ -58,9 +42,5 @@ public class Jogo {
 			tempo += tempojogo.totalTempoJogado();
 		}
 		return tempo;
-	}
-
-	public Jogo() {
-		this.tempoJogado = new HashSet<TempoJogo>();
 	}
 }

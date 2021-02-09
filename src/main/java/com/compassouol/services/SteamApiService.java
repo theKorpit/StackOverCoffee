@@ -18,52 +18,43 @@ public class SteamApiService {
 
 	@Autowired
 	private SteamConnection steamCon;
-	
-	Jogo jogo = new Jogo();
 
 	public Jogo retornaJogo(Integer appIdSteam,String nomeJogo) throws IOException, ParseException {
+		Jogo jogo = new Jogo();
 		if(appIdSteam==null) {
-			this.jogo.setNomeJogo(nomeJogo);
-			this.jogo.setAppIdSteam(this.jogoPorNome(nomeJogo));
-			this.getInfo();
+			jogo.setNomeJogo(nomeJogo);
+			jogo.setAppIdSteam(this.jogoPorNome(nomeJogo));
 		}else {
-			this.jogo.setAppIdSteam(appIdSteam);
-			this.jogo.setNomeJogo(jogoPorId(appIdSteam));
-			this.getInfo();
+			jogo.setAppIdSteam(appIdSteam);
+			jogo.setNomeJogo(jogoPorId(appIdSteam));
 		}
+		this.getInfo(jogo);
 		return jogo;
 	}
 
 	public String jogoPorId(int appId) throws IOException, ParseException {
-
 		JSONArray jsonEntries = getAppsField();
-
 		for (int i = 0; i < jsonEntries.size(); i++) {
 			JSONObject o = (JSONObject) jsonEntries.get(i);
 			Long idApp = (Long) o.get("appid");
 			if (idApp == appId) 
 				return (String) o.get("name");
 		}
-
 		throw new JogoInvalidoException(appId);
 	}
 
 	public Integer jogoPorNome(String jogoNome) throws IOException, ParseException {
-
 		JSONArray jsonEntries = getAppsField();
-
 		for (int i = 0; i < jsonEntries.size(); i++) {
 			JSONObject o = (JSONObject) jsonEntries.get(i);
 			String nomeJogo = (String) o.get("name");
-
 			if (nomeJogo.equalsIgnoreCase(jogoNome)) 
 				return Integer.parseInt(o.get("appid").toString());
 		}
-
 		throw new JogoInvalidoException(jogoNome);
 	}
 
-	private void getInfo() throws IOException, ParseException {
+	private void getInfo(Jogo jogo) throws IOException, ParseException {
 
 		Object obj = new JSONParser().parse(steamCon.getThisGame(jogo.getAppIdSteam()));
 		JSONObject Job = (JSONObject) obj;

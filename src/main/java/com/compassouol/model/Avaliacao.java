@@ -28,6 +28,5 @@ public class Avaliacao {
 		this.jogo = jogo;
 		this.nota = nota;
 		this.comentario = comentario;
-		
 	}
 }

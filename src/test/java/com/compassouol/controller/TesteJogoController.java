@@ -50,17 +50,27 @@ class TesteJogoController {
 	@Autowired
 	private MockMvc mvc;
 	
-	private Jogo jogoCs = new Jogo(730, "Counter-Strike: Global Offensive", "Valve,Hidden Path Entertainment", "Valve", "21 Aug 2012", "Multi-player,Action,Free to Play", 0.0, null);
+	private Jogo jogoCs = new Jogo();
+	
+	public void insereDadoJogo() {
+		jogoCs.setAppIdSteam(730);
+		jogoCs.setNomeJogo("Counter-Strike: Global Offensive");
+		jogoCs.setDesenvolvedor("Valve,Hidden Path Entertainment");
+		jogoCs.setDistribuidora("Valve");
+		jogoCs.setDataLancamento("21 Aug 2012");
+		jogoCs.setCategoria("Multi-player,Action,Free to Play");
+		jogoCs.setValorDeVenda(0.0);
+		jogoCs.setDescricao(null);
+	}
 	
 	@BeforeEach
 	public void setup() {
 		RestAssuredMockMvc.standaloneSetup(this.jogoController);
+		this.insereDadoJogo();
 	}
-
 
 	@Test
 	void testAdicionaJogoIdValido() throws Exception {
-		
 		when(this.jogoService.adicionaJogoBiblioteca(730,"")).thenReturn(jogoCs);
 		
 		mvc.perform(post("/jogo").content("{\n"
@@ -86,10 +96,8 @@ class TesteJogoController {
 
 	@Test
 	void testBuscaTodos() throws Exception {
-		
 		List<Jogo> jogos = new ArrayList<Jogo>();
 		jogos.add(jogoCs);
-		
 		when(this.jogoService.retornaJogos(PageRequest.of(0, 10))).thenReturn(new PageImpl<Jogo>(jogos));
 		
 		mvc.perform(get("/jogo")
@@ -99,7 +107,6 @@ class TesteJogoController {
 	
 	@Test
 	void testBuscaJogoPorIdJogoExisteNoBancoDeDados() {
-		
 		when(this.jogoService.retornaJogoPorId(730)).thenReturn(jogoCs);
 		
 		given()
@@ -112,19 +119,17 @@ class TesteJogoController {
 	
 	@Test
 	void testBuscaJogoPorIdJogoNaoExisteNoBancoDeDados() throws Exception {
-		
 		when(this.jogoService.retornaJogoPorId(730)).thenReturn(null);
 		
 		mvc.perform(get("/jogo/{id}", 730)
 			      .contentType(MediaType.APPLICATION_JSON))
 			      .andExpect(status().isNotFound())
 			      .andExpect(result -> assertTrue(result.getResolvedException() instanceof JogoInvalidoException))
-			      .andExpect(result -> assertEquals("Nao foi localizado nenhum jogo com os dados informados no campo de busca acima!", result.getResolvedException().getMessage()));
+			      .andExpect(result -> assertEquals("Nao foi localizado nenhum jogo com os dados informados", result.getResolvedException().getMessage()));
 	}
 	
 	@Test
 	void testAvaliaJogo() throws Exception {
-		
 		
 		mvc.perform(post("/jogo/{id}/avaliar",730).content("{\n"
 				+ "    \"comentario\":\"Jogo muito bom\",\n"
@@ -137,7 +142,6 @@ class TesteJogoController {
 	@Test
 	void testAvaliaJogoSemNota() throws Exception {
 		
-		
 		mvc.perform(post("/jogo/{id}/avaliar",730).content("{\n"
 				+ "    \"comentario\":\"Jogo muito bom\",\n"
 				+ "    \"nota\":\"\"\n"
@@ -145,6 +149,4 @@ class TesteJogoController {
 			      .contentType(MediaType.APPLICATION_JSON))
 			      .andExpect(status().isBadRequest());
 	}
-
-	
 }

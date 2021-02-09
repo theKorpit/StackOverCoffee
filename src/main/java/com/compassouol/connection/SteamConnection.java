@@ -9,7 +9,6 @@ import java.net.URL;
 import org.springframework.stereotype.Service;
 @Service
 public class SteamConnection {
-
 	
 	private URL url;
 	private InputStream is;
@@ -24,7 +23,5 @@ public class SteamConnection {
 		this.url = new URL("https://store.steampowered.com/api/appdetails/l=portuguese&?appids=" + appId);
 		this.is = url.openConnection().getInputStream();
 		return new BufferedReader(new InputStreamReader(this.is));
-	}
-	
-	
+	}	
 }

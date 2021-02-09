@@ -40,12 +40,23 @@ class TesteJogoService {
 	@MockBean
 	AvaliacaoRepository avaliacaoRepository;
 
-	private Jogo jogoCs = new Jogo(730, "Counter-Strike: Global Offensive", "Valve,Hidden Path Entertainment", "Valve",
-			"21 Aug 2012", "Multi-player,Action,Free to Play", 0.0, null);
+	private Jogo jogoCs = new Jogo();
+	
+	public void insereDadoJogo() {
+		jogoCs.setAppIdSteam(730);
+		jogoCs.setNomeJogo("Counter-Strike: Global Offensive");
+		jogoCs.setDesenvolvedor("Valve,Hidden Path Entertainment");
+		jogoCs.setDistribuidora("Valve");
+		jogoCs.setDataLancamento("21 Aug 2012");
+		jogoCs.setCategoria("Multi-player,Action,Free to Play");
+		jogoCs.setValorDeVenda(0.0);
+		jogoCs.setDescricao(null);
+	}
 
 	@Test
 	void testAdicionaJogoNovoNaBibliotecaPorIdQuandoJogoNaoEstaNoBancoDeDados() throws IOException, ParseException {
-
+		this.insereDadoJogo();
+		
 		when(this.jogoRepository.findByAppIdSteam(730)).thenReturn(null);
 		when(this.steamApiService.retornaJogo(730, null)).thenReturn(jogoCs);
 
@@ -57,7 +68,8 @@ class TesteJogoService {
 
 	@Test
 	void testAdicionaJogoNovoNaBibliotecaPorIdQuandoJogoEstaNoBancoDeDados() throws IOException, ParseException {
-
+		this.insereDadoJogo();
+		
 		when(this.jogoRepository.findByAppIdSteam(730)).thenReturn(jogoCs);
 
 		assertThrows(JogoDuplicadoException.class, () -> jogoService.adicionaJogoBiblioteca(730, null));
@@ -66,7 +78,8 @@ class TesteJogoService {
 
 	@Test
 	void testAdicionaJogoNovoNaBibliotecaPorNomeQuandoJogoNaoEstaNoBancoDeDados() throws IOException, ParseException {
-
+		this.insereDadoJogo();
+		
 		when(this.jogoRepository.findByNomeJogo("Counter-Strike: Global Offensive")).thenReturn(null);
 		when(this.steamApiService.retornaJogo(null, "Counter-Strike: Global Offensive")).thenReturn(jogoCs);
 
@@ -78,7 +91,8 @@ class TesteJogoService {
 
 	@Test
 	void testAdicionaJogoNovoNaBibliotecaPorNomeQuandoJogoEstaNoBancoDeDados() throws IOException, ParseException {
-
+		this.insereDadoJogo();
+		
 		when(this.jogoRepository.findByNomeJogo("Counter-Strike: Global Offensive")).thenReturn(jogoCs);
 
 		assertThrows(JogoDuplicadoException.class,
@@ -87,7 +101,8 @@ class TesteJogoService {
 
 	@Test
 	void testRetornaJogoPorIdJogoExistenteNoBanco() throws IOException, ParseException {
-
+		this.insereDadoJogo();
+		
 		when(this.jogoRepository.findByAppIdSteam(730)).thenReturn(jogoCs);
 
 		assertTrue(jogoService.retornaJogoPorId(730) != null);
@@ -110,6 +125,8 @@ class TesteJogoService {
 	
 	@Test
 	void testAdicionaAvaliacaoJogoValidoAvaliacaoDuplicada() {
+		this.insereDadoJogo();
+		
 		when(this.jogoRepository.findByAppIdSteam(730)).thenReturn(jogoCs);
 		jogoCs.setAvaliacao(new Avaliacao(10,"muito bom",jogoCs));
 		
@@ -118,6 +135,8 @@ class TesteJogoService {
 	
 	@Test
 	void testAdicionaAvaliacaoJogoValidoCorreto() {
+		this.insereDadoJogo();
+		
 		when(this.jogoRepository.findByAppIdSteam(730)).thenReturn(jogoCs);
 		
 		jogoService.adicionarAvaliacao(730, "", 10);

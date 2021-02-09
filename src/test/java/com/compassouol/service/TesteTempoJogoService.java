@@ -34,7 +34,7 @@ class TesteTempoJogoService {
 	
 	@BeforeEach
 	void TempoJogoListCreate() {
-		jogo = new Jogo(70, "Nome Jogo", "Desenvolvedora", "Distribuidora", "26/07/1998", "Categoria", 100.0, "Descrição");
+		jogo = new Jogo();
 		
 		tempoJogoBD = new ArrayList<>();
 		tempoJogoBD.add(new TempoJogo(LocalDateTime.parse("2021-01-01T13:00:00.000000"), LocalDateTime.parse("2021-01-01T14:00:00.000000")));
@@ -47,7 +47,6 @@ class TesteTempoJogoService {
 	void test_NaoRetornaException_RecebeTempoJogoValido() {
 		
 		tempoJogoService.adicionaTempoJogo(jogo, LocalDateTime.parse("2021-01-01T17:00:00.000000"), LocalDateTime.parse("2021-01-01T18:00:00.000000"));
-	
 	}
 
 	@Test
@@ -55,7 +54,6 @@ class TesteTempoJogoService {
 		
 		assertThrows(JogosEmMesmoHorarioException.class, () -> 
 				tempoJogoService.adicionaTempoJogo(jogo,LocalDateTime.parse("2021-01-01T15:30:00.000000"), LocalDateTime.parse("2021-01-01T16:30:00.000000")));
-
 	}
 	
 	@Test
@@ -63,7 +61,6 @@ class TesteTempoJogoService {
 
 		assertThrows(JogosEmMesmoHorarioException.class, () -> 
 				tempoJogoService.adicionaTempoJogo(jogo,LocalDateTime.parse("2021-01-01T12:00:00.000000"), LocalDateTime.parse("2021-01-01T15:30:00.000000")));
-
 	}
 	
 	@Test
@@ -71,7 +68,6 @@ class TesteTempoJogoService {
 
 		assertThrows(JogosEmMesmoHorarioException.class, () -> 
 				tempoJogoService.adicionaTempoJogo(jogo,LocalDateTime.parse("2021-01-01T13:00:00.000000"), LocalDateTime.parse("2021-01-01T14:00:00.000000")));
-
 	}
 	
 	@Test
@@ -79,8 +75,5 @@ class TesteTempoJogoService {
 
 		assertThrows(JogosEmMesmoHorarioException.class, () -> 
 				tempoJogoService.adicionaTempoJogo(jogo,LocalDateTime.parse("2021-01-01T12:00:00.000000"), LocalDateTime.parse("2021-01-01T17:00:00.000000")));
-
 	}
-
-
 }

@@ -49,23 +49,37 @@ class TesteTempoJogoController {
 	
 	private List<TempoJogo> tempoJogo;
 	
+	private Jogo jogoTeste = new Jogo();
+	
+	public void insereDadoJogo() {
+		jogoTeste.setAppIdSteam(10);
+		jogoTeste.setNomeJogo("Nome Jogo");
+		jogoTeste.setDesenvolvedor("Desenvolvedora");
+		jogoTeste.setDistribuidora( "Distribuidora");
+		jogoTeste.setDataLancamento("26/07/1998");
+		jogoTeste.setCategoria("Categoria");
+		jogoTeste.setValorDeVenda(100.0);
+		jogoTeste.setDescricao("Descrição");
+	}
+	
 	@BeforeEach
 	public void setup() {
 		RestAssuredMockMvc.standaloneSetup(this.tempoJogoController);
 		tempoJogo = new ArrayList<TempoJogo>();
 		tempoJogo.add(new TempoJogo(LocalDateTime.now(), LocalDateTime.now().plusHours(5)));
+		
+		this.insereDadoJogo();
 	}
 
 	@Test
 	void testEnvioIdJogoExistenteNoBancoDeDados() throws Exception {
 		
-		when(this.jogoService.retornaJogoPorId(10)).thenReturn(new Jogo(10, "Nome Jogo","Desenvolvedora", "Distribuidora","26/07/1998", "Categoria", 100.0, "Descrição"));
-		when(this.tempoJogoRepository.FindByJogo_appIdSteam(10, PageRequest.of(0, 10))).thenReturn(new PageImpl<TempoJogo>(tempoJogo));
+		when(this.jogoService.retornaJogoPorId(10)).thenReturn(jogoTeste);
+		when(this.tempoJogoService.buscaTodosTempoJogos(10, PageRequest.of(0, 10))).thenReturn(new PageImpl<TempoJogo>(tempoJogo));
 		
 		mvc.perform(get("/tempojogado/{id}", 10)
 			      .contentType(MediaType.APPLICATION_JSON))
 			      .andExpect(status().isOk());
-
 	}
 	
 	@Test
@@ -77,52 +91,6 @@ class TesteTempoJogoController {
 			      .contentType(MediaType.APPLICATION_JSON))
 			      .andExpect(status().isNotFound())
 			      .andExpect(result -> assertTrue(result.getResolvedException() instanceof JogoInvalidoException))
-			      .andExpect(result -> assertEquals("Nao foi localizado nenhum jogo com os dados informados no campo de busca acima!", result.getResolvedException().getMessage()));
+			      .andExpect(result -> assertEquals("Nao foi localizado nenhum jogo com os dados informados", result.getResolvedException().getMessage()));
 	}
-	
-	/*@Test
-	void test_RetornaStatus200_AdicionandoTempoJogoValidoEmUmJogoValido() throws Exception {
-		
-		when(this.jogoService.retornaJogoPorId(730)).thenReturn(new Jogo(730, "Nome Jogo","Desenvolvedora", "Distribuidora","26/07/1998", "Categoria", 100.0, "Descrição"));
-
-		mvc.perform(post("/jogar").content("{\n"
-				+ "    \"idJogo\":730,\n"
-				+ "    \"dataInicial\":\"2021-01-09T20:30:00.000000\",\n"
-				+ "    \"dataFinal\":\"2021-01-09T22:45:00.000000\"\n"
-				+ "}")
-			      .contentType(MediaType.APPLICATION_JSON))
-			      .andExpect(status().isOk());
-
-	}
-	
-	@Test
-	void test_RetornaStatus401_IdDeJogoInexistenteETempoJogoValido() throws Exception {
-		
-		when(this.jogoService.retornaJogoPorId(10)).thenReturn(null);
-		
-		
-		mvc.perform(get("/jogar/{id}", 10)
-			      .contentType(MediaType.APPLICATION_JSON))
-			      .andExpect(status().isBadRequest())
-			      .andExpect(result -> assertTrue(result.getResolvedException() instanceof JogoInvalidoException))
-			      .andExpect(result -> assertEquals("Jogo não existente", result.getResolvedException().getMessage()));
-
-	}
-	
-	@Test
-	void test_RetornaStatus401_IdDeJogoValidoETempoJogoInvalido() throws Exception {
-		
-		when(this.jogoService.retornaJogoPorId(10)).thenReturn(null);
-		
-		mvc.perform(post("/jogar").content("{\n"
-				+ "    \"idJogo\":730,\n"
-				+ "    \"dataInicial\":\"2021-01-09T23:00:00.000000\",\n"
-				+ "    \"dataFinal\":\"2021-01-09T22:00:00.000000\"\n"
-				+ "}")
-			      .contentType(MediaType.APPLICATION_JSON))
-			      .andExpect(status().isBadRequest())
-			      .andExpect(result -> assertTrue(result.getResolvedException() instanceof DataInicioMaiorQueDataFimException))
-			      .andExpect(result -> assertEquals("A data inicial nao pode ser menor que a data final", result.getResolvedException().getMessage()));
-	}*/
-
 }

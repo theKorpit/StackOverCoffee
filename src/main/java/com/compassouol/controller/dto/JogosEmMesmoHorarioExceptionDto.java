@@ -9,12 +9,8 @@ import lombok.Getter;
 public class JogosEmMesmoHorarioExceptionDto {
 
 	private LocalDateTime dataInicio;
-	
 	private LocalDateTime dataFim;
-	
 	private LocalDateTime dataInicioToAdd;
-	
 	private LocalDateTime dataFimToAdd;
-	
 	private String mensagem;
 }

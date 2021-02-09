@@ -7,6 +7,5 @@ import lombok.Getter;
 public class GenericDto {
 
 	private String campo;
-	
 	private String mensagem;
 }

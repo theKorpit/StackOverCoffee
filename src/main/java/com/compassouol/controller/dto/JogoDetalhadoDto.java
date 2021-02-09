@@ -1,13 +1,10 @@
 package com.compassouol.controller.dto;
 
-import org.springframework.stereotype.Component;
-
 import com.compassouol.model.Jogo;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Component
 @Getter
 @NoArgsConstructor
 public class JogoDetalhadoDto {
@@ -39,10 +36,6 @@ public class JogoDetalhadoDto {
 		}else {
 			this.comentario = "";
 			this.nota = "";
-		}
-			
-		
-			
-		
+		}	
 	}
 }

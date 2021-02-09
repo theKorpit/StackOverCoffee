@@ -3,6 +3,8 @@ package com.compassouol.services;
 import java.time.LocalDateTime;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.compassouol.exceptions.JogosEmMesmoHorarioException;
@@ -30,15 +32,16 @@ public class TempoJogoService {
 			   (tempoJogo.getDataInicio().isAfter(e.getDataInicio()) && tempoJogo.getDataInicio().isBefore(e.getDataFim())) ||
 			   (tempoJogo.getDataInicio().isEqual(e.getDataInicio())) && tempoJogo.getDataFim().isEqual(e.getDataFim()) ||
 			   (tempoJogo.getDataInicio().isBefore(e.getDataInicio()) && tempoJogo.getDataFim().isAfter(e.getDataFim()))) 
-				throw new JogosEmMesmoHorarioException("Jogos não podem ser jogados no mesmo horario",e.getDataInicio(),e.getDataFim(),tempoJogo.getDataInicio(), tempoJogo.getDataFim());
+				throw new JogosEmMesmoHorarioException(e.getDataInicio(),e.getDataFim(),tempoJogo.getDataInicio(), tempoJogo.getDataFim());
 		});
 		
 		tempoJogo.setJogo(jogo);
-		
 		jogo.adicionaTempoJogo(tempoJogo.getDataInicio(), tempoJogo.getDataFim());
-		
 		tempoJogoRepository.save(tempoJogo);
-		
+	}
+	
+	public Page<TempoJogo> buscaTodosTempoJogos(Integer jogoId, Pageable paginacao) {
+		return tempoJogoRepository.FindByJogo_appIdSteam(jogoId, paginacao);
 	}
 	
 	public Float calculaTempoTotalJogado() {
@@ -47,6 +50,5 @@ public class TempoJogoService {
 			tempoTotal+=jogo.tempoTotalJogado();
 		}
 		return tempoTotal;
-		
 	}
 }

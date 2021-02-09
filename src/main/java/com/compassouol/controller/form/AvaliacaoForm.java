@@ -11,8 +11,6 @@ import lombok.Getter;
 public class AvaliacaoForm {
 	@Size(max = 255)
 	private String comentario;
-
 	@NotNull
 	private Integer nota;
-
 }

@@ -44,99 +44,87 @@ public class JogoController {
 
 	@Autowired
 	private TempoJogoService tempoJogoService;
-
 	@Autowired
 	public JogoService jogoService;
 
 	@ApiResponses(value = { @ApiResponse(code = 201, message = "Jogo adicionado com sucesso"),
-			@ApiResponse(code = 400, message = "Entrada invalida"),
-			@ApiResponse(code = 404, message = "Jogo não encontrado na Steam") })
-
+							@ApiResponse(code = 400, message = "Entrada invalida"),
+							@ApiResponse(code = 404, message = "Jogo não encontrado na Steam") })
 	@PostMapping
-	public ResponseEntity<JogoDetalhadoDto> adicionaJogo(@RequestBody JogoForm jogoForm)
-			throws IOException, ParseException {
+	public ResponseEntity<JogoDetalhadoDto> adicionaJogo(@RequestBody JogoForm jogoForm) throws IOException, ParseException {		
 		jogoForm.aplicaValidacoes();
-		JogoDetalhadoDto jogoDtoSaida = new JogoDetalhadoDto(jogoService.adicionaJogoBiblioteca(jogoForm.getIdSteam(),jogoForm.getNomeJogo()));
-
-		return ResponseEntity.status(201).body(jogoDtoSaida);
-	}
-
-	@ApiResponses(value = { @ApiResponse(code = 200, message = "Jogos encontrados com sucesso"),
-			@ApiResponse(code = 400, message = "Entrada invalida"),
-			@ApiResponse(code = 404, message = "Biblioteca Vazia") })
-
-	@GetMapping
-	public ResponseEntity<Page<JogoDto>> buscaTodosJogos(@PageableDefault(size = 10) Pageable paginacao) {	
-		return ResponseEntity.ok(new JogoDto().retornaListaJogos(jogoService.retornaJogos(paginacao)));
-	}
-
-	@GetMapping("/categoria")
-	public ResponseEntity<Page<JogoDto>> buscaJogoPorCategoria(@PageableDefault(size = 10) Pageable paginacao,@RequestParam String categoria) {
-		return ResponseEntity.ok(new JogoDto().retornaListaJogos(jogoService.retornaJogoPorCategoria(categoria,paginacao)));
-	}
-
-	@ApiResponses(value = { @ApiResponse(code = 200, message = "Jogo encontrado com sucesso"),
-			@ApiResponse(code = 400, message = "Entrada invalida"),
-			@ApiResponse(code = 404, message = "Jogo não encontrado na biblioteca") })
-
-	@GetMapping("/{id}")
-	public ResponseEntity<JogoDetalhadoDto> buscaJogoPorId(@PathVariable("id") Integer jogoId) {
-		Jogo jogo = jogoService.retornaJogoPorId(jogoId);
-		if (jogo != null)
-			return ResponseEntity.ok(new JogoDetalhadoDto(jogo));
-		else
-			throw new JogoInvalidoException("Jogo nao encontrado!");
-
+		return ResponseEntity.status(201).body(new JogoDetalhadoDto(jogoService.adicionaJogoBiblioteca(jogoForm.getIdSteam(), jogoForm.getNomeJogo())));
 	}
 	
-	@ApiResponses(value = { @ApiResponse(code = 201, message = "Avaliação criada"),
-			@ApiResponse(code = 404, message = "Jogo não encontrado"),
-			@ApiResponse(code = 409, message = "Jogo ja avaliado") 
-	})
-
+	
+	@ApiResponses(value = { @ApiResponse(code = 201, message = "Adicionado tempo de jogo com sucesso"),
+							@ApiResponse(code = 400, message = "Entrada invalida"),
+							@ApiResponse(code = 404, message = "Jogo não encontrado na Biblioteca") })
+	@PostMapping("/{id}/jogar")
+	public ResponseEntity<TempoJogoDto> AddTempoJogoByDate(@PathVariable("id") Integer jogoId, @Valid @RequestBody TempoJogoForm tempoJogoForm) {
+		tempoJogoForm.aplicaValidacoes();
+		Jogo jogo = jogoService.retornaJogoPorId(jogoId);
+		if (jogo == null)
+			throw new JogoInvalidoException(jogoId);
+		tempoJogoService.adicionaTempoJogo(jogo, tempoJogoForm.getDataInicial(), tempoJogoForm.getDataFinal());
+		return ResponseEntity.status(201).body(new TempoJogoDto(jogo.getAppIdSteam(), tempoJogoForm.getDataInicial(), tempoJogoForm.getDataFinal()));
+	}
+	
+	
+	@ApiResponses(value = { @ApiResponse(code = 201, message = "Avaliação adicionada com sucesso"),
+							@ApiResponse(code = 404, message = "Jogo não encontrado na Biblioteca"),
+							@ApiResponse(code = 409, message = "Jogo ja avaliado") })
 	@PostMapping("/{id}/avaliar")
 	public ResponseEntity<GenericDto> AdicionarAvaliacao(@PathVariable("id") Integer jogoId ,@Valid @RequestBody AvaliacaoForm avaliacaoForm) {
 		jogoService.adicionarAvaliacao(jogoId, avaliacaoForm.getComentario(), avaliacaoForm.getNota());
-		return ResponseEntity.status(201).body(new GenericDto("Comentario: "+avaliacaoForm.getComentario(), "Nota: "+avaliacaoForm.getNota().toString()));
+		return ResponseEntity.status(201).body(new GenericDto("Nota: " + avaliacaoForm.getNota().toString(), "Comentario: " + avaliacaoForm.getComentario()));
 	}
 	
-	@ApiResponses(value = { @ApiResponse(code = 200, message = "Avaliação alterada com sucesso"),
-			@ApiResponse(code = 404, message = "Jogo não encontrado")
-	})
-
-	@PutMapping("/{id}/avaliar")
-	public ResponseEntity<GenericDto> AlterarAvaliacaoJogo(@PathVariable("id") Integer jogoId ,@Valid @RequestBody AvaliacaoForm avaliacaoForm) {
-		jogoService.alteraAvaliacao(jogoId, avaliacaoForm.getComentario(), avaliacaoForm.getNota());
-		return ResponseEntity.ok().body(new GenericDto("Comentario: "+avaliacaoForm.getComentario(), "Nota: "+avaliacaoForm.getNota().toString()));
+	
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "Retornado lista de jogos com sucesso"),
+							@ApiResponse(code = 404, message = "Biblioteca Vazia") })
+	@GetMapping
+	public ResponseEntity<Page<JogoDto>> buscaTodosJogos(@PageableDefault(size = 10) Pageable paginacao) {	
+		return ResponseEntity.status(200).body(new JogoDto().retornaListaJogos(jogoService.retornaJogos(paginacao)));
 	}
+
+	
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "Retornado lista de jogos por categoria com sucesso"),
+							@ApiResponse(code = 400, message = "Entrada invalida") })	
+	@GetMapping("/categoria")
+	public ResponseEntity<Page<JogoDto>> buscaJogoPorCategoria(@PageableDefault(size = 10) Pageable paginacao,@RequestParam String categoria) {
+		return ResponseEntity.status(200).body(new JogoDto().retornaListaJogos(jogoService.retornaJogoPorCategoria(categoria,paginacao)));
+	}
+	
+
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "Jogo encontrado com sucesso"),
+							@ApiResponse(code = 400, message = "Entrada invalida"),
+							@ApiResponse(code = 404, message = "Jogo não encontrado na biblioteca") })
+	@GetMapping("/{id}")
+	public ResponseEntity<JogoDetalhadoDto> buscaJogoPorId(@PathVariable("id") Integer jogoId) {
+		Jogo jogo = jogoService.retornaJogoPorId(jogoId);
+		if (jogo == null)
+			throw new JogoInvalidoException(jogoId);
+		return ResponseEntity.status(200).body(new JogoDetalhadoDto(jogo));
+	}
+	
 			
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Jogo removido com sucesso"),
-			@ApiResponse(code = 400, message = "Entrada invalida"),
-			@ApiResponse(code = 404, message = "Jogo não encontrado na Biblioteca") })
-
+							@ApiResponse(code = 400, message = "Entrada invalida"),
+							@ApiResponse(code = 404, message = "Jogo não encontrado na Biblioteca") })
 	@DeleteMapping("/{id}")
 	public ResponseEntity<String> removeJogo(@PathVariable("id") Integer jogoId) {
 		jogoService.deletaJogo(jogoId);
-		return ResponseEntity.ok("Jogo deletado");
+		return ResponseEntity.status(200).body("Jogo deletado");
 	}
 
-	@ApiResponses(value = { @ApiResponse(code = 201, message = "Adicionado tempo de jogo com sucesso"),
-			@ApiResponse(code = 400, message = "Entrada invalida"),
-			@ApiResponse(code = 404, message = "Jogo não encontrado na Steam") })
 
-	@PostMapping("/{id}/jogar")
-	public ResponseEntity<TempoJogoDto> AddTempoJogoByDate(@PathVariable("id") Integer jogoId, @Valid @RequestBody TempoJogoForm tempoJogoForm) {
-
-		Jogo jogo = jogoService.retornaJogoPorId(jogoId);
-
-		if (jogo == null)
-			throw new JogoInvalidoException("Jogo nao encontrado!");
-
-		tempoJogoService.adicionaTempoJogo(jogo, tempoJogoForm.getDataInicial(), tempoJogoForm.getDataFinal());
-
-		TempoJogoDto tempoJogoDto = new TempoJogoDto(jogo.getAppIdSteam(), tempoJogoForm.getDataInicial(), tempoJogoForm.getDataFinal());
-
-		return ResponseEntity.status(201).body(tempoJogoDto);
-
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "Avaliação alterada com sucesso"),
+							@ApiResponse(code = 400, message = "Entrada invalida"),
+							@ApiResponse(code = 404, message = "Jogo não encontrado") })
+	@PutMapping("/{id}/avaliar")
+	public ResponseEntity<GenericDto> AlterarAvaliacaoJogo(@PathVariable("id") Integer jogoId ,@Valid @RequestBody AvaliacaoForm avaliacaoForm) {
+		jogoService.alteraAvaliacao(jogoId, avaliacaoForm.getComentario(), avaliacaoForm.getNota());
+		return ResponseEntity.status(200).body(new GenericDto("Nota: "+avaliacaoForm.getNota().toString(), "Comentario: "+avaliacaoForm.getComentario()));
 	}
 }
